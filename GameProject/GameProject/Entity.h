@@ -1,25 +1,29 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#define and &&
+#define or ||
+
 #include "SFML\Graphics.hpp"
 #include "GrowingArray.h"
 #include "InputHandler.h"
+#include  "GSprite.h"
+
 class Entity
 {
 public:
-	Entity(char* aName);
+	Entity(std::string aName);
 	~Entity();
 	
-	static std::map<char*, GrowingArray<Entity*>*> SuperList;
+	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
 	
 	//Add, Destroy instance in game loop
-	void AddInstance(Entity* aEntity, char* aName);
+	void AddInstance(Entity* aEntity, std::string aName);
 	void DestroyInstance(Entity* aEntity);
 	static void DeleteInstance(Entity* aEntity);
 	static void DeleteMarkedInstances();
-	char* GetName() const;
-
+	
 	//Update,Draw
 	virtual void BeginUpdate();
 	virtual void Update();
@@ -39,8 +43,11 @@ public:
 	bool MouseCheckReleased(sf::Mouse::Button aButton);
 	bool MouseWheelUp();
 	bool MouseWheelDown();
-	
 
+	//Accessors
+	bool GetActive() const;
+	std::string GetName() const;
+	
 protected:
 	float myX;
 	float myY;
@@ -53,10 +60,11 @@ protected:
 	sf::Color myColor;
 	float myAnimationSpeed;
 	
+	GSprite mySprite;
 	//If the entity is drawn and updated
 	bool myActive;
 	//Exists for design purposes(like getting an instance from the SuperList)
-	char* myName;
+	std::string myName;
 private:
 
 	//this, or where entities get deleted is the current problem.

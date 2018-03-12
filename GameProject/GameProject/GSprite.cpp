@@ -41,7 +41,35 @@ GSprite::~GSprite()
 
 void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
-	//Before Draw is constructed, some more research into OpenGl functions is necessary (glPushmatrix, glTranslatef...and so on)
+	myAnimationSpeed = aAnimationSpeed;
+	if (myAnimationSpeed > 0)
+	{
+		myAnimationCounter += myAnimationSpeed;
+		if (myAnimationCounter >= 1)
+		{
+			myAnimationIndex++;
+			myAnimationCounter--;
+			if (myAnimationIndex >= myNrOfFrames)
+			{
+				myAnimationIndex = 0;
+			}
+		}
+	}
+
+	mySprite.setTextureRect(sf::IntRect(myAnimationIndex * myTextureWidth / myNrOfFrames, 0, myTextureWidth / myNrOfFrames, myTextureHeight));
+	mySprite.setPosition(aX, aY);
+	mySprite.setOrigin(myTextureWidth / myNrOfFrames / 2, myTextureHeight / 2);
+	mySprite.setRotation(aAngle);
+	mySprite.setScale(aXScale, aYScale);
+
+	mySprite.setColor(sf::Color(aColor.r, aColor.g, aColor.b, aAlpha * 255));
+
+	myWidth = myTextureWidth * aXScale;
+	myHeight = myTextureHeight * aYScale;
+
+	//myDepth = -aDepth;
+	glTranslatef(0, 0, aDepth);
+	Window->draw(mySprite);
 }
 
 //Accessors

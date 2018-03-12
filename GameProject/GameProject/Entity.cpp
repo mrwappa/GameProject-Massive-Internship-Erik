@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Entity.h"
 
-std::map<char*, GrowingArray<Entity*>*> Entity::SuperList;
+std::map<std::string, GrowingArray<Entity*>*> Entity::SuperList;
 GrowingArray<Entity*>* Entity::GrArrayPtr;
+GrowingArray<Entity*> Entity::DeleteMarkedList;
 InputHandler* Entity::Input;
 
-Entity::Entity(char* aName)
+
+Entity::Entity(std::string aName)
 {
 	myAnimationSpeed = 0;
 	myDepth = 0;
@@ -24,7 +26,7 @@ Entity::~Entity()
 
 }
 
-void Entity::AddInstance(Entity * aEntity, char* aName)
+void Entity::AddInstance(Entity * aEntity, std::string aName)
 {
 	if (SuperList.count(aName) == 0)
 	{
@@ -56,7 +58,7 @@ void Entity::DeleteMarkedInstances()
 	}
 }
 
-char* Entity::GetName() const
+std::string Entity::GetName() const
 {
 	return myName;
 }
@@ -75,6 +77,10 @@ void Entity::EndUpdate()
 
 void Entity::Draw()
 {
+	if (mySprite.GetTextureWidth() > 0)
+	{
+		mySprite.Draw(myX, myY, myXScale, myYScale, myAngle, myDepth, myAlpha, myColor, myAnimationSpeed);
+	}
 }
 
 void Entity::DrawGUI()
@@ -129,4 +135,9 @@ bool Entity::MouseWheelUp()
 bool Entity::MouseWheelDown()
 {
 	return Input->MouseWheelDown;
+}
+
+bool Entity::GetActive() const
+{
+	return myActive;
 }

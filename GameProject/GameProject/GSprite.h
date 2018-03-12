@@ -2,6 +2,8 @@
 #define GSPRITE_H
 #include "SFML\Graphics.hpp"
 #include "GrowingArray.h"
+#include "SFML\OpenGL.hpp"
+
 class GSprite
 {
 public:

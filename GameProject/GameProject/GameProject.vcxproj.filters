@@ -31,6 +31,9 @@
     <Filter Include="Tools/Core\GSprite">
       <UniqueIdentifier>{5e45e8e8-d6f1-4cbc-97ea-54ae8c0b7dd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{ea37253a-1073-45ef-97ac-98f5d56802e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,6 +54,9 @@
     <ClInclude Include="GSprite.h">
       <Filter>Tools/Core\GSprite</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -65,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="GSprite.cpp">
       <Filter>Tools/Core\GSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
