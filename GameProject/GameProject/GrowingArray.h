@@ -61,7 +61,7 @@ private:
 
 //CONSTRUCTOR
 template<typename TObjectType, typename TSizeType>
-GrowingArray<TObjectType, TSizeType>::GrowingArray(int cap = 5)
+GrowingArray<TObjectType, TSizeType>::GrowingArray(int cap)
 {
 	myCap = cap;
 	myNrOfElements = 0;
@@ -137,7 +137,7 @@ inline TObjectType & GrowingArray<TObjectType, TSizeType>::FindAtIndex(const TSi
 
 //INSERT
 template<typename TObjectType, typename TSizeType>
-inline void GrowingArray<TObjectType, TSizeType>::Insert(TSizeType index, const TObjectType &object, bool cyclic = true)
+inline void GrowingArray<TObjectType, TSizeType>::Insert(TSizeType index, const TObjectType &object, bool cyclic)
 {
 	if (index < 0 || index > myNrOfElements)
 	{

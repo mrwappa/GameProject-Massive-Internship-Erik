@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{137e2210-25c7-4cd5-8e69-99e9678ac712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity">
+      <UniqueIdentifier>{f8b58004-e563-4ed0-82a4-a42e85a74b4e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header-Source-Resource Files">
       <UniqueIdentifier>{287e0511-988c-439e-8ddd-59d73a1936bb}</UniqueIdentifier>
     </Filter>
@@ -16,14 +22,14 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{137e2210-25c7-4cd5-8e69-99e9678ac712}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tools">
+    <Filter Include="Tools/Core">
       <UniqueIdentifier>{ea41067a-d8e6-40a5-8c64-ffbb964b59e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Entity">
-      <UniqueIdentifier>{f8b58004-e563-4ed0-82a4-a42e85a74b4e}</UniqueIdentifier>
+    <Filter Include="Tools/Core\InputHandler">
+      <UniqueIdentifier>{9eca8493-093d-42e9-bb68-dfe6d7ef0c47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\GSprite">
+      <UniqueIdentifier>{5e45e8e8-d6f1-4cbc-97ea-54ae8c0b7dd4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,10 +40,16 @@
       <Filter>Header-Source-Resource Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GrowingArray.h">
-      <Filter>Tools</Filter>
+      <Filter>Tools/Core</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Tools/Core\InputHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="GSprite.h">
+      <Filter>Tools/Core\GSprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +59,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Entity.cpp">
       <Filter>Game\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Tools/Core\InputHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="GSprite.cpp">
+      <Filter>Tools/Core\GSprite</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
