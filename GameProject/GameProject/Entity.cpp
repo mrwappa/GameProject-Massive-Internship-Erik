@@ -5,7 +5,7 @@ std::map<std::string, GrowingArray<Entity*>*> Entity::SuperList;
 GrowingArray<Entity*>* Entity::GrArrayPtr;
 GrowingArray<Entity*> Entity::DeleteMarkedList;
 InputHandler* Entity::Input;
-
+Camera* Entity::Camera;
 
 Entity::Entity(std::string aName)
 {

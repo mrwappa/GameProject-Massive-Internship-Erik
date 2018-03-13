@@ -1,11 +1,11 @@
 ﻿  main.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(65): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(67): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(75): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(77): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(79): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(87): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(89): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(91): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(109): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(111): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(99): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(101): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(120): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(122): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(287): warning C4172: returning address of local variable or temporary
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

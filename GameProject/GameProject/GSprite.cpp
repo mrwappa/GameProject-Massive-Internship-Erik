@@ -68,8 +68,13 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 	myHeight = myTextureHeight * aYScale;
 
 	//myDepth = -aDepth;
+	
+	
+	glPushMatrix();
+	Window->resetGLStates();
 	glTranslatef(0, 0, aDepth);
 	Window->draw(mySprite);
+	glPopMatrix();
 }
 
 //Accessors

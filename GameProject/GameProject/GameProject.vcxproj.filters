@@ -34,6 +34,9 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{ea37253a-1073-45ef-97ac-98f5d56802e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools/Core\Camera">
+      <UniqueIdentifier>{b61a5690-63c9-4284-860c-5a5d158bb3c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -57,6 +60,9 @@
     <ClInclude Include="Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Tools/Core\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -74,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Tools/Core\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

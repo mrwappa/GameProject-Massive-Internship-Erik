@@ -10,7 +10,7 @@ Player::Player(float aX, float aY, sf::Color aColor) : Entity("Player")
 
 	mySprite.SetTexture("Sprites/spr_link_sheet.png", 9);
 	myAnimationSpeed = 0.3f;
-	myXScale = 2;
+	myXScale = 1;
 	myYScale = myXScale;
 }
 
@@ -22,14 +22,30 @@ Player::~Player()
 
 void Player::Update()
 {
+	if (myColor == sf::Color::Red)
+	{
+		if (KeyboardCheckPressed(sf::Keyboard::O))
+		{
+			myDepth += 1;
+		}
 
-	if (KeyboardCheckPressed(sf::Keyboard::O) or KeyboardCheckPressed(sf::Keyboard::I))
-	{
-		myDepth += 0.1f;
+		if (KeyboardCheckPressed(sf::Keyboard::L))
+		{
+			myDepth -= 1;
+		}
 	}
-	if (KeyboardCheckPressed(sf::Keyboard::K) or KeyboardCheckPressed(sf::Keyboard::L))
+
+	if (myColor == sf::Color::White)
 	{
-		myDepth -= 0.1f;
+		if (KeyboardCheckPressed(sf::Keyboard::I))
+		{
+			myDepth += 1;
+		}
+
+		if (KeyboardCheckPressed(sf::Keyboard::K))
+		{
+			myDepth -= 1;
+		}
 	}
 	if (KeyboardCheck(sf::Keyboard::S))
 	{

@@ -7,7 +7,8 @@
 #include "SFML\Graphics.hpp"
 #include "GrowingArray.h"
 #include "InputHandler.h"
-#include  "GSprite.h"
+#include "GSprite.h"
+#include "Camera.h"
 
 class Entity
 {
@@ -17,6 +18,8 @@ public:
 	
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
+	
+	static Camera* Camera;
 	
 	//Add, Destroy instance in game loop
 	void AddInstance(Entity* aEntity, std::string aName);
