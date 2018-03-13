@@ -17,8 +17,9 @@ public:
 	float GetY() const;
 
 	//Modifiers
-	float SetX() const;
-	float SetY() const;
+	void SetX(float aX);
+	void SetY(float aY);
+
 private:
 	sf::View myView;
 	float myX;

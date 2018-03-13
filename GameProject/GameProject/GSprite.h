@@ -11,6 +11,7 @@ public:
 	GSprite(sf::Texture aTexture, int aNrOfFrames);
 	~GSprite();
 	static sf::RenderWindow* Window;
+	static sf::Shader* DepthShader;
 
 	void Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
 

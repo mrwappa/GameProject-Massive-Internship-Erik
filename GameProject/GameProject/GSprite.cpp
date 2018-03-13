@@ -2,6 +2,7 @@
 #include "GSprite.h"
 
 sf::RenderWindow* GSprite::Window;
+sf::Shader* GSprite::DepthShader;
 
 GSprite::GSprite()
 {
@@ -70,11 +71,13 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 	//myDepth = -aDepth;
 	
 	
-	glPushMatrix();
+	/*glPushMatrix();
 	Window->resetGLStates();
 	glTranslatef(0, 0, aDepth);
 	Window->draw(mySprite);
-	glPopMatrix();
+	glPopMatrix();*/
+	DepthShader->setUniform("depth",aDepth);
+	Window->draw(mySprite, DepthShader);
 }
 
 //Accessors

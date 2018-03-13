@@ -60,3 +60,23 @@ void Camera::Update()
 	Window->setView(myView);
 }
 
+float Camera::GetX() const
+{
+	return myX;
+}
+
+float Camera::GetY() const
+{
+	return myY;
+}
+
+void Camera::SetX(float aX) 
+{
+	myX = aX;
+}
+
+void Camera::SetY(float aY)
+{
+	myY = aY;
+}
+
