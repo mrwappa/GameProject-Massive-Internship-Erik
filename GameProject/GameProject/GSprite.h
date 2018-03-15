@@ -3,7 +3,7 @@
 #include "SFML\Graphics.hpp"
 #include "GrowingArray.h"
 #include "SFML\OpenGL.hpp"
-
+#include "Camera.h"
 class GSprite
 {
 public:
@@ -11,9 +11,16 @@ public:
 	GSprite(sf::Texture aTexture, int aNrOfFrames);
 	~GSprite();
 	static sf::RenderWindow* Window;
+	static Camera* Camera;
 	static sf::Shader* DepthShader;
-
+	static GrowingArray<GSprite*> SpriteList;
+	
 	void Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
+
+	static GSprite* Partition(int aLow, int aHigh);
+	static void QuickSort(int aLow, int aHigh);
+	static void SortDepth();
+	static void DrawAllSprites();
 
 	//Accessors
 	float GetDepth();

@@ -5,7 +5,7 @@
 class Player : Entity
 {
 public:
-	Player(float aX, float aY, sf::Color aColor);
+	Player(float aX, float aY);
 	~Player();
 
 	void Update();

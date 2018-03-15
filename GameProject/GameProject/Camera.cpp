@@ -60,6 +60,7 @@ void Camera::Update()
 	Window->setView(myView);
 }
 
+//Accessors
 float Camera::GetX() const
 {
 	return myX;
@@ -70,6 +71,27 @@ float Camera::GetY() const
 	return myY;
 }
 
+int Camera::GetViewWidth() const
+{
+	return myViewWidth;
+}
+
+int Camera::GetViewHeight() const
+{
+	return myViewHeight;
+}
+
+float Camera::GetMouseX() const
+{
+	return myMouseX;
+}
+
+float Camera::GetMouseY() const
+{
+	return myMouseY;
+}
+
+//Modifiers
 void Camera::SetX(float aX) 
 {
 	myX = aX;

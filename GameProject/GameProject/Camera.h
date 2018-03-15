@@ -15,10 +15,15 @@ public:
 	//Accessors
 	float GetX() const;
 	float GetY() const;
+	int GetViewWidth() const;
+	int GetViewHeight() const;
+	float GetMouseX() const;
+	float GetMouseY() const;
 
 	//Modifiers
 	void SetX(float aX);
 	void SetY(float aY);
+
 
 private:
 	sf::View myView;

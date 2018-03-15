@@ -90,8 +90,6 @@ GrowingArray<TObjectType, TSizeType>::~GrowingArray()
 	ARRAY_SAFE_DELETE(myArray);
 }
 
-
-
 //EQUALS/ASSIGNMENT OPERATOR
 template<typename TObjectType, typename TSizeType>
 GrowingArray<TObjectType, TSizeType>& GrowingArray<TObjectType, TSizeType>::operator = (const GrowingArray &growingArray)

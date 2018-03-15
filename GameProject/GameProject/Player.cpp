@@ -2,11 +2,10 @@
 #include "Player.h"
 
 
-Player::Player(float aX, float aY, sf::Color aColor) : Entity("Player")
+Player::Player(float aX, float aY) : Entity("Player")
 {
 	myX = aX;
 	myY = aY;
-	myColor = aColor;
 
 	mySprite.SetTexture("Sprites/spr_link_sheet.png", 9);
 	myAnimationSpeed = 0.3f;
@@ -41,16 +40,30 @@ void Player::Update()
 		{
 			myDepth += 1;
 		}
-
 		if (KeyboardCheckPressed(sf::Keyboard::K))
 		{
 			myDepth -= 1;
 		}
 	}
+
+	if (KeyboardCheck(sf::Keyboard::W))
+	{
+		myY -= 1;
+	}
+	if (KeyboardCheck(sf::Keyboard::A))
+	{
+		myX -= 1;
+	}
 	if (KeyboardCheck(sf::Keyboard::S))
 	{
 		myY += 1;
 	}
+	if (KeyboardCheck(sf::Keyboard::D))
+	{
+		myX += 1;
+	}
+
+	
 
 }
 

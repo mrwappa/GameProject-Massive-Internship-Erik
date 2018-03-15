@@ -36,14 +36,14 @@ public:
 	
 	//Keyboard, Mouse
 	static InputHandler* Input;
-	bool KeyboardCheck(sf::Keyboard::Key aKey);
-	bool KeyboardCheckPressed(sf::Keyboard::Key aKey);
-	bool KeyboardCheckRelease(sf::Keyboard::Key aKey);
-	bool KeyboardCheckReleased(sf::Keyboard::Key aKey);
-	bool MouseCheck(sf::Mouse::Button aButton);
-	bool MouseCheckPressed(sf::Mouse::Button aButton);
-	bool MouseCheckRelease(sf::Mouse::Button aButton);
-	bool MouseCheckReleased(sf::Mouse::Button aButton);
+	bool KeyboardCheck(const sf::Keyboard::Key aKey);
+	bool KeyboardCheckPressed(const sf::Keyboard::Key aKey);
+	bool KeyboardCheckRelease(const sf::Keyboard::Key aKey);
+	bool KeyboardCheckReleased(const sf::Keyboard::Key aKey);
+	bool MouseCheck(const sf::Mouse::Button aButton);
+	bool MouseCheckPressed(const sf::Mouse::Button aButton);
+	bool MouseCheckRelease(const sf::Mouse::Button aButton);
+	bool MouseCheckReleased(const sf::Mouse::Button aButton);
 	bool MouseWheelUp();
 	bool MouseWheelDown();
 
