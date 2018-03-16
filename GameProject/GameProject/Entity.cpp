@@ -7,7 +7,18 @@ GrowingArray<Entity*> Entity::DeleteMarkedList;
 InputHandler* Entity::Input;
 Camera* Entity::Camera;
 
-Entity::Entity(std::string aName)
+Entity::Entity()
+{
+	
+}
+
+
+Entity::~Entity()
+{
+
+}
+
+void Entity::Init(std::string aName)
 {
 	myAnimationSpeed = 0;
 	myDepth = 0;
@@ -18,12 +29,6 @@ Entity::Entity(std::string aName)
 	myColor = sf::Color::White;
 	myName = aName;
 	AddInstance(this, aName);
-}
-
-
-Entity::~Entity()
-{
-
 }
 
 void Entity::AddInstance(Entity * aEntity, std::string aName)

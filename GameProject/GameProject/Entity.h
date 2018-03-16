@@ -13,9 +13,11 @@
 class Entity
 {
 public:
-	Entity(std::string aName);
+	Entity();
 	~Entity();
-	
+
+	void Init(std::string aName);
+
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
 	
@@ -26,6 +28,7 @@ public:
 	void DestroyInstance(Entity* aEntity);
 	static void DeleteInstance(Entity* aEntity);
 	static void DeleteMarkedInstances();
+	
 	
 	//Update,Draw
 	virtual void BeginUpdate();

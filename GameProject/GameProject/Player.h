@@ -2,7 +2,9 @@
 #define PLAYER_H
 
 #include "Entity.h"
-class Player : Entity
+#include "CollisionEntity.h"
+#include "Math.h"
+class Player : public CollisionEntity
 {
 public:
 	Player(float aX, float aY);
@@ -13,7 +15,24 @@ public:
 	void DrawGUI();
 
 private:
-	GSprite myGUISprite;
+	bool W;
+	bool A;
+	bool S;
+	bool D;
+
+	float myXAcceleration;
+	float myYAcceleration;
+	float myYRestitution;
+	float myXRestitution;
+	
+	float myXSpeedMax;
+	float myYSpeedMax;
+	int myXDir;
+	int myYDir;
+	float myXAdd;
+	float myYAdd;
+	float myXSub;
+	float myYSub;
 
 };
 #endif // !PLAYER_H

@@ -147,6 +147,7 @@ inline void GrowingArray<TObjectType, TSizeType>::Insert(TSizeType index, const 
 	}
 	else
 	{
+		//Am I checking this one too many times?
 		if (myNrOfElements + 1 >= myCap)
 		{
 			Expand();
@@ -157,7 +158,6 @@ inline void GrowingArray<TObjectType, TSizeType>::Insert(TSizeType index, const 
 			{
 				Expand();
 			}
-
 			for (TSizeType i = myNrOfElements; i > index; i--)
 			{
 				myArray[i] = myArray[i - 1];

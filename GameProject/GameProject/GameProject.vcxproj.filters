@@ -37,6 +37,12 @@
     <Filter Include="Tools/Core\Camera">
       <UniqueIdentifier>{b61a5690-63c9-4284-860c-5a5d158bb3c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CollisionEntity">
+      <UniqueIdentifier>{64da0916-70ba-4e4a-8fc7-227c92451cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{fc46dce5-146c-47a8-b71c-9f736829e2b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -63,6 +69,12 @@
     <ClInclude Include="Camera.h">
       <Filter>Tools/Core\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionEntity.h">
+      <Filter>Game\CollisionEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -83,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Tools/Core\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionEntity.cpp">
+      <Filter>Game\CollisionEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
