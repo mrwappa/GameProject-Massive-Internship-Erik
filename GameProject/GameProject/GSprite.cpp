@@ -43,13 +43,12 @@ GSprite::~GSprite()
 
 void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
-
 	myWidth = myTextureWidth * aXScale / myNrOfFrames;
 	myHeight = myTextureHeight * aYScale;
 	int diameter = myWidth > myHeight ? myWidth : myHeight;
 
 	if (aX + diameter / 2 > Camera->GetX() - Camera->GetViewWidth() / 2 and aX - diameter / 2 < Camera->GetX() + Camera->GetViewWidth() / 2 and
-		aY + diameter / 2 > Camera->GetY() -Camera->GetViewHeight() / 2 and aY - diameter / 2 < Camera->GetY() + Camera->GetViewHeight() / 2)
+		aY + diameter / 2 > Camera->GetY() - Camera->GetViewHeight() / 2 and aY - diameter / 2 < Camera->GetY() + Camera->GetViewHeight() / 2)
 	{
 		myAnimationSpeed = aAnimationSpeed;
 		if (myAnimationSpeed > 0)
@@ -80,7 +79,37 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 		myDepth = -aDepth;
 		SpriteList.Add(this);
 	}
-	
+}
+
+void GSprite::DrawGUI(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
+{
+	myAnimationSpeed = aAnimationSpeed;
+	if (myAnimationSpeed > 0)
+	{
+		myAnimationCounter += myAnimationSpeed;
+		if (myAnimationCounter >= 1)
+		{
+			myAnimationIndex++;
+			myAnimationCounter--;
+			if (myAnimationIndex >= myNrOfFrames)
+			{
+				myAnimationIndex = 0;
+			}
+		}
+	}
+
+	mySprite.setTextureRect(sf::IntRect(myAnimationIndex * myTextureWidth / myNrOfFrames, 0, myTextureWidth / myNrOfFrames, myTextureHeight));
+	mySprite.setPosition(aX + Camera->GetX() - Camera->GetViewWidth() /2, aY + Camera->GetY() - Camera->GetViewHeight() / 2);
+	mySprite.setOrigin(myTextureWidth / myNrOfFrames / 2, myTextureHeight / 2);
+	mySprite.setRotation(aAngle);
+	mySprite.setScale(aXScale, aYScale);
+
+	mySprite.setColor(sf::Color(aColor.r, aColor.g, aColor.b, aAlpha * 255));
+	myWidth = myTextureWidth * aXScale;
+	myHeight = myTextureHeight * aYScale;
+
+	myDepth = 9999999;
+	SpriteList.Add(this);
 }
 
 GSprite* GSprite::Partition(int aLow, int aHigh)
@@ -136,6 +165,8 @@ void GSprite::DrawAllSprites()
 	//remove sprites
 	SpriteList.RemoveAll();
 }
+
+
 
 //Accessors
 float GSprite::GetDepth()

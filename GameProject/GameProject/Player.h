@@ -10,5 +10,10 @@ public:
 
 	void Update();
 	void Draw();
+	void DrawGUI();
+
+private:
+	GSprite myGUISprite;
+
 };
 #endif // !PLAYER_H

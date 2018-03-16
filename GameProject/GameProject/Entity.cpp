@@ -85,6 +85,7 @@ void Entity::Draw()
 
 void Entity::DrawGUI()
 {
+
 }
 
 bool Entity::KeyboardCheck(sf::Keyboard::Key aKey)

@@ -1,25 +1,2 @@
-﻿  GSprite.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(35): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(36): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(49): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(69): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(75): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(132): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(167): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(168): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(170): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(177): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(178): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(193): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(285): warning C4172: returning address of local variable or temporary
-  Compiling...
-  Entity.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\entity.cpp(54): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(285): warning C4172: returning address of local variable or temporary
-  Skipping... (no relevant changes detected)
-  main.cpp
-  Player.cpp
+﻿  Player.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe
