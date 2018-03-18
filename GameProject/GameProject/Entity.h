@@ -25,8 +25,8 @@ public:
 	
 	//Add, Destroy instance in game loop
 	void AddInstance(Entity* aEntity, std::string aName);
-	void DestroyInstance(Entity* aEntity);
-	static void DeleteInstance(Entity* aEntity);
+	void DeleteInstance(Entity* aEntity);
+	
 	static void DeleteMarkedInstances();
 	
 	
@@ -57,7 +57,7 @@ public:
 protected:
 	float myX;
 	float myY;
-
+	
 	float myDepth;
 	float myAngle;
 	float myXScale;
@@ -71,6 +71,8 @@ protected:
 	bool myActive;
 	//Exists for design purposes(like getting an instance from the SuperList)
 	std::string myName;
+
+	static void DeleteInstanceMem(Entity* aEntity);
 private:
 
 	//this, or where entities get deleted is the current problem.

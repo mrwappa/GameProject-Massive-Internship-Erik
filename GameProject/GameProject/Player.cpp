@@ -31,6 +31,7 @@ Player::~Player()
 
 void Player::Update()
 {
+	
 	myDepth = -myY;
 
 	//Check keys
@@ -54,6 +55,7 @@ void Player::Update()
 	myXSpeed = Math::Clamp(myXSpeed + myXAdd - myXSub, -myMovementSpeed, myMovementSpeed);
 	myYSpeed = Math::Clamp(myYSpeed + myYAdd - myYSub, -myMovementSpeed, myMovementSpeed);
 
+	//Diagonals
 	if (myXSpeed != 0 and myYSpeed != 0)
 	{
 		float dist = Math::SQRT2((myXSpeed * myXSpeed) + (myYSpeed * myYSpeed));
@@ -65,6 +67,11 @@ void Player::Update()
 	myX += myXSpeed;
 	myY += myYSpeed;
 
+
+	if (KeyboardCheckPressed(sf::Keyboard::Tab))
+	{
+		DeleteInstance(this);
+	}
 	/*Camera->SetX(myX);
 	Camera->SetY(myY);*/
 }

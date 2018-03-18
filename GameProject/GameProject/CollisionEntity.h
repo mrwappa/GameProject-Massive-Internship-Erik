@@ -9,6 +9,8 @@ public:
 	CollisionEntity();
 	~CollisionEntity();
 
+
+
 protected:
 	float myMovementSpeed;
 	float myXSpeed;

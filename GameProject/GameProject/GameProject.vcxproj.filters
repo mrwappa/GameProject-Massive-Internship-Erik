@@ -40,8 +40,11 @@
     <Filter Include="Game\CollisionEntity">
       <UniqueIdentifier>{64da0916-70ba-4e4a-8fc7-227c92451cfa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
+    <Filter Include="Tools/Core\Math">
       <UniqueIdentifier>{fc46dce5-146c-47a8-b71c-9f736829e2b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\QuadNode">
+      <UniqueIdentifier>{b11c770c-94b4-4c9a-9f4f-fbb9f53a7116}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +76,13 @@
       <Filter>Game\CollisionEntity</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
-      <Filter>Math</Filter>
+      <Filter>Tools/Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Tools/Core</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadNode.h">
+      <Filter>Tools/Core\QuadNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +109,10 @@
       <Filter>Game\CollisionEntity</Filter>
     </ClCompile>
     <ClCompile Include="Math.cpp">
-      <Filter>Math</Filter>
+      <Filter>Tools/Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadNode.cpp">
+      <Filter>Tools/Core\QuadNode</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
