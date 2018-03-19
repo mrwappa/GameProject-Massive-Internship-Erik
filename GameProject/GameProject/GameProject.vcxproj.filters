@@ -84,6 +84,9 @@
     <ClInclude Include="QuadNode.h">
       <Filter>Tools/Core\QuadNode</Filter>
     </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Tools/Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

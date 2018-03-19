@@ -1,2 +1,20 @@
-﻿  QuadNode.cpp
+﻿  Entity.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\entity.cpp(59): warning C4018: '<': signed/unsigned mismatch
+  CollisionEntity.cpp
+  Generating Code...
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(285): warning C4172: returning address of local variable or temporary
+  Compiling...
+  main.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(79): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(91): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(103): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(122): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(136): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(152): warning C4018: '<': signed/unsigned mismatch
+  Player.cpp
+  Generating Code...
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(285): warning C4172: returning address of local variable or temporary
+  Compiling...
+  QuadNode.cpp
+  Generating Code...
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

@@ -68,6 +68,21 @@ std::string Entity::GetName() const
 	return myName;
 }
 
+float Entity::GetAngle() const
+{
+	return myAngle;
+}
+
+float Entity::GetX() const
+{
+	return myX;
+}
+
+float Entity::GetY() const
+{
+	return myY;
+}
+
 void Entity::BeginUpdate()
 {
 }

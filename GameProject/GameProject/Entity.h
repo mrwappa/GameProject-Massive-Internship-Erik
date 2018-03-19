@@ -53,6 +53,9 @@ public:
 	//Accessors
 	bool GetActive() const;
 	std::string GetName() const;
+	float GetAngle() const;
+	float GetX() const;
+	float GetY() const;
 	
 protected:
 	float myX;
