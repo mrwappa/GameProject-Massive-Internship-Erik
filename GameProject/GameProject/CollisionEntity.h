@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Vector2.h"
+#include "Rectangle.h"
 
 class CollisionEntity : public Entity
 {
@@ -22,13 +23,13 @@ public:
 	*/
 
 	Vector2<float> GetBoxPosition() const;
-	sf::Rect<float> GetBoundingBox() const;
+	Rectangle<float> GetBounds() const;
 
 protected:
 	float myMovementSpeed;
 	float myXSpeed;
 	float myYSpeed;
-	sf::Rect<float> myBoundingBox;
+	Rectangle<float> myBoundingBox;
 };
 
 #endif // !COLLISION_ENTITY

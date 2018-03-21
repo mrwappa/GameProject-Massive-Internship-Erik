@@ -3,32 +3,35 @@
 
 #include "GrowingArray.h"
 #include "SFML\Graphics.hpp"
-
-class QuadTree;
+#include "Rectangle.h"
 
 template <typename T>
 class QuadNode
 {
 public:
 
-	QuadNode(sf::Rect<int> aBounds, int aLevel, QuadTree* aOwner, QuadNode* aParent);
+	QuadNode(Rectangle<float> aBounds, int aLevelsLeft, int aSplitSize);
 	~QuadNode();
 	void CreateChildNodes();
+	bool IsEmpty() const;
+	int Count() const;
+	Rectangle<float> GetBounds() const;
 
+	void AddSubTreeContent(GrowingArray<T>* aResult);
+	GrowingArray<T>* Find(Rectangle<float> aQueryArea, GrowingArray<T>* aResult);
+	GrowingArray<T>* FindIntersecting(Rectangle<float> aQueryArea, GrowingArray<T>* aResult);
+	void Insert(T aObject);
 
 private:
 	GrowingArray<T> myObjects;
 
-	QuadNode* myParent;
-	QuadNode* myChildNodes[4];
-	QuadTree* myQuadTreeOwner;
+	QuadNode<T>* myChildNodes[4];
 
-	int myLevel;
+	int myLevelsLeft;
+	int mySplitSize;
+	bool myHasSplit;
 
-
-	sf::Rect myBounds;
-	float myX;
-	float myY;
+	Rectangle<float> myBounds;
 
 	
 };

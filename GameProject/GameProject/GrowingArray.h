@@ -17,13 +17,13 @@ public:
 
 	TObjectType &operator[](const TSizeType index);
 
-	//retardation?
+	//retarderat?
 	TObjectType &FindAtIndex(const TSizeType index);
-	//retardering?
 
 	GrowingArray &operator = (const GrowingArray &growingArray);
 
 	inline void Add(const TObjectType &object);
+	inline void AddRange(const GrowingArray &growingArray);
 
 	inline void RemoveCyclic(const TObjectType &object);
 	inline void RemoveCyclicAtIndex(TSizeType index);
@@ -276,6 +276,17 @@ inline void GrowingArray<TObjectType, TSizeType>::Add(const TObjectType &object)
 		Expand();
 	}
 	myArray[myNrOfElements++] = object;
+}
+
+template<typename TObjectType, typename TSizeType>
+inline void GrowingArray<TObjectType, TSizeType>::AddRange(const GrowingArray & growingArray)
+{
+
+	for (TSizeType i = 0; i < growingArray.Size(); i++)
+	{
+		if (myNrOfElements >= myCap) { Expand(); }
+		myArray[myNrOfElements++] = growingArray[i];
+	}
 }
 
 //SIZE OF GROWINGARRAY
