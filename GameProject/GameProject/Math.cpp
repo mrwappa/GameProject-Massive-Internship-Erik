@@ -39,3 +39,13 @@ const float Math::Clamp(float value, float min, float max)
 {
 	return value <= min ? min : value >= max ? max : value;
 }
+
+float Math::RadToDeg(float aRadians)
+{
+	return aRadians * (180 * M_PI);
+}
+
+float Math::DegToRad(float aDegrees)
+{
+	return aDegrees / (180 / M_PI);
+}

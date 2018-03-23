@@ -38,7 +38,7 @@ public:
 	TType FullLength();
 
 	//Vector2 SetRotate(double aRad);
-	Vector2 Rotate(double aRad);
+	Vector2 Rotate(float aRad);
 
 	TType Dot(const Vector2 &aVector);
 
@@ -243,10 +243,10 @@ inline TType Vector2<TType>::FullLength()
 
 //ROTATE
 template<class TType>
-inline Vector2<TType> Vector2<TType>::Rotate(double aRad)
+inline Vector2<TType> Vector2<TType>::Rotate(float aRad)
 {
-	double Cos = sin(aRad);
-	double Sin = sin(aRad);
+	float Cos = cos(aRad);
+	float Sin = sin(aRad);
 	return(Vector2((myX * Cos) - (myY * Sin), (myY * Cos) + (myX * Sin)));
 }
 

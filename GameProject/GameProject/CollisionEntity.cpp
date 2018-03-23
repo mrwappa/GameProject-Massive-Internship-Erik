@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "CollisionEntity.h"
 
-
 CollisionEntity::CollisionEntity()
 {
 	myMovementSpeed = 0;
 	myXSpeed = 0;
 	myYSpeed = 0;
-	myBoundingBox = Rectangle<float>(0, 0, 0, 0);
+	myBoundingBox = RektF(0, 0, 0, 0);
+
+	myBoxXOffset = 0;
+	myBoxYOffset = 0;
+	myBoxWidth = 0;
+	myBoxHeight = 0;
 }
 
 
@@ -15,7 +19,7 @@ CollisionEntity::~CollisionEntity()
 {
 }
 
-bool CollisionEntity::LineIntersection(Vector2<float> aP1, Vector2<float> aP2, Vector2<float> aP3, Vector2<float> aP4)
+bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4)
 {
 	float denominator = (aP4.y - aP3.y) * (aP2.x - aP1.x) - (aP4.x - aP3.x) * (aP2.y - aP1.y);
 
@@ -35,23 +39,23 @@ bool CollisionEntity::LineIntersection(Vector2<float> aP1, Vector2<float> aP2, V
 	return false;
 }
 
-bool CollisionEntity::CheckBoxEdges(CollisionEntity * t, CollisionEntity * o)
+bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 {
 	
 	//Bounding Points t
-	Vector2<float> TBottomRight = t->GetBoxPosition() + Vector2<float>(t->GetBounds().GetWidth(), t->GetBounds().GetHeight());
-	Vector2<float> TBottomLeft = t->GetBoxPosition() + Vector2<float>(0, t->GetBounds().GetHeight());
-	Vector2<float> TTopLeft = t->GetBoxPosition();
-	Vector2<float> TTopRight = t->GetBoxPosition() + Vector2<float>(t->GetBounds().GetWidth(),0);
+	Vector2f TBottomRight = t->GetBoxPosition() + Vector2f(t->GetBounds().GetWidth(), t->GetBounds().GetHeight());
+	Vector2f TBottomLeft = t->GetBoxPosition() + Vector2f(0, t->GetBounds().GetHeight());
+	Vector2f TTopLeft = t->GetBoxPosition();
+	Vector2f TTopRight = t->GetBoxPosition() + Vector2f(t->GetBounds().GetWidth(),0);
 
 	//Bounding Points o
-	Vector2<float> OBottomRight = o->GetBoxPosition() + Vector2<float>(o->GetBounds().GetWidth(), o->GetBounds().GetHeight());
-	Vector2<float> OBottomLeft = o->GetBoxPosition() + Vector2<float>(0, o->GetBounds().GetHeight());
-	Vector2<float> OTopLeft = o->GetBoxPosition();
-	Vector2<float> OTopRight = o->GetBoxPosition() + Vector2<float>(o->GetBounds().GetWidth(), 0);
+	Vector2f OBottomRight = o->GetBoxPosition() + Vector2f(o->GetBounds().GetWidth(), o->GetBounds().GetHeight());
+	Vector2f OBottomLeft = o->GetBoxPosition() + Vector2f(0, o->GetBounds().GetHeight());
+	Vector2f OTopLeft = o->GetBoxPosition();
+	Vector2f OTopRight = o->GetBoxPosition() + Vector2f(o->GetBounds().GetWidth(), 0);
 
-	Vector2<float> TRectangleEdges[4];
-	Vector2<float> ORectangleEdges[4];
+	Vector2f TRectangleEdges[4];
+	Vector2f ORectangleEdges[4];
 
 	TRectangleEdges[0] = TBottomRight;
 	TRectangleEdges[1] = TBottomLeft;
@@ -62,15 +66,13 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity * t, CollisionEntity * o)
 	ORectangleEdges[1] = OBottomLeft;
 	ORectangleEdges[2] = OTopLeft;
 	ORectangleEdges[3] = OTopRight;
-
+	
 	//If problems arise, check here if angle needs to be converted to radians or the calculation for rotation is incorrect
 	for (int i = 0; i < 4; i++)
 	{
+		/*TRectangleEdges[i] = Rotate(t->GetX(), t->GetY(), t->GetAngle(), TRectangleEdges[i]);
+		ORectangleEdges[i] = Rotate(o->GetX(), o->GetY(), o->GetAngle(), ORectangleEdges[i]);*/
 		TRectangleEdges[i].Rotate(t->GetAngle());
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
 		ORectangleEdges[i].Rotate(o->GetAngle());
 	}
 
@@ -87,12 +89,58 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity * t, CollisionEntity * o)
 	return false;
 }
 
-Vector2<float> CollisionEntity::GetBoxPosition() const
+CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aType)
 {
-	return Vector2<float>(myBoundingBox.GetX(),myBoundingBox.GetY());
+	return NULL;
 }
 
-Rectangle<float> CollisionEntity::GetBounds() const
+bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aObject)
+{
+	aObject->UpdateBBox();
+	UpdateBBoxManually(aX, aY);
+
+	/*if (aObject->GetAngle() == 0 or aObject->GetAngle() == 180 and myAngle == 0 or myAngle == 180)
+	{
+		if (myBoundingBox.Intersect(aObject->GetBounds()))
+		{
+			return true;
+		}
+		return false;
+	}*/
+	if (CheckBoxEdges(this, aObject))
+	{
+		return true;
+	}
+	return false;
+}
+
+void CollisionEntity::UpdateBBoxManually(float aX, float aY)
+{
+	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * myXScale / 2), aY + myBoxYOffset - (myBoxHeight * myYScale / 2), myBoxWidth * myXScale, myBoxHeight * myYScale);
+}
+
+void CollisionEntity::UpdateBBox()
+{
+	myBoundingBox = RektF(myX + myBoxXOffset - (myBoxWidth * myXScale / 2), myY + myBoxYOffset - (myBoxHeight * myYScale / 2), myBoxWidth * myXScale, myBoxHeight * myYScale);
+}
+
+void CollisionEntity::DrawBBox()
+{
+	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset,myBoxWidth * myXScale,myBoxHeight  * myYScale,myAngle,myDepth-1,0.5f,sf::Color::Black);
+}
+
+Vector2f CollisionEntity::GetBoxPosition() const
+{
+	return Vector2f(myBoundingBox.GetX(),myBoundingBox.GetY());
+}
+
+Vector2f CollisionEntity::Rotate(float aX, float aY, float aAngle, Vector2f aPoint)
+{
+	return Vector2f(cos(aAngle) * (aPoint.x - aX) - sin(aAngle) * (aPoint.y - aY) + aX,
+					sin(aAngle) * (aPoint.x - aX) + cos(aAngle) * (aPoint.y - aY) + aY);
+}
+
+RektF CollisionEntity::GetBounds() const
 {
 	return myBoundingBox;
 }

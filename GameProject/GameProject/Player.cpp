@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Player.h"
 
-
+#include "Brick.h"
 Player::Player(float aX, float aY)
 {
-	Entity::Init("Player");
+	Entity::Init("Player",aX,aY);
 	
 	myX = aX;
 	myY = aY;
@@ -21,6 +21,10 @@ Player::Player(float aX, float aY)
 	myYAcceleration = 0.7f;
 	myXRestitution = 0.5f;
 	myYRestitution = 0.5f;
+
+	myBoxWidth = 20;
+	myBoxHeight = 20;
+
 }
 
 
@@ -67,11 +71,26 @@ void Player::Update()
 	myX += myXSpeed;
 	myY += myYSpeed;
 
+	if (KeyboardCheck(sf::Keyboard::T))
+	{
+		myAngle += 2;
+	}
+	if (KeyboardCheck(sf::Keyboard::G))
+	{
+		myAngle -= 2;
+	}
 
-	if (KeyboardCheckPressed(sf::Keyboard::Tab))
+	myColor = sf::Color::White;
+	if (InstanceCollision(myX, myY, (CollisionEntity*)GetObj("Brick")))
+	{
+		myColor = sf::Color::Red;
+	}
+	
+	
+	/*if (KeyboardCheckPressed(sf::Keyboard::Tab))
 	{
 		DeleteInstance(this);
-	}
+	}*/
 	/*Camera->SetX(myX);
 	Camera->SetY(myY);*/
 }
@@ -79,6 +98,7 @@ void Player::Update()
 void Player::Draw()
 {
 	Entity::Draw();
+	DrawBBox();
 }
 
 void Player::DrawGUI()

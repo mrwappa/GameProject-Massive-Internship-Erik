@@ -46,6 +46,9 @@
     <Filter Include="Tools/Core\QuadNode">
       <UniqueIdentifier>{b11c770c-94b4-4c9a-9f4f-fbb9f53a7116}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Brick">
+      <UniqueIdentifier>{950ddf83-bbb4-4095-aa47-38f70d2ad8f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -87,8 +90,11 @@
     <ClInclude Include="Vector2.h">
       <Filter>Tools/Core</Filter>
     </ClInclude>
-    <ClInclude Include="Rectangle.h">
+    <ClInclude Include="Rekt.h">
       <Filter>Tools/Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Game\Brick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="QuadNode.cpp">
       <Filter>Tools/Core\QuadNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Game\Brick</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

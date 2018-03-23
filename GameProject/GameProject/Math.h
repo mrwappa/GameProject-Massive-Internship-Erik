@@ -2,6 +2,8 @@
 #define MATH_H
 
 #define SQRT_MAGIC_F 0x5f3759df
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class Math
 {
@@ -12,6 +14,8 @@ public:
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);
 	static const float Clamp(float value, float min, float max);
+	static float RadToDeg(float aRadians);
+	static float DegToRad(float aDegrees);
 };
 
 #endif // !MATH_H

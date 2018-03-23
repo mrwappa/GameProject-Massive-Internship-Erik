@@ -2,9 +2,9 @@
 #include "GSprite.h"
 
 sf::RenderWindow* GSprite::Window;
-sf::Shader* GSprite::DepthShader;
 GrowingArray<GSprite*> GSprite::SpriteList;
 Camera* GSprite::Camera;
+
 GSprite::GSprite()
 {
 	myWidth = 0;
@@ -147,7 +147,6 @@ void GSprite::QuickSort(int aLow, int aHigh)
 
 void GSprite::SortDepth()
 {
-	std::cout << SpriteList.Size() << "\n";
 	if(SpriteList.Size() > 1)
 	{
 		QuickSort(0, SpriteList.Size()-1);

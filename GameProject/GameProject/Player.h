@@ -34,5 +34,6 @@ private:
 	float myXSub;
 	float myYSub;
 
+	
 };
 #endif // !PLAYER_H

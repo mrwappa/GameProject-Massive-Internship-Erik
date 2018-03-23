@@ -2,32 +2,27 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
-#define ARRAY_SAFE_DELETE(a) if(a!= NULL) delete[] a; a = NULL;
-#define SAFE_DELETE(a) if(a != NULL) delete(a); a = NULL;
-
 #include "QuadNode.h"
-#include "Rectangle.h"
 
 template <typename T>
 class QuadTree
 {
 public:
 
-	QuadTree(Rectangle<float> aRectangle, int aMaxLevels, int aSplitSize);
+	QuadTree(RektF aRectangle, int aMaxLevels, int aSplitSize);
 	~QuadTree();
 	
 	int Count() const;
-	void Insert(T aObject);
-	GrowingArray<T>* FindIntersecting(Rectangle<float> aArea);
-	GrowingArray<T>* Find(Rectangle<float> aArea);
+	void Insert(T* aObject);
+	GrowingArray<T*>* FindIntersecting(RektF aArea);
+	GrowingArray<T*>* Find(RektF aArea);
 
 private:
-	QuadNode<T>* myRootNode;
-
+	QuadNode<T*>* myRootNode;
 };
 
 template<typename T>
-inline QuadTree<T>::QuadTree(Rectangle<float> aRectangle, int aMaxLevels, int aSplitSize)
+inline QuadTree<T>::QuadTree(RektF aRectangle, int aMaxLevels, int aSplitSize)
 {
 	myRootNode = new QuadNode<T>(aRectangle, aMaxLevels, aSplitSize);
 }
@@ -45,21 +40,21 @@ inline int QuadTree<T>::Count() const
 }
 
 template<typename T>
-inline void QuadTree<T>::Insert(T aObject)
+inline void QuadTree<T>::Insert(T* aObject)
 {
 	myRootNode->Insert(aObject);
 }
 
 template<typename T>
-inline GrowingArray<T>* QuadTree<T>::FindIntersecting(Rectangle<float> aArea)
+inline GrowingArray<T*>* QuadTree<T>::FindIntersecting(RektF aArea)
 {
-	return myRootNode->FindInterSecting(aArea,GrowingArray<T>());
+	return myRootNode->FindIntersecting(aArea,GrowingArray<T>());
 }
 
 template<typename T>
-inline GrowingArray<T>* QuadTree<T>::Find(Rectangle<float> aArea)
+inline GrowingArray<T*>* QuadTree<T>::Find(RektF aArea)
 {
 	return myRootNode->Find(aArea, GrowingArray<T>());
 }
 
-#endif // !QUADTREE_H
+#endif // !QUADTREE_H*/

@@ -3,33 +3,39 @@
 
 #include "Entity.h"
 #include "Vector2.h"
-#include "Rectangle.h"
+#include "QuadTree.h"
+#include "Math.h"
 
 class CollisionEntity : public Entity
 {
 public:
 	CollisionEntity();
 	~CollisionEntity();
-
-
-	bool LineIntersection(Vector2<float> aP1, Vector2<float> aP2, Vector2<float> aP3, Vector2<float> aP4);
+	
+	bool LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4);
 	bool CheckBoxEdges(CollisionEntity* t, CollisionEntity* o);
 
-	/*
-		When making the actual collision-checking , make sure to do 
-		normal intersection checking if the angles are 0,90,180,270,360.
-		Also before the check, make sure to: GetAngle() % 360, to get a
-		number from 0-360.
-	*/
+	CollisionEntity* ObjCollision(float aX, float aY, std::string aType);
+	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject);
 
-	Vector2<float> GetBoxPosition() const;
-	Rectangle<float> GetBounds() const;
+	void UpdateBBoxManually(float aX, float aY);
+	void UpdateBBox();
+	void DrawBBox();
+	
+	Vector2f GetBoxPosition() const;
+	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
+	RektF GetBounds() const;
 
 protected:
 	float myMovementSpeed;
 	float myXSpeed;
 	float myYSpeed;
-	Rectangle<float> myBoundingBox;
+	RektF myBoundingBox;
+
+	float myBoxXOffset;
+	float myBoxYOffset;
+	float myBoxWidth;
+	float myBoxHeight;
 };
 
 #endif // !COLLISION_ENTITY

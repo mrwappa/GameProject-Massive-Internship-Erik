@@ -4,6 +4,10 @@
 #include "GrowingArray.h"
 #include "SFML\OpenGL.hpp"
 #include "Camera.h"
+
+#define and &&
+#define or ||
+
 class GSprite
 {
 public:
@@ -12,7 +16,6 @@ public:
 	~GSprite();
 	static sf::RenderWindow* Window;
 	static Camera* Camera;
-	static sf::Shader* DepthShader;
 	static GrowingArray<GSprite*> SpriteList;
 	
 	static GSprite* Partition(int aLow, int aHigh);
@@ -33,6 +36,7 @@ public:
 	//Modifiers
 	void SetTexture(std::string aFileName, int aNrOfFrames);
 	void SetTexture(sf::Texture aTexture, int aNrOfFrames);
+
 	void SetSprite(sf::Sprite aSprite);
 	void SetDepth(float aDepth);
 	void SetAnimationIndex(int aIndex);

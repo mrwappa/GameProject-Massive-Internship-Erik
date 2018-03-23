@@ -16,7 +16,7 @@ public:
 	Entity();
 	~Entity();
 
-	void Init(std::string aName);
+	void Init(std::string aName, float aX, float aY);
 
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
@@ -26,10 +26,10 @@ public:
 	//Add, Destroy instance in game loop
 	void AddInstance(Entity* aEntity, std::string aName);
 	void DeleteInstance(Entity* aEntity);
-	
 	static void DeleteMarkedInstances();
 	
-	
+	Entity* GetObj(std::string aEntity);
+
 	//Update,Draw
 	virtual void BeginUpdate();
 	virtual void Update();
@@ -37,6 +37,9 @@ public:
 	virtual void Draw();
 	virtual void DrawGUI();
 	
+	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle,float aDepth , float aAlpha, sf::Color aColor);
+	static sf::Sprite Pixel;
+
 	//Keyboard, Mouse
 	static InputHandler* Input;
 	bool KeyboardCheck(const sf::Keyboard::Key aKey);
@@ -70,6 +73,7 @@ protected:
 	float myAnimationSpeed;
 	
 	GSprite mySprite;
+	GSprite myPixel;
 	//If the entity is drawn and updated
 	bool myActive;
 	//Exists for design purposes(like getting an instance from the SuperList)

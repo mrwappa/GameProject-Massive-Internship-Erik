@@ -6,6 +6,8 @@ GrowingArray<Entity*>* Entity::GrArrayPtr;
 GrowingArray<Entity*> Entity::DeleteMarkedList;
 InputHandler* Entity::Input;
 Camera* Entity::Camera;
+sf::Sprite Entity::Pixel;
+
 
 Entity::Entity()
 {
@@ -18,8 +20,10 @@ Entity::~Entity()
 
 }
 
-void Entity::Init(std::string aName)
+void Entity::Init(std::string aName, float aX, float aY)
 {
+	myX = aX;
+	myY = aY;
 	myAnimationSpeed = 0;
 	myDepth = 0;
 	myAngle = 0;
@@ -61,6 +65,16 @@ void Entity::DeleteMarkedInstances()
 		Entity::DeleteInstanceMem(DeleteMarkedList[i]);
 		DeleteMarkedList.RemoveCyclic(DeleteMarkedList[i]);
 	}
+}
+
+Entity * Entity::GetObj(std::string aEntity)
+{
+	GrArrayPtr = SuperList.at(aEntity);
+	if (GrArrayPtr->Size() > 0)
+	{
+		return GrArrayPtr->FindAtIndex(0);
+	}
+	return NULL;
 }
 
 std::string Entity::GetName() const
@@ -106,6 +120,16 @@ void Entity::Draw()
 void Entity::DrawGUI()
 {
 
+}
+
+void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aDepth, float aAlpha, sf::Color aColor)
+{
+	if (myPixel.GetTextureWidth() == 0)
+	{
+		//myPixel.SetSprite(Pixel);
+		myPixel.SetTexture("Sprites/spr_pixel.png", 1);
+	}
+	myPixel.Draw(aX, aY, aWidth, aHeight, aAngle, aDepth, aAlpha, aColor,0);
 }
 
 bool Entity::KeyboardCheck(sf::Keyboard::Key aKey)
