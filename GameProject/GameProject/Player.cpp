@@ -10,7 +10,7 @@ Player::Player(float aX, float aY)
 	myY = aY;
 	mySprite.SetTexture("Sprites/spr_link_sheet.png", 9);
 	myAnimationSpeed = 0.3f;
-	myXScale = 1;
+	myXScale = 2;
 	myYScale = myXScale;
 
 	myMovementSpeed = 2.5f;
@@ -24,7 +24,6 @@ Player::Player(float aX, float aY)
 
 	myBoxWidth = 20;
 	myBoxHeight = 20;
-
 }
 
 
@@ -68,6 +67,42 @@ void Player::Update()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
+	CollisionEntity* brick = (CollisionEntity*)GetObj("Brick");
+
+	//X Axis Collision
+	if (InstanceCollision(myX + myXSpeed, myY, brick))
+	{
+		float brickBoxWidth = brick->GetBounds().GetWidth();
+		float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
+
+		if (myX > brickBoxX and myXSpeed < 0)
+		{
+			myX = brickBoxX + (brickBoxWidth / 2) + (myBoundingBox.GetWidth() / 2);
+		}
+		if (myX < brickBoxX and myXSpeed > 0)
+		{
+			myX = brickBoxX  - (brickBoxWidth / 2) - (myBoundingBox.GetWidth() / 2);
+		}
+		myXSpeed = 0;
+	}
+
+	//Y Axis Collision
+	if (InstanceCollision(myX, myY + myYSpeed, brick))
+	{
+		float brickBoxHeight = brick->GetBounds().GetHeight();
+		float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
+
+		if (myY > brickBoxY and myYSpeed < 0)
+		{
+			myY = round(brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2));
+		}
+		if (myY < brickBoxY and myYSpeed > 0)
+		{
+			myY = floor(brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2));
+		}
+		myYSpeed = 0;
+	}
+
 	myX += myXSpeed;
 	myY += myYSpeed;
 
@@ -80,12 +115,24 @@ void Player::Update()
 		myAngle -= 2;
 	}
 
+	if (MouseWheelDown())
+	{
+		Camera->IncrZoom(-0.095f * Camera->GetZoom());
+	}
+	if (MouseWheelUp())
+	{
+		Camera->IncrZoom(0.095f * Camera->GetZoom());
+	}
 	myColor = sf::Color::White;
 	if (InstanceCollision(myX, myY, (CollisionEntity*)GetObj("Brick")))
 	{
 		myColor = sf::Color::Red;
 	}
-	
+	LineColor = sf::Color::White;
+	if (LineIntersection(Vector2f(myX, myY), Vector2f(Camera->GetMouseX(), Camera->GetMouseY()), Vector2f(0, 0), Vector2f(-100, -100)))
+	{
+		LineColor = sf::Color::Red;
+	}
 	
 	/*if (KeyboardCheckPressed(sf::Keyboard::Tab))
 	{
@@ -99,6 +146,10 @@ void Player::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
+	myLine1.DrawLinePos(myX, myY, Camera->GetMouseX(), Camera->GetMouseY(), myDepth - 3, LineColor);
+	myLine2.DrawLinePos(0, 0, -100, -100, myDepth - 3, LineColor);
+	
+	
 }
 
 void Player::DrawGUI()

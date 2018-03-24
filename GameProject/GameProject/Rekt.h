@@ -123,8 +123,8 @@ inline bool Rekt<T>::Contains(Rekt<T> aRect)
 template<typename T>
 inline bool Rekt<T>::Intersect(Rekt<T> aRect)
 {
-	return (myX + myWidth >= aRect.GetX() and myY + myHeight >= aRect.GetY() and
-		myX <= aRect.GetX() + aRect.GetWidth() and myY <= aRect.GetY() + aRect.GetHeight());
+	return (myX + myWidth > aRect.GetX() and myY + myHeight > aRect.GetY() and
+		myX < aRect.GetX() + aRect.GetWidth() and myY < aRect.GetY() + aRect.GetHeight());
 }
 
 typedef Rekt<float> RektF;

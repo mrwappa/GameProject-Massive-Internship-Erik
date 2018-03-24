@@ -160,6 +160,7 @@
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadNode.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Player.cpp" />

@@ -19,10 +19,12 @@ public:
 	int GetViewHeight() const;
 	float GetMouseX() const;
 	float GetMouseY() const;
+	float GetZoom() const;
 
 	//Modifiers
 	void SetX(float aX);
 	void SetY(float aY);
+	void IncrZoom(float aX);
 
 
 private:

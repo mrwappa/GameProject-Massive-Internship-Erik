@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "CollisionEntity.h"
 #include "Math.h"
+#include "Line.h"
 class Player : public CollisionEntity
 {
 public:
@@ -33,6 +34,10 @@ private:
 	float myYAdd;
 	float myXSub;
 	float myYSub;
+
+	Line myLine1;
+	Line myLine2;
+	sf::Color LineColor;
 
 	
 };

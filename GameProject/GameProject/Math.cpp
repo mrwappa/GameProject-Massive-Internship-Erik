@@ -42,10 +42,24 @@ const float Math::Clamp(float value, float min, float max)
 
 float Math::RadToDeg(float aRadians)
 {
-	return aRadians * (180 * M_PI);
+	return aRadians * (180.0f / M_PI);
 }
 
 float Math::DegToRad(float aDegrees)
 {
-	return aDegrees / (180 / M_PI);
+	return aDegrees * (M_PI / 180.0f);
+}
+
+float Math::darctan2(float aX, float aY)
+{
+	if (aY == 0)
+	{
+		return Math::Sign(aX) * M_PI / 2;
+	}
+	if (aY < 0)
+	{
+		return atan(aX / aY) + Math::Sign(aX)*M_PI;
+	}
+	//Greater than 0
+	return atan(aX / aY);
 }

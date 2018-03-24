@@ -32,14 +32,13 @@ void InputHandler::Update()
 			mouseData[i] += 2;
 		}
 	}
-	/*MouseWheelUp = false;
-	MouseWheelDown = false;*/
+	MouseWheelUp = false;
+	MouseWheelDown = false;
 }
 
 void InputHandler::UpdateMouseWheel()
 {
-	MouseWheelUp = false;
-	MouseWheelDown = false;
+	
 
 	if (Event->type == sf::Event::MouseWheelMoved)
 	{

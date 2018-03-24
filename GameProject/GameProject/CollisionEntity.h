@@ -21,6 +21,9 @@ public:
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();
 	void DrawBBox();
+
+	//Compare if two rectangles contain one or the other
+	bool ContainRekt(RektF aRect1, RektF aRect2);
 	
 	Vector2f GetBoxPosition() const;
 	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);

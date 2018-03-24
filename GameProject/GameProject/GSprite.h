@@ -18,13 +18,14 @@ public:
 	static Camera* Camera;
 	static GrowingArray<GSprite*> SpriteList;
 	
-	static GSprite* Partition(int aLow, int aHigh);
+	static int Partition(int aLow, int aHigh);
 	static void QuickSort(int aLow, int aHigh);
 	static void SortDepth();
 	static void DrawAllSprites();
 
 	//A GSprite can only be drawn in the game world or GUI, not both at once
 	void Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
+	void DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
 	void DrawGUI(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed);
 
 	//Accessors

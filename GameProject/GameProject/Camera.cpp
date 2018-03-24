@@ -44,7 +44,6 @@ Camera::Camera(float aX, float aY, int aMonitorWidth, int aMonitorHeight)
 	myMouseY = myY - myViewHeight / 2 + sf::Mouse::getPosition().y / ((float)myMonitorHeight / (float)myViewHeight);
 }
 
-
 Camera::~Camera()
 {
 }
@@ -91,6 +90,11 @@ float Camera::GetMouseY() const
 	return myMouseY;
 }
 
+float Camera::GetZoom() const
+{
+	return myZoom;
+}
+
 //Modifiers
 void Camera::SetX(float aX) 
 {
@@ -100,5 +104,10 @@ void Camera::SetX(float aX)
 void Camera::SetY(float aY)
 {
 	myY = aY;
+}
+
+void Camera::IncrZoom(float aX)
+{
+	myZoom += aX;
 }
 

@@ -11,11 +11,13 @@ public:
 	Math();
 	~Math();
 
+	//Namespace didn't work, have no idea why
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);
 	static const float Clamp(float value, float min, float max);
 	static float RadToDeg(float aRadians);
 	static float DegToRad(float aDegrees);
+	static float darctan2(float aX, float aY);
 };
 
 #endif // !MATH_H

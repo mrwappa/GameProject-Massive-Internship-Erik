@@ -81,6 +81,38 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 	}
 }
 
+void GSprite::DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed)
+{
+	myAnimationSpeed = aAnimationSpeed;
+	if (myAnimationSpeed > 0)
+	{
+		myAnimationCounter += myAnimationSpeed;
+		if (myAnimationCounter >= 1)
+		{
+			myAnimationIndex++;
+			myAnimationCounter--;
+			if (myAnimationIndex >= myNrOfFrames)
+			{
+				myAnimationIndex = 0;
+			}
+		}
+	}
+
+	mySprite.setTextureRect(sf::IntRect(myAnimationIndex * myTextureWidth / myNrOfFrames, 0, myTextureWidth / myNrOfFrames, myTextureHeight));
+	mySprite.setPosition(aX, aY);
+	mySprite.setOrigin(aOriginX, aOriginY);
+	mySprite.setRotation(aAngle);
+	mySprite.setScale(aXScale, aYScale);
+
+	mySprite.setColor(sf::Color(aColor.r, aColor.g, aColor.b, aAlpha * 255.0f));
+
+	myWidth = myTextureWidth * aXScale;
+	myHeight = myTextureHeight * aYScale;
+
+	myDepth = -aDepth;
+	SpriteList.Add(this);
+}
+
 void GSprite::DrawGUI(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
 	myAnimationSpeed = aAnimationSpeed;
@@ -112,9 +144,36 @@ void GSprite::DrawGUI(float aX, float aY, float aXScale, float aYScale, float aA
 	SpriteList.Add(this);
 }
 
-GSprite* GSprite::Partition(int aLow, int aHigh)
+int GSprite::Partition(int aLow, int aHigh)
 {
-	GSprite* pivot = SpriteList[aHigh];
+	int i = aLow;
+	int j = aHigh + 1;
+	while (true)
+	{
+		while(SpriteList[++i]->GetDepth() < SpriteList[aLow]->GetDepth())
+		{
+			if (i == aHigh)
+			{
+				break;
+			}
+		}
+		while (SpriteList[aLow]->GetDepth() < SpriteList[--j]->GetDepth())
+		{
+			if (j == aLow)
+			{
+				break;
+			}
+		}
+
+		if (i >= j) break;
+
+		SpriteList.Swap(i, j);
+	}
+
+	SpriteList.Swap(aLow, j);
+
+	return j;
+	/*GSprite* pivot = SpriteList[aHigh];
 	int i = aLow -1;
 
 	for (int j = aLow; j <= aHigh-1; j++)
@@ -128,12 +187,17 @@ GSprite* GSprite::Partition(int aLow, int aHigh)
 		}
 	}
 	SpriteList.Swap(i + 1, aHigh);
-	return SpriteList[i + 1];
+	return SpriteList[i + 1];*/
 }
 
 void GSprite::QuickSort(int aLow, int aHigh)
 {
-	if (aLow < aHigh)
+	if (aHigh <= aLow) return;
+
+	int j = Partition(aLow, aHigh);
+	QuickSort(aLow, j - 1);
+	QuickSort(j + 1, aHigh);
+	/*if (aLow < aHigh)
 	{
 		GSprite* partition = Partition(aLow, aHigh);
 		int partitionIndex = SpriteList.Find(partition);
@@ -142,7 +206,7 @@ void GSprite::QuickSort(int aLow, int aHigh)
 			QuickSort(aLow, partitionIndex -1);
 			QuickSort(partitionIndex + 1, aHigh);
 		}
-	}
+	}*/
 }
 
 void GSprite::SortDepth()
@@ -196,7 +260,7 @@ void GSprite::SetTexture(std::string aFileName, int aNrOfFrames)
 	mySprite.setTexture(myTexture);
 	myTextureWidth = myTexture.getSize().x;
 	myTextureHeight = myTexture.getSize().y;
-
+	myTexture.setSmooth(false);
 	myNrOfFrames = aNrOfFrames;
 }
 
@@ -206,6 +270,7 @@ void GSprite::SetTexture(sf::Texture aTexture, int aNrOfFrames)
 	mySprite.setTexture(myTexture);
 	myTextureWidth = myTexture.getSize().x;
 	myTextureHeight = myTexture.getSize().y;
+	myTexture.setSmooth(false);
 }
 
 void GSprite::SetSprite(sf::Sprite aSprite)

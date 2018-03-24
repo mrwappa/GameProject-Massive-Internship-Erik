@@ -41,6 +41,14 @@ bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3,
 
 bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 {
+
+	//Check if their Rectangles contain eachother to know if we can skip these expensive operations
+	//Partially fixes problem where it can't find collision if one box is inside the other and no edges
+	//are intersecting
+	if (ContainRekt(t->GetBounds(), o->GetBounds()))
+	{
+		return true;
+	}
 	
 	//Bounding Points t
 	Vector2f TBottomRight = t->GetBoxPosition() + Vector2f(t->GetBounds().GetWidth(), t->GetBounds().GetHeight());
@@ -70,10 +78,10 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	//If problems arise, check here if angle needs to be converted to radians or the calculation for rotation is incorrect
 	for (int i = 0; i < 4; i++)
 	{
-		/*TRectangleEdges[i] = Rotate(t->GetX(), t->GetY(), t->GetAngle(), TRectangleEdges[i]);
-		ORectangleEdges[i] = Rotate(o->GetX(), o->GetY(), o->GetAngle(), ORectangleEdges[i]);*/
-		TRectangleEdges[i].Rotate(t->GetAngle());
-		ORectangleEdges[i].Rotate(o->GetAngle());
+		/*TRectangleEdges[i] = Rotate(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TRectangleEdges[i]);
+		ORectangleEdges[i] = Rotate(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), ORectangleEdges[i]);*/
+		TRectangleEdges[i].Rotate(Math::RadToDeg(t->GetAngle()));
+		ORectangleEdges[i].Rotate(Math::RadToDeg(o->GetAngle()));
 	}
 
 	//Check Intersection for rectangle edges
@@ -99,14 +107,15 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 	aObject->UpdateBBox();
 	UpdateBBoxManually(aX, aY);
 
-	/*if (aObject->GetAngle() == 0 or aObject->GetAngle() == 180 and myAngle == 0 or myAngle == 180)
+	if (aObject->GetAngle() == 0 or aObject->GetAngle() == 180 and myAngle == 0 or myAngle == 180)
 	{
 		if (myBoundingBox.Intersect(aObject->GetBounds()))
 		{
 			return true;
 		}
 		return false;
-	}*/
+	}
+	
 	if (CheckBoxEdges(this, aObject))
 	{
 		return true;
@@ -127,6 +136,15 @@ void CollisionEntity::UpdateBBox()
 void CollisionEntity::DrawBBox()
 {
 	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset,myBoxWidth * myXScale,myBoxHeight  * myYScale,myAngle,myDepth-1,0.5f,sf::Color::Black);
+}
+
+bool CollisionEntity::ContainRekt(RektF aRect1, RektF aRect2)
+{
+	return (aRect1.GetX() >= aRect2.GetX() and aRect1.GetY() >= aRect2.GetY() and
+		    aRect1.GetX2() <= aRect2.GetY2() and aRect1.GetY2() <= aRect2.GetY2()
+			or
+			aRect2.GetX() >= aRect1.GetX() and aRect2.GetY() >= aRect1.GetY() and
+			aRect2.GetX2() <= aRect1.GetY2() and aRect2.GetY2() <= aRect1.GetY2());
 }
 
 Vector2f CollisionEntity::GetBoxPosition() const
