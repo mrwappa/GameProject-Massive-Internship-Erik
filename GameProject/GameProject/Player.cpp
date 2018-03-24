@@ -70,7 +70,7 @@ void Player::Update()
 	CollisionEntity* brick = (CollisionEntity*)GetObj("Brick");
 
 	//X Axis Collision
-	if (InstanceCollision(myX + myXSpeed, myY, brick))
+	/*if (InstanceCollision(myX + myXSpeed, myY, brick))
 	{
 		float brickBoxWidth = brick->GetBounds().GetWidth();
 		float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
@@ -94,14 +94,14 @@ void Player::Update()
 
 		if (myY > brickBoxY and myYSpeed < 0)
 		{
-			myY = round(brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2));
+			myY = brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2);
 		}
 		if (myY < brickBoxY and myYSpeed > 0)
 		{
-			myY = floor(brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2));
+			myY = brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2);
 		}
 		myYSpeed = 0;
-	}
+	}*/
 
 	myX += myXSpeed;
 	myY += myYSpeed;

@@ -62,6 +62,18 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	Vector2f OTopLeft = o->GetBoxPosition();
 	Vector2f OTopRight = o->GetBoxPosition() + Vector2f(o->GetBounds().GetWidth(), 0);
 
+	//Rotate Points t
+	TBottomRight = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TBottomRight /*+ Vector2f(-0.5f, -0.5f)*/);
+	TBottomLeft = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TBottomLeft /*+ Vector2f(0.5f, -0.5f)*/);
+	TTopLeft = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TTopLeft /*+ Vector2f(0.5f, 0.5f)*/) ;
+	TTopRight = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TTopRight /*+ Vector2f(-0.5f, 0.5f)*/);
+
+	//Rotate Points o
+	OBottomRight = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OBottomRight /*+ Vector2f(-0.5f, -0.5f)*/);
+	OBottomLeft = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OBottomLeft /*+ Vector2f(0.5f, -0.5f)*/);
+	OTopLeft = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OTopLeft /*+ Vector2f(0.5f, 0.5f)*/);
+	OTopRight = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OTopRight /*+ Vector2f(-0.5f, 0.5f)*/);
+
 	Vector2f TRectangleEdges[4];
 	Vector2f ORectangleEdges[4];
 
@@ -74,15 +86,6 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	ORectangleEdges[1] = OBottomLeft;
 	ORectangleEdges[2] = OTopLeft;
 	ORectangleEdges[3] = OTopRight;
-	
-	//If problems arise, check here if angle needs to be converted to radians or the calculation for rotation is incorrect
-	for (int i = 0; i < 4; i++)
-	{
-		/*TRectangleEdges[i] = Rotate(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TRectangleEdges[i]);
-		ORectangleEdges[i] = Rotate(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), ORectangleEdges[i]);*/
-		TRectangleEdges[i].Rotate(Math::RadToDeg(t->GetAngle()));
-		ORectangleEdges[i].Rotate(Math::RadToDeg(o->GetAngle()));
-	}
 
 	//Check Intersection for rectangle edges
 	for (int i = 0; i < 4; i++)
@@ -107,7 +110,7 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 	aObject->UpdateBBox();
 	UpdateBBoxManually(aX, aY);
 
-	if (aObject->GetAngle() == 0 or aObject->GetAngle() == 180 and myAngle == 0 or myAngle == 180)
+	if ((aObject->GetAngle() == 0 or aObject->GetAngle() == 180) and (myAngle == 0 or myAngle == 180))
 	{
 		if (myBoundingBox.Intersect(aObject->GetBounds()))
 		{
@@ -157,6 +160,27 @@ Vector2f CollisionEntity::Rotate(float aX, float aY, float aAngle, Vector2f aPoi
 	return Vector2f(cos(aAngle) * (aPoint.x - aX) - sin(aAngle) * (aPoint.y - aY) + aX,
 					sin(aAngle) * (aPoint.x - aX) + cos(aAngle) * (aPoint.y - aY) + aY);
 }
+
+Vector2f CollisionEntity::RotatePoint(float cx, float cy, float angle, Vector2f p)
+{
+	float s = sin(angle);
+	float c = cos(angle);
+
+	// translate point back to origin:
+	p.x -= cx;
+	p.y -= cy;
+
+	// rotate point
+	float xnew = p.x * c - p.y * s;
+	float ynew = p.x * s + p.y * c;
+
+	// translate point back:
+	p.x = xnew + cx;
+	p.y = ynew + cy;
+	return p;
+}
+
+
 
 RektF CollisionEntity::GetBounds() const
 {
