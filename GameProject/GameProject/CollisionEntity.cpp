@@ -63,16 +63,16 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	Vector2f OTopRight = o->GetBoxPosition() + Vector2f(o->GetBounds().GetWidth(), 0);
 
 	//Rotate Points t
-	TBottomRight = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TBottomRight /*+ Vector2f(-0.5f, -0.5f)*/);
-	TBottomLeft = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TBottomLeft /*+ Vector2f(0.5f, -0.5f)*/);
-	TTopLeft = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TTopLeft /*+ Vector2f(0.5f, 0.5f)*/) ;
-	TTopRight = RotatePoint(t->GetX(), t->GetY(), Math::RadToDeg(t->GetAngle()), TTopRight /*+ Vector2f(-0.5f, 0.5f)*/);
+	TBottomRight = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TBottomRight);
+	TBottomLeft = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TBottomLeft);
+	TTopLeft = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TTopLeft) ;
+	TTopRight = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TTopRight);
 
 	//Rotate Points o
-	OBottomRight = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OBottomRight /*+ Vector2f(-0.5f, -0.5f)*/);
-	OBottomLeft = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OBottomLeft /*+ Vector2f(0.5f, -0.5f)*/);
-	OTopLeft = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OTopLeft /*+ Vector2f(0.5f, 0.5f)*/);
-	OTopRight = RotatePoint(o->GetX(), o->GetY(), Math::RadToDeg(o->GetAngle()), OTopRight /*+ Vector2f(-0.5f, 0.5f)*/);
+	OBottomRight = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OBottomRight);
+	OBottomLeft = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OBottomLeft);
+	OTopLeft = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OTopLeft);
+	OTopRight = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OTopRight);
 
 	Vector2f TRectangleEdges[4];
 	Vector2f ORectangleEdges[4];
@@ -143,11 +143,10 @@ void CollisionEntity::DrawBBox()
 
 bool CollisionEntity::ContainRekt(RektF aRect1, RektF aRect2)
 {
-	return (aRect1.GetX() >= aRect2.GetX() and aRect1.GetY() >= aRect2.GetY() and
-		    aRect1.GetX2() <= aRect2.GetY2() and aRect1.GetY2() <= aRect2.GetY2()
-			or
-			aRect2.GetX() >= aRect1.GetX() and aRect2.GetY() >= aRect1.GetY() and
-			aRect2.GetX2() <= aRect1.GetY2() and aRect2.GetY2() <= aRect1.GetY2());
+	float rect1Area = aRect1.GetWidth() * aRect1.GetHeight();
+	float rect2Area = aRect2.GetWidth() * aRect2.GetHeight();
+	
+	return rect1Area > rect2Area ? aRect1.Contains(aRect2) : aRect2.Contains(aRect1);
 }
 
 Vector2f CollisionEntity::GetBoxPosition() const

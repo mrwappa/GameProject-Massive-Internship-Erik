@@ -35,10 +35,6 @@ private:
 	float myXSub;
 	float myYSub;
 
-	Line myLine1;
-	Line myLine2;
-	sf::Color LineColor;
-
 	
 };
 #endif // !PLAYER_H

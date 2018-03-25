@@ -69,39 +69,65 @@ void Player::Update()
 
 	CollisionEntity* brick = (CollisionEntity*)GetObj("Brick");
 
-	//X Axis Collision
-	/*if (InstanceCollision(myX + myXSpeed, myY, brick))
+	if (myAngle == 0 or myAngle == 180)
 	{
-		float brickBoxWidth = brick->GetBounds().GetWidth();
-		float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
+		//X Axis Collision
+		if (InstanceCollision(myX + myXSpeed, myY, brick))
+		{
+			float brickBoxWidth = brick->GetBounds().GetWidth();
+			float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
 
-		if (myX > brickBoxX and myXSpeed < 0)
-		{
-			myX = brickBoxX + (brickBoxWidth / 2) + (myBoundingBox.GetWidth() / 2);
+			if (myX > brickBoxX and myXSpeed < 0)
+			{
+				myX = brickBoxX + (brickBoxWidth / 2) + (myBoundingBox.GetWidth() / 2);
+			}
+			if (myX < brickBoxX and myXSpeed > 0)
+			{
+				myX = brickBoxX - (brickBoxWidth / 2) - (myBoundingBox.GetWidth() / 2);
+			}
+			myXSpeed = 0;
 		}
-		if (myX < brickBoxX and myXSpeed > 0)
+
+		//Y Axis Collision
+		if (InstanceCollision(myX, myY + myYSpeed, brick))
 		{
-			myX = brickBoxX  - (brickBoxWidth / 2) - (myBoundingBox.GetWidth() / 2);
+			float brickBoxHeight = brick->GetBounds().GetHeight();
+			float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
+
+			if (myY > brickBoxY and myYSpeed < 0)
+			{
+				myY = brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2);
+			}
+			if (myY < brickBoxY and myYSpeed > 0)
+			{
+				myY = brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2);
+			}
+			myYSpeed = 0;
 		}
-		myXSpeed = 0;
 	}
-
-	//Y Axis Collision
-	if (InstanceCollision(myX, myY + myYSpeed, brick))
+	else
 	{
-		float brickBoxHeight = brick->GetBounds().GetHeight();
-		float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
+		if (InstanceCollision(myX + myXSpeed, myY, brick))
+		{
+			for (int i = 0; i < abs(myXSpeed); i++)
+			{
+				if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
+				myX += Math::Sign(myXSpeed);
+			}
+			myXSpeed = 0;
+		}
 
-		if (myY > brickBoxY and myYSpeed < 0)
+		if (InstanceCollision(myX, myY + myYSpeed, brick))
 		{
-			myY = brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2);
+			for (int i = 0; i < abs(myYSpeed); i++)
+			{
+				if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
+				myY += Math::Sign(myYSpeed);
+			}
+			myYSpeed = 0;
 		}
-		if (myY < brickBoxY and myYSpeed > 0)
-		{
-			myY = brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2);
-		}
-		myYSpeed = 0;
-	}*/
+	}
+	
 
 	myX += myXSpeed;
 	myY += myYSpeed;
@@ -128,11 +154,6 @@ void Player::Update()
 	{
 		myColor = sf::Color::Red;
 	}
-	LineColor = sf::Color::White;
-	if (LineIntersection(Vector2f(myX, myY), Vector2f(Camera->GetMouseX(), Camera->GetMouseY()), Vector2f(0, 0), Vector2f(-100, -100)))
-	{
-		LineColor = sf::Color::Red;
-	}
 	
 	/*if (KeyboardCheckPressed(sf::Keyboard::Tab))
 	{
@@ -146,8 +167,6 @@ void Player::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
-	myLine1.DrawLinePos(myX, myY, Camera->GetMouseX(), Camera->GetMouseY(), myDepth - 3, LineColor);
-	myLine2.DrawLinePos(0, 0, -100, -100, myDepth - 3, LineColor);
 	
 	
 }
