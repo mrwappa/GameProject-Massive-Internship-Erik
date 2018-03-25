@@ -17,7 +17,7 @@ public:
 	static const float Clamp(float value, float min, float max);
 	static float RadToDeg(float aRadians);
 	static float DegToRad(float aDegrees);
-	static float darctan2(float aX, float aY);
+	static float PointDirection(float aX1, float aY1, float aX2, float aY2);
 };
 
 #endif // !MATH_H

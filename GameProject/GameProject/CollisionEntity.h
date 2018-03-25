@@ -26,9 +26,9 @@ public:
 	bool ContainRekt(RektF aRect1, RektF aRect2);
 	
 	Vector2f GetBoxPosition() const;
-	//this is broken, so is the rotate in the Vector2 class
+	//Rotate() is broken, so is the Rotate() in the Vector2 class
 	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
-	Vector2f RotatePoint(float cx, float cy, float angle, Vector2f p);
+	Vector2f RotatePoint(float aX, float aY, float aAngle, Vector2f Point);
 	RektF GetBounds() const;
 
 protected:

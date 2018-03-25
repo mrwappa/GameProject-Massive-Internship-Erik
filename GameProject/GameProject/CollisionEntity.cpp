@@ -160,23 +160,23 @@ Vector2f CollisionEntity::Rotate(float aX, float aY, float aAngle, Vector2f aPoi
 					sin(aAngle) * (aPoint.x - aX) + cos(aAngle) * (aPoint.y - aY) + aY);
 }
 
-Vector2f CollisionEntity::RotatePoint(float cx, float cy, float angle, Vector2f p)
+Vector2f CollisionEntity::RotatePoint(float aX, float aY, float aAngle, Vector2f aPoint)
 {
-	float s = sin(angle);
-	float c = cos(angle);
+	float s = sin(aAngle);
+	float c = cos(aAngle);
 
 	// translate point back to origin:
-	p.x -= cx;
-	p.y -= cy;
+	aPoint.x -= aX;
+	aPoint.y -= aY;
 
 	// rotate point
-	float xnew = p.x * c - p.y * s;
-	float ynew = p.x * s + p.y * c;
+	float xnew = aPoint.x * c - aPoint.y * s;
+	float ynew = aPoint.x * s + aPoint.y * c;
 
 	// translate point back:
-	p.x = xnew + cx;
-	p.y = ynew + cy;
-	return p;
+	aPoint.x = xnew + aX;
+	aPoint.y = ynew + aY;
+	return aPoint;
 }
 
 

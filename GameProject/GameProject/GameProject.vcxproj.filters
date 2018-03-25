@@ -49,10 +49,13 @@
     <Filter Include="Game\Brick">
       <UniqueIdentifier>{950ddf83-bbb4-4095-aa47-38f70d2ad8f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Draw Stuff">
+    <Filter Include="Game\World">
+      <UniqueIdentifier>{b94ae476-1aeb-441a-9454-5847d30907e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\Draw Stuff">
       <UniqueIdentifier>{daefe2e4-9c4e-4420-a6c6-c2a246d22a6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Draw Stuff\Line">
+    <Filter Include="Tools/Core\Draw Stuff\Line">
       <UniqueIdentifier>{f5bfc3ed-9139-46fb-b242-06844af8408f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -103,7 +106,10 @@
       <Filter>Game\Brick</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
-      <Filter>Game\Draw Stuff\Line</Filter>
+      <Filter>Tools/Core\Draw Stuff\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Game\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +145,10 @@
       <Filter>Game\Brick</Filter>
     </ClCompile>
     <ClCompile Include="Line.cpp">
-      <Filter>Game\Draw Stuff\Line</Filter>
+      <Filter>Tools/Core\Draw Stuff\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Game\World</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -50,16 +50,7 @@ float Math::DegToRad(float aDegrees)
 	return aDegrees * (M_PI / 180.0f);
 }
 
-float Math::darctan2(float aX, float aY)
+float Math::PointDirection(float aX1, float aY1, float aX2, float aY2)
 {
-	if (aY == 0)
-	{
-		return Math::Sign(aX) * M_PI / 2;
-	}
-	if (aY < 0)
-	{
-		return atan(aX / aY) + Math::Sign(aX)*M_PI;
-	}
-	//Greater than 0
-	return atan(aX / aY);
+	return atan2f(aY2 - aY1, aX2 - aX1);
 }

@@ -115,6 +115,30 @@ void Player::Update()
 				myX += Math::Sign(myXSpeed);
 			}
 			myXSpeed = 0;
+			/*float brickBoxWidth = brick->GetBounds().GetWidth();
+			float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
+
+			if (myX > brickBoxX and myXSpeed < 0)
+			{
+				myX = brickBoxX + (brickBoxWidth / 2);
+			}
+			if (myX < brickBoxX and myXSpeed > 0)
+			{
+				myX = brickBoxX - (brickBoxWidth / 2);
+			}
+
+			int diameter = myBoxWidth > myBoxHeight ? myBoxWidth * myXScale : myBoxHeight * myYScale;
+			for (int i = 0; i < diameter; i++)
+			{
+				
+				if (!InstanceCollision(myX, myY, brick))
+				{
+					break;
+				}
+				myX -= Math::Sign(myXSpeed);
+			}
+
+			myXSpeed = 0;*/
 		}
 
 		if (InstanceCollision(myX, myY + myYSpeed, brick))
@@ -125,6 +149,31 @@ void Player::Update()
 				myY += Math::Sign(myYSpeed);
 			}
 			myYSpeed = 0;
+			/*float brickBoxHeight = brick->GetBounds().GetHeight();
+			float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
+
+			if (myY > brickBoxY and myYSpeed < 0)
+			{
+				myY = brickBoxY + (brickBoxHeight / 2);
+			}
+			if (myY < brickBoxY and myYSpeed > 0)
+			{
+				myY = brickBoxY - (brickBoxHeight / 2);
+			}
+
+			int diameter = myBoxWidth > myBoxHeight ? myBoxWidth * myXScale : myBoxHeight * myYScale;
+
+			for (int i = 0; i < diameter; i++)
+			{
+				
+				if (!InstanceCollision(myX, myY, brick))
+				{
+					break;
+				}
+				myY -= Math::Sign(myYSpeed);
+			}
+
+			myYSpeed = 0;*/
 		}
 	}
 	
