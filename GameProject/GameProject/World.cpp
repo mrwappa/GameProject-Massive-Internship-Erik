@@ -27,6 +27,8 @@ void World::CreateWorld()
 {
 	new Player(100, 100);
 	new Brick(50, 50);
+	new Brick(0, 0);
+	new Brick(25, 25);
 }
 
 void World::DestroyWorld()

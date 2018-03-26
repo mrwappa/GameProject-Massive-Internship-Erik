@@ -8,6 +8,7 @@ Brick::Brick(float aX, float aY)
 
 	myBoxWidth = 32;
 	myBoxHeight = 32;
+	myDepth = -myY;
 }
 
 
@@ -17,7 +18,11 @@ Brick::~Brick()
 
 void Brick::Update()
 {
-	myDepth = -myY;
+	
+	if (KeyboardCheckPressed(sf::Keyboard::Tab))
+	{
+		DeleteInstance(this);
+	}
 }
 
 void Brick::Draw()

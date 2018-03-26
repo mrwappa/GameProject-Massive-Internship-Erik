@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "CollisionEntity.h"
 
+std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionEntity::CollisionList;
+GrowingArray<CollisionEntity*>* CollisionEntity::GrArrayPtr;
+
 CollisionEntity::CollisionEntity()
 {
 	myMovementSpeed = 0;
@@ -17,6 +20,52 @@ CollisionEntity::CollisionEntity()
 
 CollisionEntity::~CollisionEntity()
 {
+
+}
+
+void CollisionEntity::Init(std::string aName, float aX, float aY)
+{
+	Entity::Init(aName, aX, aY);
+	AddCollInstance(this);
+}
+
+void CollisionEntity::RemoveCollInstance(CollisionEntity* aEntity)
+{
+	GrArrayPtr = CollisionList.at(aEntity->GetName());
+	GrArrayPtr->RemoveCyclic(aEntity);
+	GrArrayPtr = nullptr;
+}
+
+void CollisionEntity::RemoveCollInstance(std::string aName, CollisionEntity * aEntity)
+{
+	GrArrayPtr = CollisionList.at(aName);
+	GrArrayPtr->RemoveCyclic(aEntity);
+	GrArrayPtr = nullptr;
+}
+
+void CollisionEntity::AddCollInstance(CollisionEntity* aEntity)
+{
+	if (CollisionList.count(aEntity->GetName()) == 0)
+	{
+		CollisionList[aEntity->GetName()] = new GrowingArray<CollisionEntity*>;
+	}
+	GrArrayPtr = CollisionList.at(aEntity->GetName());
+	GrArrayPtr->Add(aEntity);
+}
+
+void CollisionEntity::AddCollInstance(std::string aName, CollisionEntity * aEntity)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		CollisionList[aName] = new GrowingArray<CollisionEntity*>;
+	}
+	GrArrayPtr = CollisionList.at(aName);
+	GrArrayPtr->Add(aEntity);
+}
+
+void CollisionEntity::OnRemoval()
+{
+	RemoveCollInstance(this);
 }
 
 bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4)
@@ -100,16 +149,40 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	return false;
 }
 
-CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aType)
+CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aName)
 {
+	
+
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+	UpdateBBoxManually(aX, aY);
+
+	GrArrayPtr = CollisionList.at(aName);
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
+		{
+			//I do not understand why the regular [] index operator is failing here
+			return GrArrayPtr->FindAtIndex(i);
+		}
+	}
 	return NULL;
 }
 
-bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aObject)
+bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aObject, bool aUpdateBBox)
 {
+	if (aObject == NULL)
+	{
+		return false;
+	}
 	aObject->UpdateBBox();
-	UpdateBBoxManually(aX, aY);
-
+	if (aUpdateBBox)
+	{
+		UpdateBBoxManually(aX, aY);
+	}
+	
 	if ((aObject->GetAngle() == 0 or aObject->GetAngle() == 180) and (myAngle == 0 or myAngle == 180))
 	{
 		if (myBoundingBox.Intersect(aObject->GetBounds()))
@@ -118,27 +191,43 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 		}
 		return false;
 	}
-	
+
 	if (CheckBoxEdges(this, aObject))
 	{
 		return true;
 	}
 	return false;
+	
 }
 
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)
 {
-	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * myXScale / 2), aY + myBoxYOffset - (myBoxHeight * myYScale / 2), myBoxWidth * myXScale, myBoxHeight * myYScale);
+	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),
+		                  aY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2),
+						  myBoxWidth * abs(myXScale),
+						  myBoxHeight * abs(myYScale));
 }
 
 void CollisionEntity::UpdateBBox()
 {
-	myBoundingBox = RektF(myX + myBoxXOffset - (myBoxWidth * myXScale / 2), myY + myBoxYOffset - (myBoxHeight * myYScale / 2), myBoxWidth * myXScale, myBoxHeight * myYScale);
+	myBoundingBox = RektF(myX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),
+						  myY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2),
+						  myBoxWidth * abs(myXScale),
+						  myBoxHeight * abs(myYScale));
 }
 
 void CollisionEntity::DrawBBox()
 {
-	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset,myBoxWidth * myXScale,myBoxHeight  * myYScale,myAngle,myDepth-1,0.5f,sf::Color::Black);
+	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset, myBoxWidth * myXScale, myBoxHeight  * myYScale, myAngle, myDepth - 1, 0.5f, sf::Color::Black);
+}
+
+void CollisionEntity::Move(float aXSpeed, float aYSpeed)
+{
+	//add slowmotion
+	//change or add itself to some quadnode in the quadtree collision structure(if that is ever gonna happen)
+	myX += aXSpeed;
+	myY += aYSpeed;
+
 }
 
 bool CollisionEntity::ContainRekt(RektF aRect1, RektF aRect2)

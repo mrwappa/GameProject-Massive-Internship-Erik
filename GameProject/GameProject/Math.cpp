@@ -52,5 +52,5 @@ float Math::DegToRad(float aDegrees)
 
 float Math::PointDirection(float aX1, float aY1, float aX2, float aY2)
 {
-	return atan2f(aY2 - aY1, aX2 - aX1);
+	return RadToDeg(atan2f(aY2 - aY1, aX2 - aX1));
 }

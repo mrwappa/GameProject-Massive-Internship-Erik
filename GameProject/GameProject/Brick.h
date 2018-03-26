@@ -1,9 +1,9 @@
 #ifndef BRICK_H
 #define BRICK_H
 
-#include "CollisionEntity.h"
+#include "Solid.h"
 
-class Brick : public CollisionEntity
+class Brick : public Solid
 {
 public:
 	Brick(float aX, float aY);

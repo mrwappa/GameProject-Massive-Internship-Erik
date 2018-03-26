@@ -48,7 +48,13 @@ void Entity::AddInstance(Entity * aEntity, std::string aName)
 
 void Entity::DeleteInstance(Entity * aEntity)
 {
+	aEntity->OnRemoval();
 	DeleteMarkedList.Add(aEntity);
+}
+
+void Entity::OnRemoval()
+{
+
 }
 
 void Entity::DeleteInstanceMem(Entity * aEntity)

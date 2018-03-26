@@ -1,8 +1,4 @@
-﻿  main.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(68): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(80): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(92): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(111): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\main.cpp(125): warning C4018: '<': signed/unsigned mismatch
+﻿  CollisionEntity.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(163): warning C4018: '<': signed/unsigned mismatch
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(296): warning C4172: returning address of local variable or temporary
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

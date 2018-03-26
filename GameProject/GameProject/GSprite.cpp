@@ -266,6 +266,7 @@ void GSprite::SetTexture(std::string aFileName, int aNrOfFrames)
 
 void GSprite::SetTexture(sf::Texture aTexture, int aNrOfFrames)
 {
+	myNrOfFrames = aNrOfFrames;
 	myTexture = aTexture;
 	mySprite.setTexture(myTexture);
 	myTextureWidth = myTexture.getSize().x;

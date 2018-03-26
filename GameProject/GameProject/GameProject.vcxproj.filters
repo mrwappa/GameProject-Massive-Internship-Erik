@@ -46,9 +46,6 @@
     <Filter Include="Tools/Core\QuadNode">
       <UniqueIdentifier>{b11c770c-94b4-4c9a-9f4f-fbb9f53a7116}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Brick">
-      <UniqueIdentifier>{950ddf83-bbb4-4095-aa47-38f70d2ad8f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\World">
       <UniqueIdentifier>{b94ae476-1aeb-441a-9454-5847d30907e1}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,15 @@
     </Filter>
     <Filter Include="Tools/Core\Draw Stuff\Line">
       <UniqueIdentifier>{f5bfc3ed-9139-46fb-b242-06844af8408f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids">
+      <UniqueIdentifier>{e6a89fa7-8361-4949-b283-9175e585a92a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids\Brick">
+      <UniqueIdentifier>{950ddf83-bbb4-4095-aa47-38f70d2ad8f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids\Solid">
+      <UniqueIdentifier>{b56fcbb2-f637-499e-9413-e43a3438b9d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,13 +109,16 @@
       <Filter>Tools/Core</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
-      <Filter>Game\Brick</Filter>
+      <Filter>Game\Solids\Brick</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
       <Filter>Tools/Core\Draw Stuff\Line</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>Game\Solids\Solid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -142,13 +151,16 @@
       <Filter>Tools/Core\QuadNode</Filter>
     </ClCompile>
     <ClCompile Include="Brick.cpp">
-      <Filter>Game\Brick</Filter>
+      <Filter>Game\Solids\Brick</Filter>
     </ClCompile>
     <ClCompile Include="Line.cpp">
       <Filter>Tools/Core\Draw Stuff\Line</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>Game\Solids\Solid</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -35,6 +35,13 @@ private:
 	float myXSub;
 	float myYSub;
 
+	float myLookAngle;
+
+	void TextureDirection(float aAngle);
+
+	sf::Texture myCharTextures[8];
+
+	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left};
 	
 };
 #endif // !PLAYER_H

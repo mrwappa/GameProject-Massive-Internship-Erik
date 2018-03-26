@@ -4,16 +4,24 @@
 #include "Brick.h"
 Player::Player(float aX, float aY)
 {
-	Entity::Init("Player",aX,aY);
+	CollisionEntity::Init("Player",aX,aY);
 	
 	myX = aX;
 	myY = aY;
-	mySprite.SetTexture("Sprites/spr_link_sheet.png", 9);
-	myAnimationSpeed = 0.3f;
-	myXScale = 2;
+
+	myCharTextures[(int)Back].loadFromFile("Sprites/Player/spr_player_back.png");
+	myCharTextures[(int)BackLeft].loadFromFile("Sprites/Player/spr_player_back_left.png");
+	myCharTextures[(int)Front].loadFromFile("Sprites/Player/spr_player_front.png");
+	myCharTextures[(int)FrontLeft].loadFromFile("Sprites/Player/spr_player_front_left.png");
+	myCharTextures[(int)Left].loadFromFile("Sprites/Player/spr_player_left.png");
+
+	mySprite.SetTexture(myCharTextures[(int)Front], 3);
+
+	myAnimationSpeed = 0.f;
+	myXScale = 2.0f;
 	myYScale = myXScale;
 
-	myMovementSpeed = 2.5f;
+	myMovementSpeed = 4.5f;
 	myXSpeedMax = myMovementSpeed;
 	myYSpeedMax = myMovementSpeed;
 
@@ -35,6 +43,8 @@ Player::~Player()
 void Player::Update()
 {
 	
+	myLookAngle = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+	TextureDirection(myLookAngle);
 	myDepth = -myY;
 
 	//Check keys
@@ -67,128 +77,48 @@ void Player::Update()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
-	CollisionEntity* brick = (CollisionEntity*)GetObj("Brick");
-
-	if (myAngle == 0 or myAngle == 180)
+	CollisionEntity* brick = ObjCollision(myX + myXSpeed,myY,"Solid");
+	
+	//X Axis Collision
+	if (InstanceCollision(myX + myXSpeed, myY, brick))
 	{
-		//X Axis Collision
-		if (InstanceCollision(myX + myXSpeed, myY, brick))
+		float brickBoxWidth = brick->GetBounds().GetWidth();
+		float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
+
+		if (myX > brickBoxX and myXSpeed < 0)
 		{
-			float brickBoxWidth = brick->GetBounds().GetWidth();
-			float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
-
-			if (myX > brickBoxX and myXSpeed < 0)
-			{
-				myX = brickBoxX + (brickBoxWidth / 2) + (myBoundingBox.GetWidth() / 2);
-			}
-			if (myX < brickBoxX and myXSpeed > 0)
-			{
-				myX = brickBoxX - (brickBoxWidth / 2) - (myBoundingBox.GetWidth() / 2);
-			}
-			myXSpeed = 0;
+			myX = brickBoxX + (brickBoxWidth / 2) + (myBoundingBox.GetWidth() / 2);
 		}
-
-		//Y Axis Collision
-		if (InstanceCollision(myX, myY + myYSpeed, brick))
+		if (myX < brickBoxX and myXSpeed > 0)
 		{
-			float brickBoxHeight = brick->GetBounds().GetHeight();
-			float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
-
-			if (myY > brickBoxY and myYSpeed < 0)
-			{
-				myY = brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2);
-			}
-			if (myY < brickBoxY and myYSpeed > 0)
-			{
-				myY = brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2);
-			}
-			myYSpeed = 0;
+			myX = brickBoxX - (brickBoxWidth / 2) - (myBoundingBox.GetWidth() / 2);
 		}
+		myXSpeed = 0;
 	}
-	else
+
+	brick = ObjCollision(myX, myY + myYSpeed, "Solid");
+
+	//Y Axis Collision
+	if (InstanceCollision(myX, myY + myYSpeed, brick))
 	{
-		if (InstanceCollision(myX + myXSpeed, myY, brick))
+		float brickBoxHeight = brick->GetBounds().GetHeight();
+		float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
+
+		if (myY > brickBoxY and myYSpeed < 0)
 		{
-			for (int i = 0; i < abs(myXSpeed); i++)
-			{
-				if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
-				myX += Math::Sign(myXSpeed);
-			}
-			myXSpeed = 0;
-			/*float brickBoxWidth = brick->GetBounds().GetWidth();
-			float brickBoxX = brick->GetBoxPosition().x + brickBoxWidth / 2;
-
-			if (myX > brickBoxX and myXSpeed < 0)
-			{
-				myX = brickBoxX + (brickBoxWidth / 2);
-			}
-			if (myX < brickBoxX and myXSpeed > 0)
-			{
-				myX = brickBoxX - (brickBoxWidth / 2);
-			}
-
-			int diameter = myBoxWidth > myBoxHeight ? myBoxWidth * myXScale : myBoxHeight * myYScale;
-			for (int i = 0; i < diameter; i++)
-			{
-				
-				if (!InstanceCollision(myX, myY, brick))
-				{
-					break;
-				}
-				myX -= Math::Sign(myXSpeed);
-			}
-
-			myXSpeed = 0;*/
+			myY = brickBoxY + (brickBoxHeight / 2) + (myBoundingBox.GetWidth() / 2);
 		}
-
-		if (InstanceCollision(myX, myY + myYSpeed, brick))
+		if (myY < brickBoxY and myYSpeed > 0)
 		{
-			for (int i = 0; i < abs(myYSpeed); i++)
-			{
-				if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
-				myY += Math::Sign(myYSpeed);
-			}
-			myYSpeed = 0;
-			/*float brickBoxHeight = brick->GetBounds().GetHeight();
-			float brickBoxY = brick->GetBoxPosition().y + brickBoxHeight / 2;
-
-			if (myY > brickBoxY and myYSpeed < 0)
-			{
-				myY = brickBoxY + (brickBoxHeight / 2);
-			}
-			if (myY < brickBoxY and myYSpeed > 0)
-			{
-				myY = brickBoxY - (brickBoxHeight / 2);
-			}
-
-			int diameter = myBoxWidth > myBoxHeight ? myBoxWidth * myXScale : myBoxHeight * myYScale;
-
-			for (int i = 0; i < diameter; i++)
-			{
-				
-				if (!InstanceCollision(myX, myY, brick))
-				{
-					break;
-				}
-				myY -= Math::Sign(myYSpeed);
-			}
-
-			myYSpeed = 0;*/
+			myY = brickBoxY - (brickBoxHeight / 2) - (myBoundingBox.GetWidth() / 2);
 		}
+		myYSpeed = 0;
 	}
+	
 	
 
 	myX += myXSpeed;
 	myY += myYSpeed;
-
-	if (KeyboardCheck(sf::Keyboard::T))
-	{
-		myAngle += 2;
-	}
-	if (KeyboardCheck(sf::Keyboard::G))
-	{
-		myAngle -= 2;
-	}
 
 	if (MouseWheelDown())
 	{
@@ -208,8 +138,8 @@ void Player::Update()
 	{
 		DeleteInstance(this);
 	}*/
-	/*Camera->SetX(myX);
-	Camera->SetY(myY);*/
+	Camera->SetX(myX);
+	Camera->SetY(myY);
 }
 
 void Player::Draw()
@@ -223,5 +153,57 @@ void Player::Draw()
 void Player::DrawGUI()
 {
 	
+}
+
+void Player::TextureDirection(float aAngle)
+{
+	if (aAngle < 25 && aAngle > 0 || aAngle > -25 && aAngle < 0)
+	{
+		//Right
+		mySprite.SetTexture(myCharTextures[(int)Left],3);
+		myXScale = -2;
+	}
+	if (aAngle < -25 && aAngle > -70)
+	{
+		//Back Right
+		mySprite.SetTexture(myCharTextures[(int)BackLeft], 3);
+		myXScale = -2;
+	}
+	if (aAngle < -70 && aAngle > -115)
+	{
+		//Back
+		mySprite.SetTexture(myCharTextures[(int)Back], 3);
+		myXScale = 2;
+	}
+	if (aAngle < -115 && aAngle > -160)
+	{
+		//Back Left
+		mySprite.SetTexture(myCharTextures[(int)BackLeft], 3);
+		myXScale = 2;
+	}
+	if (aAngle < -160 && aAngle > -180 || aAngle > 155 && aAngle < 180)
+	{
+		//Left
+		mySprite.SetTexture(myCharTextures[(int)Left], 3);
+		myXScale = 2;
+	}
+	if (aAngle < 155 && aAngle > 110)
+	{
+		//Front Left
+		mySprite.SetTexture(myCharTextures[(int)FrontLeft], 3);
+		myXScale = 2;
+	}
+	if (aAngle < 110 && aAngle > 65)
+	{
+		//Front
+		mySprite.SetTexture(myCharTextures[(int)Front], 3);
+		myXScale = 2;
+	}
+	if (aAngle < 65 && aAngle > 25)
+	{
+		//Front Right
+		mySprite.SetTexture(myCharTextures[(int)FrontLeft], 3);
+		myXScale = -2;
+	}
 }
 

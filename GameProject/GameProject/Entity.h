@@ -16,7 +16,7 @@ public:
 	Entity();
 	~Entity();
 
-	void Init(std::string aName, float aX, float aY);
+	virtual void Init(std::string aName, float aX, float aY);
 
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
@@ -26,6 +26,7 @@ public:
 	//Add, Destroy instance in game loop
 	void AddInstance(Entity* aEntity, std::string aName);
 	void DeleteInstance(Entity* aEntity);
+	virtual void OnRemoval();
 	static void DeleteMarkedInstances();
 	
 	Entity* GetObj(std::string aEntity);
