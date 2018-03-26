@@ -64,7 +64,9 @@ public:
 protected:
 	float myX;
 	float myY;
-	
+	float myPreviousX;
+	float myPreviousY;
+
 	float myDepth;
 	float myAngle;
 	float myXScale;

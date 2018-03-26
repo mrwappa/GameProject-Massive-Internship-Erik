@@ -26,8 +26,7 @@ public:
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();
 	void DrawBBox();
-
-	//Not necassary right now, meant for use when and if QuadTree Collision is implemented
+	
 	void Move(float aXSpeed, float aYSpeed);
 
 	//Compare if two rectangles contain one or the other

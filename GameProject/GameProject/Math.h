@@ -4,6 +4,7 @@
 #define SQRT_MAGIC_F 0x5f3759df
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <random>
 
 class Math
 {
@@ -18,6 +19,10 @@ public:
 	static float RadToDeg(float aRadians);
 	static float DegToRad(float aDegrees);
 	static float PointDirection(float aX1, float aY1, float aX2, float aY2);
+	static float Lerp(float aStart, float aEnd, float aPercent);
+	static float FRand(float aLow, float aHigh);
+	static float IRand(float aLow, float aHigh);
+
 };
 
 #endif // !MATH_H

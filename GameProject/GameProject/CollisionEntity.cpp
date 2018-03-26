@@ -225,6 +225,9 @@ void CollisionEntity::Move(float aXSpeed, float aYSpeed)
 {
 	//add slowmotion
 	//change or add itself to some quadnode in the quadtree collision structure(if that is ever gonna happen)
+	myPreviousX = myX;
+	myPreviousY = myY;
+
 	myX += aXSpeed;
 	myY += aYSpeed;
 

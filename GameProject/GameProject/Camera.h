@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include "SFML\Graphics.hpp"
+#include <random>
+#include "Math.h"
 
 class Camera
 {
@@ -24,7 +26,9 @@ public:
 	//Modifiers
 	void SetX(float aX);
 	void SetY(float aY);
+	void SetZoom(float aZoom);
 	void IncrZoom(float aX);
+	void ShakeScreen(float aX);
 
 
 private:

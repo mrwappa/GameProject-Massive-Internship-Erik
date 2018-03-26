@@ -20,6 +20,7 @@ void World::Update()
 	{
 		DestroyWorld();
 		CreateWorld();
+		Camera->SetZoom(1);
 	}
 }
 

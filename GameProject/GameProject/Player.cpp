@@ -17,7 +17,6 @@ Player::Player(float aX, float aY)
 
 	mySprite.SetTexture(myCharTextures[(int)Front], 3);
 
-	myAnimationSpeed = 0.f;
 	myXScale = 2.0f;
 	myYScale = myXScale;
 
@@ -37,12 +36,11 @@ Player::Player(float aX, float aY)
 
 Player::~Player()
 {
-
 }
 
 void Player::Update()
 {
-	
+
 	myLookAngle = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
 	myDepth = -myY;
@@ -117,9 +115,23 @@ void Player::Update()
 	
 	
 
-	myX += myXSpeed;
-	myY += myYSpeed;
+	Move(myXSpeed, myYSpeed);
 
+	float trueXSpeed = abs(myX - myPreviousX);
+	float trueYSpeed = abs(myY - myPreviousY);
+	if (myXSpeed != 0 and myYSpeed != 0)
+	{
+		myAnimationSpeed = abs(trueYSpeed + trueXSpeed) / 59.0f;
+	}
+	else
+	{
+		myAnimationSpeed = abs(trueYSpeed + trueXSpeed) / 45.0f;
+	}
+	if (myAnimationSpeed == 0)
+	{
+		mySprite.SetAnimationIndex(0);
+	}
+	
 	if (MouseWheelDown())
 	{
 		Camera->IncrZoom(-0.095f * Camera->GetZoom());
@@ -128,6 +140,11 @@ void Player::Update()
 	{
 		Camera->IncrZoom(0.095f * Camera->GetZoom());
 	}
+	if (KeyboardCheckPressed(sf::Keyboard::Space))
+	{
+		Camera->ShakeScreen(6.0f);
+	}
+
 	myColor = sf::Color::White;
 	if (InstanceCollision(myX, myY, (CollisionEntity*)GetObj("Brick")))
 	{
@@ -146,8 +163,6 @@ void Player::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
-	
-	
 }
 
 void Player::DrawGUI()

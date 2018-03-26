@@ -52,9 +52,13 @@ void Camera::Update()
 {
 	myViewWidth = myWidth / myZoom;
 	myViewHeight = myHeight / myZoom;
+	
 	myMouseX = myX - myViewWidth / 2 + sf::Mouse::getPosition().x / ((float)myMonitorWidth / (float)myViewWidth);
 	myMouseY = myY - myViewHeight / 2 + sf::Mouse::getPosition().y / ((float)myMonitorHeight / (float)myViewHeight);
-	myView.setCenter(myX, myY);
+
+	myScreenShake = Math::Lerp(myScreenShake, 0, 0.55f);
+	
+	myView.setCenter(myX + myScreenShake * Math::IRand(-2,2), myY + myScreenShake * Math::IRand(-2, 2));
 	myView.setSize(sf::Vector2f(myViewWidth, myViewHeight));
 	Window->setView(myView);
 }
@@ -106,8 +110,18 @@ void Camera::SetY(float aY)
 	myY = aY;
 }
 
+void Camera::SetZoom(float aZoom)
+{
+	myZoom = aZoom;
+}
+
 void Camera::IncrZoom(float aX)
 {
 	myZoom += aX;
+}
+
+void Camera::ShakeScreen(float aX)
+{
+	myScreenShake = aX;
 }
 

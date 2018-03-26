@@ -39,7 +39,7 @@ private:
 
 	void TextureDirection(float aAngle);
 
-	sf::Texture myCharTextures[8];
+	sf::Texture myCharTextures[5];
 
 	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left};
 	
