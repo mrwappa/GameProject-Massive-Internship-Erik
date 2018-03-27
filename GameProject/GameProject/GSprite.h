@@ -33,6 +33,10 @@ public:
 	sf::Sprite GetSprite();
 	sf::Texture GetTexture();
 	float GetTextureWidth();
+	float GetTextureHeight();
+	int GetAnimationIndex() const;
+	int GetNrOfFrames() const;
+	int GetAnimationCounter() const;
 
 	//Modifiers
 	void SetTexture(std::string aFileName, int aNrOfFrames);

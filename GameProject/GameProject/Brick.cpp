@@ -3,7 +3,7 @@
 
 Brick::Brick(float aX, float aY)
 {
-	Entity::Init("Brick",aX,aY);
+	Init("Brick",aX,aY);
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
 
 	myBoxWidth = 32;

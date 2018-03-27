@@ -252,6 +252,26 @@ float GSprite::GetTextureWidth()
 	return myTextureWidth;
 }
 
+float GSprite::GetTextureHeight()
+{
+	return myTextureHeight;
+}
+
+int GSprite::GetAnimationIndex() const
+{
+	return myAnimationIndex;
+}
+
+int GSprite::GetNrOfFrames() const
+{
+	return myNrOfFrames;
+}
+
+int GSprite::GetAnimationCounter() const
+{
+	return myAnimationCounter;
+}
+
 //Modifiers
 void GSprite::SetTexture(std::string aFileName, int aNrOfFrames)
 {

@@ -37,7 +37,7 @@ inline Rekt<T>::Rekt(T aX, T aY, T aWidth, T aHeight)
 	myX = aX;
 	myY = aY;
 	myWidth = aWidth;
-	myHeight = aWidth;
+	myHeight = aHeight;
 	myX2 = aX + aWidth;
 	myY2 = aY + aHeight;
 }

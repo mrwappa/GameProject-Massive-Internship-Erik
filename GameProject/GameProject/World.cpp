@@ -16,20 +16,15 @@ World::~World()
 
 void World::Update()
 {
-	if (KeyboardCheckPressed(sf::Keyboard::R))
-	{
-		DestroyWorld();
-		CreateWorld();
-		Camera->SetZoom(1);
-	}
+	
 }
 
 void World::CreateWorld()
 {
 	new Player(100, 100);
-	new Brick(50, 50);
-	new Brick(0, 0);
-	new Brick(25, 25);
+	new Brick(68.5f, 25.5f);
+	new Brick(34.5f, 25.5f);
+	new Brick(0.5f, 25.5f);
 }
 
 void World::DestroyWorld()
@@ -43,5 +38,17 @@ void World::DestroyWorld()
 				DeleteInstance(instance.second->FindAtIndex(i));
 			}
 		}
+	}
+}
+
+void World::DrawGUI()
+{
+	//This is done in DrawGUI() because otherwise two of every objects Sprite will be drawn on one frame
+	//It's nitpicky but also something annoying that I'd rather not deal with.
+	if (KeyboardCheckPressed(sf::Keyboard::R))
+	{
+		DestroyWorld();
+		CreateWorld();
+		Camera->SetZoom(1);
 	}
 }

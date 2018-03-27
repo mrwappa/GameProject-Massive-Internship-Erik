@@ -7,7 +7,7 @@ GrowingArray<Entity*> Entity::DeleteMarkedList;
 InputHandler* Entity::Input;
 Camera* Entity::Camera;
 sf::Sprite Entity::Pixel;
-
+sf::Font* Entity::MainFont;
 
 Entity::Entity()
 {
@@ -48,7 +48,6 @@ void Entity::AddInstance(Entity * aEntity, std::string aName)
 
 void Entity::DeleteInstance(Entity * aEntity)
 {
-	aEntity->OnRemoval();
 	DeleteMarkedList.Add(aEntity);
 }
 
@@ -59,6 +58,7 @@ void Entity::OnRemoval()
 
 void Entity::DeleteInstanceMem(Entity * aEntity)
 {
+	aEntity->OnRemoval();
 	GrArrayPtr = SuperList.at(aEntity->GetName());
 	GrArrayPtr->DeleteCyclic(aEntity);
 	GrArrayPtr = nullptr;
@@ -68,7 +68,7 @@ void Entity::DeleteMarkedInstances()
 {
 	for (int i = 0; i < DeleteMarkedList.Size(); i++)
 	{
-		Entity::DeleteInstanceMem(DeleteMarkedList[i]);
+		DeleteInstanceMem(DeleteMarkedList[i]);
 		DeleteMarkedList.RemoveCyclic(DeleteMarkedList[i]);
 	}
 }
@@ -101,6 +101,16 @@ float Entity::GetX() const
 float Entity::GetY() const
 {
 	return myY;
+}
+
+float Entity::GetWidth()
+{
+	return mySprite.GetTextureWidth() * myXScale;
+}
+
+float Entity::GetHeight()
+{
+	return mySprite.GetTextureHeight() * myYScale;
 }
 
 void Entity::BeginUpdate()
@@ -136,6 +146,44 @@ void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAn
 		myPixel.SetTexture("Sprites/spr_pixel.png", 1);
 	}
 	myPixel.Draw(aX, aY, aWidth, aHeight, aAngle, aDepth, aAlpha, aColor,0);
+}
+
+void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float aXScale ,float aYScale, sf::Color aColor)
+{
+	if (myText.getFont() == NULL) 
+	{
+		myText.setFont(*MainFont);
+		
+	}
+	const_cast<sf::Texture&>(MainFont->getTexture(aSize)).setSmooth(false);
+	myText.setString(aText);
+	myText.setCharacterSize(aSize);
+	myText.setFillColor(aColor);
+	myText.setPosition(aX, aY);
+	myText.setScale(aXScale, aYScale);
+	myText.setStyle(sf::Text::Regular);
+	
+
+	Camera->Window->draw(myText);
+}
+
+void Entity::DrawFontGUI(std::string aText, float aX, float aY, float aSize, float aXScale, float aYScale, sf::Color aColor)
+{
+	if (myText.getFont() == NULL)
+	{
+		myText.setFont(*MainFont);
+
+	}
+	const_cast<sf::Texture&>(MainFont->getTexture(aSize)).setSmooth(false);
+	myText.setString(aText);
+	myText.setCharacterSize(aSize);
+	myText.setFillColor(aColor);
+	myText.setPosition(aX + Camera->GetX() - Camera->GetViewWidth() / 2, aY + Camera->GetY() - Camera->GetViewHeight() / 2);
+	myText.setScale(aXScale, aYScale);
+	myText.setStyle(sf::Text::Regular);
+
+
+	Camera->Window->draw(myText);
 }
 
 bool Entity::KeyboardCheck(sf::Keyboard::Key aKey)

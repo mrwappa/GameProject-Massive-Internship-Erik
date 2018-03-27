@@ -39,6 +39,7 @@ public:
 	RektF GetBounds() const;
 
 protected:
+
 	float myMovementSpeed;
 	float myXSpeed;
 	float myYSpeed;

@@ -12,6 +12,7 @@ public:
 	void Update();
 	void Draw();
 
+
 };
 
 #endif // !BRICK_H

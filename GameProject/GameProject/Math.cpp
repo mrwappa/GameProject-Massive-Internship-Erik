@@ -75,3 +75,13 @@ float Math::IRand(float aLow, float aHigh)
 
 	return dist(g);
 }
+
+float Math::Decimal(float aX)
+{
+	return aX - (int)aX;
+}
+
+float Math::SetDecimal(float aTarget, float aX)
+{
+	return aTarget - Decimal(aTarget) + Decimal(aX);
+}

@@ -6,13 +6,14 @@
 #include <math.h>
 #include <random>
 
+//Namespace didn't work, have no idea why
 class Math
 {
 public:
 	Math();
 	~Math();
 
-	//Namespace didn't work, have no idea why
+	
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);
 	static const float Clamp(float value, float min, float max);
@@ -22,6 +23,8 @@ public:
 	static float Lerp(float aStart, float aEnd, float aPercent);
 	static float FRand(float aLow, float aHigh);
 	static float IRand(float aLow, float aHigh);
+	static float Decimal(float aX);
+	static float SetDecimal(float aTarget, float aX);
 
 };
 

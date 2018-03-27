@@ -1,39 +1,7 @@
-﻿  Brick.cpp
-  CollisionEntity.cpp
-  Entity.cpp
-Entity.cpp(63): warning C4018: '<': signed/unsigned mismatch
-  GSprite.cpp
-GSprite.cpp(28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-GSprite.cpp(35): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(36): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(48): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-GSprite.cpp(68): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-GSprite.cpp(74): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-GSprite.cpp(101): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-GSprite.cpp(107): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-GSprite.cpp(133): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-GSprite.cpp(139): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-GSprite.cpp(224): warning C4018: '<': signed/unsigned mismatch
-GSprite.cpp(261): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(262): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(264): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-GSprite.cpp(271): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(272): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-GSprite.cpp(288): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Line.cpp
-  Math.cpp
-Math.cpp(45): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-Math.cpp(50): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-Math.cpp(57): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-Math.cpp(61): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-Math.cpp(64): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  Player.cpp
-  QuadNode.cpp
-  main.cpp
-main.cpp(74): warning C4018: '<': signed/unsigned mismatch
-main.cpp(86): warning C4018: '<': signed/unsigned mismatch
-main.cpp(98): warning C4018: '<': signed/unsigned mismatch
-main.cpp(117): warning C4018: '<': signed/unsigned mismatch
-main.cpp(131): warning C4018: '<': signed/unsigned mismatch
-main.cpp(147): warning C4018: '<': signed/unsigned mismatch
-LINK : fatal error LNK1181: cannot open input file 'sfml-network.lib﻿'
+﻿  Generating code
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(296): warning C4172: returning address of local variable or temporary
+  314 of 578 functions (54.3%) were compiled, the rest were copied from previous compilation.
+    221 functions were new in current compilation
+    42 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Release\GameProject.exe

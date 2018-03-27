@@ -41,6 +41,11 @@ public:
 	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle,float aDepth , float aAlpha, sf::Color aColor);
 	static sf::Sprite Pixel;
 
+	//Font
+	static sf::Font* MainFont;
+	void DrawFont(std::string aText ,float aX, float aY, float aSize, float aXScale, float aYScale, sf::Color aColor);
+	void DrawFontGUI(std::string aText, float aX, float aY, float aSize, float aXScale, float aYScale, sf::Color aColor);
+
 	//Keyboard, Mouse
 	static InputHandler* Input;
 	bool KeyboardCheck(const sf::Keyboard::Key aKey);
@@ -60,7 +65,9 @@ public:
 	float GetAngle() const;
 	float GetX() const;
 	float GetY() const;
-	
+	float GetWidth();
+	float GetHeight();
+
 protected:
 	float myX;
 	float myY;
@@ -84,7 +91,7 @@ protected:
 
 	static void DeleteInstanceMem(Entity* aEntity);
 private:
-
+	sf::Text myText;
 	//this, or where entities get deleted is the current problem.
 	static GrowingArray<Entity*>* GrArrayPtr;
 };

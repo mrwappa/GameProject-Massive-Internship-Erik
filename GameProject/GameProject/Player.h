@@ -1,10 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Entity.h"
 #include "CollisionEntity.h"
 #include "Math.h"
 #include "Line.h"
+#include "Dust.h"
+
 class Player : public CollisionEntity
 {
 public:
@@ -15,11 +16,15 @@ public:
 	void Draw();
 	void DrawGUI();
 
+	void OnRemoval();
+
 private:
 	bool W;
 	bool A;
 	bool S;
 	bool D;
+
+	int myPreviousAIndex;
 
 	float myXAcceleration;
 	float myYAcceleration;
@@ -38,10 +43,16 @@ private:
 	float myLookAngle;
 
 	void TextureDirection(float aAngle);
-
-	sf::Texture myCharTextures[5];
-
-	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left};
+	//if these textures are not created and deleted on the heap, I get a memory leak
+	//thanks SFML...
+	sf::Texture* myCharTextures[5];
 	
+	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left, T_SIZE};
+
+	//this is the most odd and stupid thing I've ever come across.
+	//Declaring a Texture pointer makes any object that inherits from 
+	//Entity Removed from the main update loop entirely. But if I make it into an array
+	//it thinks that it's totally fine...
+	GSprite* myShadow[1];
 };
 #endif // !PLAYER_H

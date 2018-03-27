@@ -158,6 +158,7 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 		return NULL;
 	}
 	UpdateBBoxManually(aX, aY);
+	myAngle = fmod(myAngle, 360);
 
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
@@ -181,9 +182,12 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 	if (aUpdateBBox)
 	{
 		UpdateBBoxManually(aX, aY);
+		myAngle = fmod(myAngle, 360);
 	}
-	
-	if ((aObject->GetAngle() == 0 or aObject->GetAngle() == 180) and (myAngle == 0 or myAngle == 180))
+
+	float oAngle = fmod(aObject->GetAngle(), 360);;
+
+	if ((oAngle == 0 or oAngle == 180) and (myAngle == 0 or myAngle == 180))
 	{
 		if (myBoundingBox.Intersect(aObject->GetBounds()))
 		{

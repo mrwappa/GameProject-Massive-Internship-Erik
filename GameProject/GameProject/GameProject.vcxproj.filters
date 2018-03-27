@@ -64,6 +64,9 @@
     <Filter Include="Game\Solids\Solid">
       <UniqueIdentifier>{b56fcbb2-f637-499e-9413-e43a3438b9d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\Dust">
+      <UniqueIdentifier>{a23424c3-aebe-4965-98b5-08e2ed6288be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -120,6 +123,9 @@
     <ClInclude Include="Solid.h">
       <Filter>Game\Solids\Solid</Filter>
     </ClInclude>
+    <ClInclude Include="Dust.h">
+      <Filter>Game\Player\Dust</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -161,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="Solid.cpp">
       <Filter>Game\Solids\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Dust.cpp">
+      <Filter>Game\Player\Dust</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
