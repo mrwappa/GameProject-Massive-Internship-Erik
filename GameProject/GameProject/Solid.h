@@ -7,9 +7,8 @@ class Solid : public CollisionEntity
 {
 public:
 
-	void OnRemoval();
 	Solid();
 	~Solid();
-
+	void OnRemoval();
 };
 #endif // !SOLID_H

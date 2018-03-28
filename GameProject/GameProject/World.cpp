@@ -22,9 +22,10 @@ void World::Update()
 void World::CreateWorld()
 {
 	new Player(100, 100);
-	new Brick(68.5f, 25.5f);
+	new Brick(68.5f, 40.5f);
 	new Brick(34.5f, 25.5f);
 	new Brick(0.5f, 25.5f);
+	new TestEnemy(-40, -40);
 }
 
 void World::DestroyWorld()

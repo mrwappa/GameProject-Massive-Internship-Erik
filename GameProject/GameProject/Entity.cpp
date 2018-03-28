@@ -35,7 +35,7 @@ void Entity::Init(std::string aName, float aX, float aY)
 	AddInstance(this, aName);
 }
 
-void Entity::AddInstance(Entity * aEntity, std::string aName)
+void Entity::AddInstance(Entity* aEntity, std::string aName)
 {
 	if (SuperList.count(aName) == 0)
 	{
@@ -43,10 +43,9 @@ void Entity::AddInstance(Entity * aEntity, std::string aName)
 	}
 	GrArrayPtr = SuperList.at(aName);
 	GrArrayPtr->Add(aEntity);
-	//Should I set GrArrayPtr to null? Wouldn't that just make it null in the SuperList as well?
 }
 
-void Entity::DeleteInstance(Entity * aEntity)
+void Entity::DeleteInstance(Entity* aEntity)
 {
 	DeleteMarkedList.Add(aEntity);
 }
@@ -56,20 +55,27 @@ void Entity::OnRemoval()
 
 }
 
-void Entity::DeleteInstanceMem(Entity * aEntity)
+void Entity::DeleteInstanceMem(Entity* aEntity)
 {
 	aEntity->OnRemoval();
 	GrArrayPtr = SuperList.at(aEntity->GetName());
 	GrArrayPtr->DeleteCyclic(aEntity);
-	GrArrayPtr = nullptr;
 }
 
 void Entity::DeleteMarkedInstances()
 {
+	GrowingArray<int> indexRemoval;
+
 	for (int i = 0; i < DeleteMarkedList.Size(); i++)
 	{
 		DeleteInstanceMem(DeleteMarkedList[i]);
-		DeleteMarkedList.RemoveCyclic(DeleteMarkedList[i]);
+		//DeleteMarkedList.RemoveCyclicAtIndex(i);
+		indexRemoval.Add(i);
+	}
+
+	for (int i = 0; i < indexRemoval.Size(); i++)
+	{
+		DeleteMarkedList.RemoveCyclicAtIndex(indexRemoval[i]);
 	}
 }
 

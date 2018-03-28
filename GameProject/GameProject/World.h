@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Brick.h"
-
+#include "TestEnemy.h"
 
 class World : public Entity
 {
@@ -17,6 +17,7 @@ public:
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
+	
 };
 
 #endif // !WORLD_H

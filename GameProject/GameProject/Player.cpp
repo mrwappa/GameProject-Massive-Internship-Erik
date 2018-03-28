@@ -4,6 +4,8 @@
 #include "Brick.h"
 Player::Player(float aX, float aY)
 {
+	Enemy::Target = this;
+
 	Init("Player",aX,aY);
 	
 	myX = aX;
@@ -17,14 +19,13 @@ Player::Player(float aX, float aY)
 		myCharTextures[i] = new sf::Texture();
 	}
 	
-	myCharTextures[(int)Back]->loadFromFile("Sprites/Player/spr_player_back.png");
-	myCharTextures[(int)BackLeft]->loadFromFile("Sprites/Player/spr_player_back_left.png");
-	myCharTextures[(int)Front]->loadFromFile("Sprites/Player/spr_player_front.png");
-	myCharTextures[(int)FrontLeft]->loadFromFile("Sprites/Player/spr_player_front_left.png");
-	myCharTextures[(int)Left]->loadFromFile("Sprites/Player/spr_player_left.png");
-
-
-	mySprite.SetTexture(*myCharTextures[(int)Front], 3);
+	myCharTextures[Back]->loadFromFile("Sprites/Player/spr_player_back.png");
+	myCharTextures[BackLeft]->loadFromFile("Sprites/Player/spr_player_back_left.png");
+	myCharTextures[Front]->loadFromFile("Sprites/Player/spr_player_front.png");
+	myCharTextures[FrontLeft]->loadFromFile("Sprites/Player/spr_player_front_left.png");
+	myCharTextures[Left]->loadFromFile("Sprites/Player/spr_player_left.png");
+	
+	mySprite.SetTexture(*myCharTextures[Front], 3);
 
 	myXScale = 2.0f;
 	myYScale = myXScale;
@@ -54,7 +55,7 @@ Player::~Player()
 
 void Player::Update()
 {
-	myLookAngle = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+	myLookAngle = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
 	myDepth = -myY;
 
@@ -88,13 +89,13 @@ void Player::Update()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
-	CollisionEntity* brick = ObjCollision(myX + myXSpeed,myY,"Solid");
+	CollisionEntity* brick = ObjCollision(myX + myXSpeed,myY,"Brick");
 	
 	//X Axis Collision
-	if (InstanceCollision(myX + myXSpeed, myY, brick))
+	if (brick != NULL)
 	{
 		float brickBoxX = brick->GetBoxPosition().x;
-		myX = round(myX) + Math::Decimal(brickBoxX);
+		myX = floor(myX) + Math::Decimal(brickBoxX);
 		for (int i = 0; i < abs(myXSpeed); i++)
 		{
 			if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
@@ -106,10 +107,10 @@ void Player::Update()
 	brick = ObjCollision(myX, myY + myYSpeed, "Solid");
 
 	//Y Axis Collision
-	if (InstanceCollision(myX, myY + myYSpeed, brick))
+	if (brick != NULL)
 	{
 		float brickBoxY = brick->GetBoxPosition().y;
-		myY = round(myY) + Math::Decimal(brickBoxY);
+		myY = floor(myY) + Math::Decimal(brickBoxY);
 		for (int i = 0; i < abs(myYSpeed); i++)
 		{
 			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
@@ -139,7 +140,7 @@ void Player::Update()
 	
 	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myPreviousAIndex != mySprite.GetNrOfFrames() - 1)
 	{
-		new Dust(myX, myY + 5, Math::PointDirection(0, 0, myXSpeed, myYSpeed) - 270);
+		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 	}
 
 	if (MouseWheelDown())
@@ -187,7 +188,9 @@ void Player::Draw()
 
 void Player::DrawGUI()
 {
-	DrawFontGUI("XD", 0, 0, 24, 1, 1, sf::Color::Red);
+	GrowingArray<Entity*>* list = SuperList.at("Brick");
+
+	DrawFontGUI(std::to_string(list->Size()), 20, 20, 24, 1, 1, sf::Color::White);
 }
 
 void Player::OnRemoval()
@@ -197,6 +200,7 @@ void Player::OnRemoval()
 		delete myCharTextures[i];
 	}
 	delete myShadow[0];
+	CollisionEntity::OnRemoval();
 }
 
 void Player::TextureDirection(float aAngle)
@@ -204,49 +208,49 @@ void Player::TextureDirection(float aAngle)
 	if (aAngle < 25 && aAngle > 0 || aAngle > -25 && aAngle < 0)
 	{
 		//Right
-		mySprite.SetTexture(*myCharTextures[(int)Left],3);
+		mySprite.SetTexture(*myCharTextures[Left],3);
 		myXScale = -2;
 	}
 	if (aAngle < -25 && aAngle > -70)
 	{
 		//Back Right
-		mySprite.SetTexture(*myCharTextures[(int)BackLeft], 3);
+		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
 		myXScale = -2;
 	}
 	if (aAngle < -70 && aAngle > -115)
 	{
 		//Back
-		mySprite.SetTexture(*myCharTextures[(int)Back], 3);
+		mySprite.SetTexture(*myCharTextures[Back], 3);
 		myXScale = 2;
 	}
 	if (aAngle < -115 && aAngle > -160)
 	{
 		//Back Left
-		mySprite.SetTexture(*myCharTextures[(int)BackLeft], 3);
+		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
 		myXScale = 2;
 	}
 	if (aAngle < -160 && aAngle > -180 || aAngle > 155 && aAngle < 180)
 	{
 		//Left
-		mySprite.SetTexture(*myCharTextures[(int)Left], 3);
+		mySprite.SetTexture(*myCharTextures[Left], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 155 && aAngle > 110)
 	{
 		//Front Left
-		mySprite.SetTexture(*myCharTextures[(int)FrontLeft], 3);
+		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 110 && aAngle > 65)
 	{
 		//Front
-		mySprite.SetTexture(*myCharTextures[(int)Front], 3);
+		mySprite.SetTexture(*myCharTextures[Front], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 65 && aAngle > 25)
 	{
 		//Front Right
-		mySprite.SetTexture(*myCharTextures[(int)FrontLeft], 3);
+		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);
 		myXScale = -2;
 	}
 }

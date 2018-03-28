@@ -1,2 +1,11 @@
-﻿  Player.cpp
+﻿  Brick.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  World.cpp
+  TestEnemy.cpp
+  Solid.cpp
+  Player.cpp
+  Enemy.cpp
+  CollisionEntity.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

@@ -5,6 +5,7 @@
 #include "Math.h"
 #include "Line.h"
 #include "Dust.h"
+#include "Enemy.h"
 
 class Player : public CollisionEntity
 {

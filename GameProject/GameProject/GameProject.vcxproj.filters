@@ -67,6 +67,15 @@
     <Filter Include="Game\Player\Dust">
       <UniqueIdentifier>{a23424c3-aebe-4965-98b5-08e2ed6288be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemies">
+      <UniqueIdentifier>{b401801b-d0c2-42ae-9e8a-7f59c9fed0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemies\Enemy">
+      <UniqueIdentifier>{a766db9a-de1f-4368-a4ae-b1775b6ec87e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemies\TestEnemy">
+      <UniqueIdentifier>{a1c91552-dc4d-464c-a7b9-3bf932e87285}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -126,6 +135,12 @@
     <ClInclude Include="Dust.h">
       <Filter>Game\Player\Dust</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game\Enemies\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TestEnemy.h">
+      <Filter>Game\Enemies\TestEnemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -170,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="Dust.cpp">
       <Filter>Game\Player\Dust</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game\Enemies\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="TestEnemy.cpp">
+      <Filter>Game\Enemies\TestEnemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

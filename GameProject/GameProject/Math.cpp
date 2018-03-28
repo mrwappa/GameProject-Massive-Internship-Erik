@@ -52,7 +52,13 @@ float Math::DegToRad(float aDegrees)
 
 float Math::PointDirection(float aX1, float aY1, float aX2, float aY2)
 {
-	return RadToDeg(atan2f(aY2 - aY1, aX2 - aX1));
+	return (atan2f(aY2 - aY1, aX2 - aX1));
+}
+
+float Math::PointDirDeg(float aX1, float aY1, float aX2, float aY2)
+{
+	//I'm a bit lazy
+	return Math::RadToDeg(PointDirection(aX1, aY1, aX2, aY2));
 }
 
 float Math::Lerp(float aStart, float aEnd, float aPercent)
@@ -84,4 +90,14 @@ float Math::Decimal(float aX)
 float Math::SetDecimal(float aTarget, float aX)
 {
 	return aTarget - Decimal(aTarget) + Decimal(aX);
+}
+
+float Math::LenDirX(float aLength, float aDirection)
+{
+	return (cos(aDirection) * aLength);
+}
+
+float Math::LenDirY(float aLength, float aDirection)
+{
+	return (sin(aDirection) * aLength);
 }

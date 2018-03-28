@@ -22,6 +22,7 @@ public:
 
 	CollisionEntity* ObjCollision(float aX, float aY, std::string aName);
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true);
+	void PreventCollision(std::string aName);
 
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();

@@ -33,14 +33,12 @@ void CollisionEntity::RemoveCollInstance(CollisionEntity* aEntity)
 {
 	GrArrayPtr = CollisionList.at(aEntity->GetName());
 	GrArrayPtr->RemoveCyclic(aEntity);
-	GrArrayPtr = nullptr;
 }
 
-void CollisionEntity::RemoveCollInstance(std::string aName, CollisionEntity * aEntity)
+void CollisionEntity::RemoveCollInstance(std::string aName, CollisionEntity* aEntity)
 {
 	GrArrayPtr = CollisionList.at(aName);
 	GrArrayPtr->RemoveCyclic(aEntity);
-	GrArrayPtr = nullptr;
 }
 
 void CollisionEntity::AddCollInstance(CollisionEntity* aEntity)
@@ -53,7 +51,7 @@ void CollisionEntity::AddCollInstance(CollisionEntity* aEntity)
 	GrArrayPtr->Add(aEntity);
 }
 
-void CollisionEntity::AddCollInstance(std::string aName, CollisionEntity * aEntity)
+void CollisionEntity::AddCollInstance(std::string aName, CollisionEntity* aEntity)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -202,6 +200,37 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 	}
 	return false;
 	
+}
+
+void CollisionEntity::PreventCollision(std::string aName)
+{
+	CollisionEntity* brick = ObjCollision(myX + myXSpeed, myY, aName);
+
+	if (brick != NULL)
+	{
+		float brickBoxX = brick->GetBoxPosition().x;
+		myX = floor(myX) + Math::Decimal(brickBoxX);
+		for (int i = 0; i < abs(myXSpeed); i++)
+		{
+			if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
+			myX += Math::Sign(myXSpeed);
+		}
+		myXSpeed = 0;
+	}
+
+	brick = ObjCollision(myX, myY + myYSpeed, aName);
+
+	if (brick != NULL)
+	{
+		float brickBoxY = brick->GetBoxPosition().y;
+		myY = floor(myY) + Math::Decimal(brickBoxY);
+		for (int i = 0; i < abs(myYSpeed); i++)
+		{
+			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
+			myY += Math::Sign(myYSpeed);
+		}
+		myYSpeed = 0;
+	}
 }
 
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)

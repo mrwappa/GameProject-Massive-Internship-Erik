@@ -18,7 +18,6 @@ Brick::~Brick()
 
 void Brick::Update()
 {
-	
 	if (KeyboardCheckPressed(sf::Keyboard::Tab))
 	{
 		DeleteInstance(this);

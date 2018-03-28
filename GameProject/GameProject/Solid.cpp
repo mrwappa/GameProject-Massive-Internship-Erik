@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "Solid.h"
 
-void Solid::OnRemoval()
-{
-	RemoveCollInstance("Solid", this);
-}
 
 Solid::Solid()
 {
@@ -14,4 +10,10 @@ Solid::Solid()
 
 Solid::~Solid()
 {
+}
+
+void Solid::OnRemoval()
+{
+	RemoveCollInstance("Solid", this);
+	CollisionEntity::OnRemoval();
 }

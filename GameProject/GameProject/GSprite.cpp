@@ -140,8 +140,7 @@ void GSprite::DrawGUI(float aX, float aY, float aXScale, float aYScale, float aA
 	myWidth = myTextureWidth * aXScale;
 	myHeight = myTextureHeight * aYScale;
 
-	myDepth = 9999999;
-	SpriteList.Add(this);
+	Window->draw(mySprite);
 }
 
 int GSprite::Partition(int aLow, int aHigh)
