@@ -7,6 +7,8 @@
 #include "Dust.h"
 #include "Enemy.h"
 
+class PlayerAttack;
+
 class Player : public CollisionEntity
 {
 public:
@@ -14,10 +16,13 @@ public:
 	~Player();
 
 	void Update();
+	void BeginUpdate();
 	void Draw();
 	void DrawGUI();
 
 	void OnRemoval();
+
+	PlayerAttack* PAttack;
 
 private:
 	bool W;
@@ -42,6 +47,8 @@ private:
 	float myYSub;
 
 	float myLookAngle;
+	
+	float myAttackTimer;
 
 	void TextureDirection(float aAngle);
 	//if these textures are not created and deleted on the heap, I get a memory leak
@@ -50,10 +57,6 @@ private:
 	
 	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left, T_SIZE};
 
-	//this is the most odd and stupid thing I've ever come across.
-	//Declaring a Texture pointer makes any object that inherits from 
-	//Entity Removed from the main update loop entirely. But if I make it into an array
-	//it thinks that it's totally fine...
-	GSprite* myShadow[1];
+	GSprite* myShadow;
 };
 #endif // !PLAYER_H

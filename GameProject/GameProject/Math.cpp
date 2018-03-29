@@ -42,7 +42,7 @@ const float Math::Clamp(float value, float min, float max)
 
 float Math::RadToDeg(float aRadians)
 {
-	return aRadians * (180.0f / M_PI);
+	return fmod(aRadians * (180.0f / M_PI),360);
 }
 
 float Math::DegToRad(float aDegrees)
@@ -61,9 +61,14 @@ float Math::PointDirDeg(float aX1, float aY1, float aX2, float aY2)
 	return Math::RadToDeg(PointDirection(aX1, aY1, aX2, aY2));
 }
 
+float Math::PointDistance(float aX1, float aY1, float aX2, float aY2)
+{
+	return SQRT2(pow(aX2-aX1,2) + pow(aY2 - aY1,2));
+}
+
 float Math::Lerp(float aStart, float aEnd, float aPercent)
 {
-	return fma(aPercent, aEnd, fma(-aPercent,aStart,aEnd));
+	return aStart * aPercent + aEnd * (1 - aPercent);
 }
 
 float Math::FRand(float aLow, float aHigh)
@@ -100,4 +105,12 @@ float Math::LenDirX(float aLength, float aDirection)
 float Math::LenDirY(float aLength, float aDirection)
 {
 	return (sin(aDirection) * aLength);
+}
+
+float Math::Choose(float aX, float aY)
+{	
+
+	int determin = IRand(0, 100);
+
+	return determin <= 50 ? aX : aY;
 }

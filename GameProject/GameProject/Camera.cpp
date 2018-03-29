@@ -99,6 +99,26 @@ float Camera::GetZoom() const
 	return myZoom;
 }
 
+float Camera::GetMonitorWidth() const
+{
+	return myMonitorWidth;
+}
+
+float Camera::GetMonitorHeight() const
+{
+	return myMonitorHeight;
+}
+
+float Camera::GetInitialWidth() const
+{
+	return myWidth;
+}
+
+float Camera::GetInitialHeight() const
+{
+	return myHeight;
+}
+
 //Modifiers
 void Camera::SetX(float aX) 
 {

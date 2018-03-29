@@ -12,5 +12,8 @@ public:
 
 	void Update();
 	void Draw();
+
+private:
+	CollisionEntity* myAttackPtr;
 };
 #endif // !TESTENEMY_H

@@ -17,7 +17,7 @@ public:
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
-	
+
 };
 
 #endif // !WORLD_H

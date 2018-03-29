@@ -22,6 +22,10 @@ public:
 	float GetMouseX() const;
 	float GetMouseY() const;
 	float GetZoom() const;
+	float GetMonitorWidth() const;
+	float GetMonitorHeight() const;
+	float GetInitialWidth() const;
+	float GetInitialHeight() const;
 
 	//Modifiers
 	void SetX(float aX);
@@ -29,7 +33,6 @@ public:
 	void SetZoom(float aZoom);
 	void IncrZoom(float aX);
 	void ShakeScreen(float aX);
-
 
 private:
 	sf::View myView;
@@ -46,6 +49,7 @@ private:
 	int myViewWidth;
 	int myViewHeight;
 
+
 	int myMonitorWidth;
 	int myMonitorHeight;
 	float myAspectRatio;
@@ -53,6 +57,8 @@ private:
 
 	float myZoom;
 	float myScreenShake;
+
+	
 
 
 };

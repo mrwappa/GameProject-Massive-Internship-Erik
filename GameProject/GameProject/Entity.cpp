@@ -32,6 +32,7 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myAlpha = 1;
 	myColor = sf::Color::White;
 	myName = aName;
+	myActive = true;
 	AddInstance(this, aName);
 }
 
@@ -47,7 +48,12 @@ void Entity::AddInstance(Entity* aEntity, std::string aName)
 
 void Entity::DeleteInstance(Entity* aEntity)
 {
-	DeleteMarkedList.Add(aEntity);
+	//This is extremely slow, I may just add a bool that says "MarkedForDelete"
+	//so that no search has to be done to find if it's already in the list
+	if (DeleteMarkedList.Find(aEntity) == -1)
+	{
+		DeleteMarkedList.Add(aEntity);
+	}
 }
 
 void Entity::OnRemoval()
@@ -119,6 +125,21 @@ float Entity::GetHeight()
 	return mySprite.GetTextureHeight() * myYScale;
 }
 
+void Entity::SetX(float aX)
+{
+	myX = aX;
+}
+
+void Entity::SetY(float aY)
+{
+	myY = aY;
+}
+
+void Entity::SetAngle(float aAngle)
+{
+	myAngle = aAngle;
+}
+
 void Entity::BeginUpdate()
 {
 }
@@ -167,9 +188,7 @@ void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float 
 	myText.setFillColor(aColor);
 	myText.setPosition(aX, aY);
 	myText.setScale(aXScale, aYScale);
-	myText.setStyle(sf::Text::Regular);
 	
-
 	Camera->Window->draw(myText);
 }
 
@@ -180,12 +199,18 @@ void Entity::DrawFontGUI(std::string aText, float aX, float aY, float aSize, flo
 		myText.setFont(*MainFont);
 
 	}
+
+
 	const_cast<sf::Texture&>(MainFont->getTexture(aSize)).setSmooth(false);
 	myText.setString(aText);
 	myText.setCharacterSize(aSize);
 	myText.setFillColor(aColor);
-	myText.setPosition(aX + Camera->GetX() - Camera->GetViewWidth() / 2, aY + Camera->GetY() - Camera->GetViewHeight() / 2);
-	myText.setScale(aXScale, aYScale);
+
+	float posX = Camera->GetX() + round(aX / Camera->GetZoom() - Camera->GetViewWidth() / 2);
+	float posY = Camera->GetY() + round(aY / Camera->GetZoom() - Camera->GetViewHeight() / 2);
+	myText.setPosition(posX, posY);
+
+	myText.setScale(aXScale / Camera->GetZoom(), aYScale / Camera->GetZoom());
 	myText.setStyle(sf::Text::Regular);
 
 

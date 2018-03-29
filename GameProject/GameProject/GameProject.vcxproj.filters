@@ -76,6 +76,9 @@
     <Filter Include="Game\Enemies\TestEnemy">
       <UniqueIdentifier>{a1c91552-dc4d-464c-a7b9-3bf932e87285}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\PlayerAttack">
+      <UniqueIdentifier>{f14b891f-75cf-4dd4-9c19-4810381df25e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,6 +144,9 @@
     <ClInclude Include="TestEnemy.h">
       <Filter>Game\Enemies\TestEnemy</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerAttack.h">
+      <Filter>Game\Player\PlayerAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -191,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="TestEnemy.cpp">
       <Filter>Game\Enemies\TestEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttack.cpp">
+      <Filter>Game\Player\PlayerAttack</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

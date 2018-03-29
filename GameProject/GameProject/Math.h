@@ -5,6 +5,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <random>
+#include "GrowingArray.h"
+#include <stdio.h>
+#include <stdarg.h>
 
 //Namespace didn't work, I have no idea why
 class Math
@@ -21,6 +24,7 @@ public:
 	static float DegToRad(float aDegrees);
 	static float PointDirection(float aX1, float aY1, float aX2, float aY2);
 	static float PointDirDeg(float aX1, float aY1, float aX2, float aY2);
+	static float PointDistance(float aX1, float aY1, float aX2, float aY2);
 	static float Lerp(float aStart, float aEnd, float aPercent);
 	static float FRand(float aLow, float aHigh);
 	static float IRand(float aLow, float aHigh);
@@ -28,6 +32,10 @@ public:
 	static float SetDecimal(float aTarget, float aX);
 	static float LenDirX(float aLength, float aDirection);
 	static float LenDirY(float aLength, float aDirection);
+
+	//Have to research more into parameter passing techniques and va_list
+	//if I want to have unlimited parameters/arguments
+	static float Choose(float aX, float aY);
 
 };
 

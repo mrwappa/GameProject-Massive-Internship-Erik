@@ -33,17 +33,27 @@ public:
 	//Compare if two rectangles contain one or the other
 	bool ContainRekt(RektF aRect1, RektF aRect2);
 	
+	//Accessors
 	Vector2f GetBoxPosition() const;
 	//Rotate() is broken, so is the Rotate() in the Vector2 class
 	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
 	Vector2f RotatePoint(float aX, float aY, float aAngle, Vector2f Point);
 	RektF GetBounds() const;
+	float GetXOffset();
+	float GetYOffset();
+
+	//Modifiers
+	void SetXOffset(float aX);
+	void SetYOffset(float aY);
 
 protected:
 
 	float myMovementSpeed;
 	float myXSpeed;
 	float myYSpeed;
+	float myXKnockBack;
+	float myYKnockBack;
+
 	RektF myBoundingBox;
 
 	float myBoxXOffset;

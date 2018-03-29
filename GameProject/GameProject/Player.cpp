@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 
-#include "Brick.h"
+#include "PlayerAttack.h"
+
 Player::Player(float aX, float aY)
 {
 	Enemy::Target = this;
@@ -11,8 +12,8 @@ Player::Player(float aX, float aY)
 	myX = aX;
 	myY = aY;
 
-	myShadow[0] = new GSprite();
-	myShadow[0]->SetTexture("Sprites/Player/spr_circle.png",1);
+	myShadow = new GSprite();
+	myShadow->SetTexture("Sprites/Player/spr_circle.png",1);
 
 	for (int i = 0; i < T_SIZE; i++)
 	{
@@ -45,6 +46,8 @@ Player::Player(float aX, float aY)
 	myBoxYOffset = 3;
 
 	myPreviousAIndex = 0;
+
+	myAttackTimer = 0.7f;
 }
 
 
@@ -54,6 +57,11 @@ Player::~Player()
 }
 
 void Player::Update()
+{
+	
+}
+
+void Player::BeginUpdate()
 {
 	myLookAngle = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
@@ -72,7 +80,7 @@ void Player::Update()
 	//Acceleration
 	myXAdd = myXDir * myXAcceleration;
 	myYAdd = myYDir * myYAcceleration;
-	
+
 	//Restitution
 	myXSub = std::min(myXRestitution, std::abs(myXSpeed)) * Math::Sign(myXSpeed) * (myXDir == 0);
 	myYSub = std::min(myYRestitution, std::abs(myYSpeed)) * Math::Sign(myYSpeed) * (myYDir == 0);
@@ -89,36 +97,7 @@ void Player::Update()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
-	CollisionEntity* brick = ObjCollision(myX + myXSpeed,myY,"Brick");
-	
-	//X Axis Collision
-	if (brick != NULL)
-	{
-		float brickBoxX = brick->GetBoxPosition().x;
-		myX = floor(myX) + Math::Decimal(brickBoxX);
-		for (int i = 0; i < abs(myXSpeed); i++)
-		{
-			if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
-			myX += Math::Sign(myXSpeed);
-		}
-		myXSpeed = 0;
-	}
-
-	brick = ObjCollision(myX, myY + myYSpeed, "Solid");
-
-	//Y Axis Collision
-	if (brick != NULL)
-	{
-		float brickBoxY = brick->GetBoxPosition().y;
-		myY = floor(myY) + Math::Decimal(brickBoxY);
-		for (int i = 0; i < abs(myYSpeed); i++)
-		{
-			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
-			myY += Math::Sign(myYSpeed);
-		}
-		myYSpeed = 0;
-	}
-	
+	PreventCollision("Brick");
 	Move(myXSpeed, myYSpeed);
 
 	//Sprite Animation Speed
@@ -136,11 +115,31 @@ void Player::Update()
 	{
 		mySprite.SetAnimationIndex(0);
 	}
-	
-	
+
+	//Dust Effect
 	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myPreviousAIndex != mySprite.GetNrOfFrames() - 1)
 	{
 		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
+	}
+
+	myAttackTimer -= 1.0f / 60.0f;
+	if (MouseCheckPressed(sf::Mouse::Button::Left) and PAttack == NULL and myAttackTimer <= 0)
+	{
+		myAttackTimer = 0.7f;
+		PAttack = new PlayerAttack(myX, myY, this);
+	}
+
+	if (PAttack != NULL)
+	{
+		float dir = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+		float atX = myX + Math::LenDirX(14, dir);
+		float atY = myY + Math::LenDirY(14, dir);
+
+		PAttack->SetX(atX);
+		PAttack->SetY(atY);
+		PAttack->SetAngle(Math::RadToDeg(dir));
+		PAttack->SetXOffset(Math::LenDirX(18, dir));
+		PAttack->SetYOffset(Math::LenDirY(18, dir));
 	}
 
 	if (MouseWheelDown())
@@ -161,11 +160,6 @@ void Player::Update()
 	{
 		myColor = sf::Color::Red;
 	}
-	
-	/*if (KeyboardCheckPressed(sf::Keyboard::Tab))
-	{
-		DeleteInstance(this);
-	}*/
 	Camera->SetX(myX);
 	Camera->SetY(myY);
 }
@@ -175,11 +169,11 @@ void Player::Draw()
 	myPreviousAIndex = mySprite.GetAnimationIndex();
 	if (mySprite.GetAnimationIndex() == 2)
 	{
-		myShadow[0]->Draw(myX, myY + 16, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow->Draw(myX, myY + 16, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
 	}
 	else
 	{
-		myShadow[0]->Draw(myX, myY + 18, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow->Draw(myX, myY + 18, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
 	}
 	
 	Entity::Draw();
@@ -188,9 +182,20 @@ void Player::Draw()
 
 void Player::DrawGUI()
 {
-	GrowingArray<Entity*>* list = SuperList.at("Brick");
 
-	DrawFontGUI(std::to_string(list->Size()), 20, 20, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("TestEnemy:" + std::to_string(SuperList.at("TestEnemy")->Size()), 0, 120, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("World:" + std::to_string(SuperList.at("World")->Size()), 0, 160, 24, 1, 1, sf::Color::White);
+
+	DrawFontGUI("Brick:" + std::to_string(CollisionList.at("Brick")->Size()), 700, 40, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("Player:" + std::to_string(CollisionList.at("Player")->Size()), 700, 80, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("TestEnemy:" + std::to_string(CollisionList.at("TestEnemy")->Size()), 700, 120, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("Enemy:" + std::to_string(CollisionList.at("Enemy")->Size()), 700, 160, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
+
+	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);
+
 }
 
 void Player::OnRemoval()
@@ -199,7 +204,7 @@ void Player::OnRemoval()
 	{
 		delete myCharTextures[i];
 	}
-	delete myShadow[0];
+	delete myShadow;
 	CollisionEntity::OnRemoval();
 }
 

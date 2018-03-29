@@ -10,7 +10,6 @@ public:
 	~Dust();
 
 	void Update();
-
 };
 
 #endif // !DUST_H

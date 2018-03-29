@@ -68,6 +68,11 @@ public:
 	float GetWidth();
 	float GetHeight();
 
+	//Modifiers
+	void SetX(float aX);
+	void SetY(float aY);
+	void SetAngle(float aAngle);
+
 protected:
 	float myX;
 	float myY;
@@ -92,7 +97,6 @@ protected:
 	static void DeleteInstanceMem(Entity* aEntity);
 private:
 	sf::Text myText;
-	//this, or where entities get deleted is the current problem.
 	static GrowingArray<Entity*>* GrArrayPtr;
 };
 #endif // !ENTITY_H

@@ -1,11 +1,10 @@
-﻿  Brick.cpp
+﻿  Player.cpp
   Generating Code...
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(296): warning C4172: returning address of local variable or temporary
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(296): warning C4172: returning address of local variable or temporary
   Skipping... (no relevant changes detected)
   main.cpp
   World.cpp
   TestEnemy.cpp
-  Solid.cpp
-  Player.cpp
-  Enemy.cpp
-  CollisionEntity.cpp
+  PlayerAttack.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

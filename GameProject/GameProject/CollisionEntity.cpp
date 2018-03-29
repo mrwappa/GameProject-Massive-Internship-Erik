@@ -9,6 +9,8 @@ CollisionEntity::CollisionEntity()
 	myMovementSpeed = 0;
 	myXSpeed = 0;
 	myYSpeed = 0;
+	myXKnockBack = 0;
+	myYKnockBack = 0;
 	myBoundingBox = RektF(0, 0, 0, 0);
 
 	myBoxXOffset = 0;
@@ -109,18 +111,6 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	Vector2f OTopLeft = o->GetBoxPosition();
 	Vector2f OTopRight = o->GetBoxPosition() + Vector2f(o->GetBounds().GetWidth(), 0);
 
-	//Rotate Points t
-	TBottomRight = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TBottomRight);
-	TBottomLeft = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TBottomLeft);
-	TTopLeft = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TTopLeft) ;
-	TTopRight = RotatePoint(t->GetX(), t->GetY(), Math::DegToRad(t->GetAngle()), TTopRight);
-
-	//Rotate Points o
-	OBottomRight = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OBottomRight);
-	OBottomLeft = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OBottomLeft);
-	OTopLeft = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OTopLeft);
-	OTopRight = RotatePoint(o->GetX(), o->GetY(), Math::DegToRad(o->GetAngle()), OTopRight);
-
 	Vector2f TRectangleEdges[4];
 	Vector2f ORectangleEdges[4];
 
@@ -133,6 +123,13 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	ORectangleEdges[1] = OBottomLeft;
 	ORectangleEdges[2] = OTopLeft;
 	ORectangleEdges[3] = OTopRight;
+
+	//Rotate all points
+	for (int i = 0; i < 4; i++)
+	{
+		TRectangleEdges[i] = RotatePoint(t->GetX() + t->GetXOffset(), t->GetY() + t->GetYOffset(), Math::DegToRad(t->GetAngle()), TRectangleEdges[i] - Vector2f(t->GetXOffset(), t->GetYOffset()));
+		ORectangleEdges[i] = RotatePoint(o->GetX() + o->GetXOffset(), o->GetY() + o->GetYOffset(), Math::DegToRad(o->GetAngle()), ORectangleEdges[i] - Vector2f(o->GetXOffset(), o->GetYOffset()));
+	}
 
 	//Check Intersection for rectangle edges
 	for (int i = 0; i < 4; i++)
@@ -149,8 +146,6 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 
 CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aName)
 {
-	
-
 	if (CollisionList.count(aName) == 0)
 	{
 		return NULL;
@@ -204,32 +199,34 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 
 void CollisionEntity::PreventCollision(std::string aName)
 {
-	CollisionEntity* brick = ObjCollision(myX + myXSpeed, myY, aName);
+	CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, aName);
 
 	if (brick != NULL)
 	{
 		float brickBoxX = brick->GetBoxPosition().x;
 		myX = floor(myX) + Math::Decimal(brickBoxX);
-		for (int i = 0; i < abs(myXSpeed); i++)
+		for (int i = 0; i < abs(myXSpeed + myXKnockBack); i++)
 		{
-			if (InstanceCollision(myX + Math::Sign(myXSpeed), myY, brick)) { break; }
-			myX += Math::Sign(myXSpeed);
+			if (InstanceCollision(myX + Math::Sign(myXSpeed + myXKnockBack), myY, brick)) { break; }
+			myX += Math::Sign(myXSpeed + myXKnockBack);
 		}
 		myXSpeed = 0;
+		myXKnockBack = 0;
 	}
 
-	brick = ObjCollision(myX, myY + myYSpeed, aName);
+	brick = ObjCollision(myX, myY + myYSpeed + myYKnockBack, aName);
 
 	if (brick != NULL)
 	{
 		float brickBoxY = brick->GetBoxPosition().y;
 		myY = floor(myY) + Math::Decimal(brickBoxY);
-		for (int i = 0; i < abs(myYSpeed); i++)
+		for (int i = 0; i < abs(myYSpeed + myYKnockBack); i++)
 		{
-			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed), brick)) { break; }
-			myY += Math::Sign(myYSpeed);
+			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed + myYKnockBack), brick)) { break; }
+			myY += Math::Sign(myYSpeed + myYKnockBack);
 		}
 		myYSpeed = 0;
+		myYKnockBack = 0;
 	}
 }
 
@@ -276,7 +273,7 @@ bool CollisionEntity::ContainRekt(RektF aRect1, RektF aRect2)
 
 Vector2f CollisionEntity::GetBoxPosition() const
 {
-	return Vector2f(myBoundingBox.GetX(),myBoundingBox.GetY());
+	return Vector2f(myBoundingBox.GetX() + myBoxXOffset,myBoundingBox.GetY() + myBoxYOffset);
 }
 
 Vector2f CollisionEntity::Rotate(float aX, float aY, float aAngle, Vector2f aPoint)
@@ -309,4 +306,24 @@ Vector2f CollisionEntity::RotatePoint(float aX, float aY, float aAngle, Vector2f
 RektF CollisionEntity::GetBounds() const
 {
 	return myBoundingBox;
+}
+
+float CollisionEntity::GetXOffset()
+{
+	return myBoxXOffset;
+}
+
+float CollisionEntity::GetYOffset()
+{
+	return myBoxYOffset;
+}
+
+void CollisionEntity::SetXOffset(float aX)
+{
+	myBoxXOffset = aX;
+}
+
+void CollisionEntity::SetYOffset(float aY)
+{
+	myBoxYOffset = aY;
 }
