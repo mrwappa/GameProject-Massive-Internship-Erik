@@ -4,7 +4,6 @@
 
 Line::Line()
 {
-	Entity::Init("Line", 0, 0);
 	mySprite.SetTexture("Sprites/spr_pixel.png", 1);
 }
 

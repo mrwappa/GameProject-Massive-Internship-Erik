@@ -19,7 +19,7 @@ public:
 
 protected:
 	int myState;
-	enum EnemyStates { Idle, Aggro, Grabbable, Grabbed, InUse };
+	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse };
 
 };
 #endif // !ENEMY_H

@@ -43,9 +43,6 @@
     <Filter Include="Tools/Core\Math">
       <UniqueIdentifier>{fc46dce5-146c-47a8-b71c-9f736829e2b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools/Core\QuadNode">
-      <UniqueIdentifier>{b11c770c-94b4-4c9a-9f4f-fbb9f53a7116}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\World">
       <UniqueIdentifier>{b94ae476-1aeb-441a-9454-5847d30907e1}</UniqueIdentifier>
     </Filter>
@@ -79,6 +76,18 @@
     <Filter Include="Game\Player\PlayerAttack">
       <UniqueIdentifier>{f14b891f-75cf-4dd4-9c19-4810381df25e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools/Core\QuadTree">
+      <UniqueIdentifier>{c1c148fc-b3ff-4796-880f-5d5e372bd594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\QuadTree\QuadNode">
+      <UniqueIdentifier>{b11c770c-94b4-4c9a-9f4f-fbb9f53a7116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\AStar">
+      <UniqueIdentifier>{ff886861-6f01-48f3-aeea-ee62b5ae951d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\AStar\AStarNode">
+      <UniqueIdentifier>{93db4fd5-6e3a-460d-8ffa-755a2effc142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -111,11 +120,8 @@
     <ClInclude Include="Math.h">
       <Filter>Tools/Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTree.h">
-      <Filter>Tools/Core</Filter>
-    </ClInclude>
     <ClInclude Include="QuadNode.h">
-      <Filter>Tools/Core\QuadNode</Filter>
+      <Filter>Tools/Core\QuadTree\QuadNode</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Tools/Core</Filter>
@@ -147,6 +153,15 @@
     <ClInclude Include="PlayerAttack.h">
       <Filter>Game\Player\PlayerAttack</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Tools/Core\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar.h">
+      <Filter>Tools/Core\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AStarNode.h">
+      <Filter>Tools/Core\AStar\AStarNode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -175,7 +190,7 @@
       <Filter>Tools/Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="QuadNode.cpp">
-      <Filter>Tools/Core\QuadNode</Filter>
+      <Filter>Tools/Core\QuadTree\QuadNode</Filter>
     </ClCompile>
     <ClCompile Include="Brick.cpp">
       <Filter>Game\Solids\Brick</Filter>
@@ -200,6 +215,12 @@
     </ClCompile>
     <ClCompile Include="PlayerAttack.cpp">
       <Filter>Game\Player\PlayerAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>Tools/Core\AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="AStarNode.cpp">
+      <Filter>Tools/Core\AStar\AStarNode</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

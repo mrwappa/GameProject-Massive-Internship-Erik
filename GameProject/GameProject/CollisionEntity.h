@@ -18,11 +18,13 @@ public:
 	void OnRemoval();
 
 	bool LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4);
+	bool LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity* aObject);
 	bool CheckBoxEdges(CollisionEntity* t, CollisionEntity* o);
 
 	CollisionEntity* ObjCollision(float aX, float aY, std::string aName);
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true);
 	void PreventCollision(std::string aName);
+	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName);
 
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();
@@ -60,6 +62,8 @@ protected:
 	float myBoxYOffset;
 	float myBoxWidth;
 	float myBoxHeight;
+
+	float myHP;
 
 	void AddCollInstance(CollisionEntity* aEntity);
 	void AddCollInstance(std::string aName, CollisionEntity* aEntity);

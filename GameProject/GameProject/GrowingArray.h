@@ -26,6 +26,7 @@ public:
 	inline void AddRange(const GrowingArray &growingArray);
 
 	inline void RemoveCyclic(const TObjectType &object);
+	inline void Remove(const TObjectType &object);
 	inline void RemoveCyclicAtIndex(TSizeType index);
 	inline void DeleteCyclic(const TObjectType &object);
 	inline void DeleteCyclicAtIndex(TSizeType index);
@@ -221,6 +222,17 @@ template<typename TObjectType, typename TSizeType>
 inline void GrowingArray<TObjectType, TSizeType>::RemoveCyclic(const TObjectType &object)
 {
 	RemoveCyclicAtIndex(Find(object));
+}
+
+template<typename TObjectType, typename TSizeType>
+inline void GrowingArray<TObjectType, TSizeType>::Remove(const TObjectType & object)
+{
+	int index = Find(object);
+	for (int i = index; i < myNrOfElements-1; i++)
+	{
+		myArray[i] = myArray[i+1]
+	}
+	myNrOfElements--;
 }
 
 //CYCLING REMOVE AT INDEX

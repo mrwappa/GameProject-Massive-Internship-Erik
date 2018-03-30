@@ -8,11 +8,11 @@ PlayerAttack::PlayerAttack(float aX, float aY, Player* aTarget)
 	mySprite.SetTexture("Sprites/Player/spr_playerattack.png", 8);
 	
 	myColor = sf::Color::Color(158,52,41);
-	myAnimationSpeed = 0.2f;
+	myAnimationSpeed = 0.6f;
 	myXScale = 2;
 	myYScale = Math::Choose(myXScale,-myXScale);
-	myBoxWidth = 10;
-	myBoxHeight = 23;
+	myBoxWidth = 7;
+	myBoxHeight = 18;
 
 	myTarget = aTarget;
 }

@@ -17,6 +17,8 @@ CollisionEntity::CollisionEntity()
 	myBoxYOffset = 0;
 	myBoxWidth = 0;
 	myBoxHeight = 0;
+
+	myHP = 0;
 }
 
 
@@ -82,6 +84,44 @@ bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3,
 		if (u_a >= 0 and u_a <= 1 and u_b >= 0 and u_b <= 1)
 		{
 			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CollisionEntity::LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity * aObject)
+{
+	//Bounding Points Object
+	Vector2f OBottomRight = aObject->GetBoxPosition() + Vector2f(aObject->GetBounds().GetWidth(), aObject->GetBounds().GetHeight());
+	Vector2f OBottomLeft = aObject->GetBoxPosition() + Vector2f(0, aObject->GetBounds().GetHeight());
+	Vector2f OTopLeft = aObject->GetBoxPosition();
+	Vector2f OTopRight = aObject->GetBoxPosition() + Vector2f(aObject->GetBounds().GetWidth(), 0);
+
+	Vector2f ORectangleEdges[4];
+	Vector2f LineEdges[2];
+
+	ORectangleEdges[0] = OBottomRight;
+	ORectangleEdges[1] = OBottomLeft;
+	ORectangleEdges[2] = OTopLeft;
+	ORectangleEdges[3] = OTopRight;
+
+	LineEdges[0] = aStart;
+	LineEdges[1] = aEnd;
+
+	//Rotate all points
+	for (int i = 0; i < 4; i++)
+	{
+		ORectangleEdges[i] = RotatePoint(aObject->GetX() + aObject->GetXOffset(), aObject->GetY() + aObject->GetYOffset(), Math::DegToRad(aObject->GetAngle()),
+										ORectangleEdges[i] - Vector2f(aObject->GetXOffset(), aObject->GetYOffset()));
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (LineIntersection(LineEdges[i], LineEdges[(i + 1) % 2], ORectangleEdges[j], ORectangleEdges[(j + 1) % 4]))
+				return true;
 		}
 	}
 
@@ -228,6 +268,23 @@ void CollisionEntity::PreventCollision(std::string aName)
 		myYSpeed = 0;
 		myYKnockBack = 0;
 	}
+}
+
+CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+	GrArrayPtr = CollisionList.at(aName);
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (LineToEdgeIntersection(aStart, aEnd, GrArrayPtr->FindAtIndex(i)))
+		{
+			return GrArrayPtr->FindAtIndex(i);
+		}
+	}
+	return NULL;
 }
 
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)

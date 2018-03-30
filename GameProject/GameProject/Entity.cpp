@@ -24,6 +24,8 @@ void Entity::Init(std::string aName, float aX, float aY)
 {
 	myX = aX;
 	myY = aY;
+	myPreviousX = aX;
+	myPreviousY = aY;
 	myAnimationSpeed = 0;
 	myDepth = 0;
 	myAngle = 0;
@@ -75,7 +77,6 @@ void Entity::DeleteMarkedInstances()
 	for (int i = 0; i < DeleteMarkedList.Size(); i++)
 	{
 		DeleteInstanceMem(DeleteMarkedList[i]);
-		//DeleteMarkedList.RemoveCyclicAtIndex(i);
 		indexRemoval.Add(i);
 	}
 

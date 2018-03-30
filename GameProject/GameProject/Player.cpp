@@ -47,7 +47,7 @@ Player::Player(float aX, float aY)
 
 	myPreviousAIndex = 0;
 
-	myAttackTimer = 0.7f;
+	myAttackTimer = 0.f;
 }
 
 
@@ -128,7 +128,12 @@ void Player::BeginUpdate()
 		myAttackTimer = 0.7f;
 		PAttack = new PlayerAttack(myX, myY, this);
 	}
-
+	if (myAttackTimer <= 0)
+	{
+		myAttackTimer = 0;
+	}
+	myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
+	
 	if (PAttack != NULL)
 	{
 		float dir = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
@@ -154,12 +159,6 @@ void Player::BeginUpdate()
 	{
 		Camera->ShakeScreen(6.0f);
 	}
-
-	myColor = sf::Color::White;
-	if (InstanceCollision(myX, myY, (CollisionEntity*)GetObj("Brick")))
-	{
-		myColor = sf::Color::Red;
-	}
 	Camera->SetX(myX);
 	Camera->SetY(myY);
 }
@@ -183,7 +182,7 @@ void Player::Draw()
 void Player::DrawGUI()
 {
 
-	DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
+	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("TestEnemy:" + std::to_string(SuperList.at("TestEnemy")->Size()), 0, 120, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("World:" + std::to_string(SuperList.at("World")->Size()), 0, 160, 24, 1, 1, sf::Color::White);
@@ -194,7 +193,7 @@ void Player::DrawGUI()
 	DrawFontGUI("Enemy:" + std::to_string(CollisionList.at("Enemy")->Size()), 700, 160, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
 
-	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);
+	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);*/
 
 }
 

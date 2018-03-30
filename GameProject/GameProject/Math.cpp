@@ -38,6 +38,7 @@ const float Math::SQRT2(const float aX)
 const float Math::Clamp(float value, float min, float max)
 {
 	return value <= min ? min : value >= max ? max : value;
+	
 }
 
 float Math::RadToDeg(float aRadians)
@@ -68,7 +69,9 @@ float Math::PointDistance(float aX1, float aY1, float aX2, float aY2)
 
 float Math::Lerp(float aStart, float aEnd, float aPercent)
 {
-	return aStart * aPercent + aEnd * (1 - aPercent);
+	float clampedP = Clamp(aPercent, 0, 1);
+	return (aEnd - aStart) * (-2.0f * powf(clampedP, 3.0f) + 3.0f * powf(clampedP, 2.0f)) + aStart;
+	//return aStart * aPercent + aEnd * (1 -aPercent);
 }
 
 float Math::FRand(float aLow, float aHigh)
