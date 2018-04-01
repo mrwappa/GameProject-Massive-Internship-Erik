@@ -6,6 +6,7 @@
 World::World()
 {
 	Entity::Init("World", 0, 0);
+	mySprite.SetTexture("Sprites/32x32Block.png", 1);
 	CreateWorld();
 }
 
@@ -19,13 +20,25 @@ void World::Update()
 	
 }
 
+void World::Draw()
+{
+	mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, -99999, 1, sf::Color::Black, 0);
+
+	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::Space))
+	{
+		new Brick(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
+	}
+}
+
 void World::CreateWorld()
 {
-	new Player(100, 100);
-	new Brick(68.5f, 40.5f);
-	new Brick(34.5f, 25.5f);
-	new Brick(0.5f, 25.5f);
-	new TestEnemy(-40, -40);
+	AStarNode::NodeSize = 32.0f;
+	CollisionEntity::AStarGrid = new AStar(30, 17);
+	new Player(7 * 32 +16, 7 * 32 + 16);
+	new Brick(4 * 32 +16, 4 * 32 + 16);
+	new Brick(4 * 32 + 16, 5 * 32 + 16);
+	new Brick(4 * 32 + 16, 6 * 32 + 16);
+	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
 }
 
 void World::DestroyWorld()
@@ -40,6 +53,7 @@ void World::DestroyWorld()
 			}
 		}
 	}
+	CollisionEntity::AStarGrid->DestroyGrid();
 }
 
 void World::DrawGUI()
@@ -53,3 +67,4 @@ void World::DrawGUI()
 		Camera->SetZoom(1);
 	}
 }
+

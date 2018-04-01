@@ -3,6 +3,7 @@
 
 std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionEntity::CollisionList;
 GrowingArray<CollisionEntity*>* CollisionEntity::GrArrayPtr;
+AStar* CollisionEntity::AStarGrid;
 
 CollisionEntity::CollisionEntity()
 {
@@ -68,6 +69,30 @@ void CollisionEntity::AddCollInstance(std::string aName, CollisionEntity* aEntit
 void CollisionEntity::OnRemoval()
 {
 	RemoveCollInstance(this);
+}
+
+bool CollisionEntity::InsideGrid(float aX, float aY)
+{
+	float width = (AStarGrid->GetRows() * AStarNode::NodeSize);
+	float height = (AStarGrid->GetColumns() * AStarNode::NodeSize);
+	return (SnapToGrid(aX) <= width and SnapToGrid(aX) >= 0) and (SnapToGrid(aY) <= height and SnapToGrid(aY) >= 0);
+}
+
+Vector2f CollisionEntity::SnapToGrid(float aX, float aY)
+{
+	return Vector2f(floor(aX / AStarNode::NodeSize) * AStarNode::NodeSize + AStarNode::NodeSize / 2,
+					floor(aY / AStarNode::NodeSize) * AStarNode::NodeSize + AStarNode::NodeSize / 2);
+}
+
+float CollisionEntity::SnapToGrid(float aX)
+{
+	return floor(aX / AStarNode::NodeSize) * AStarNode::NodeSize + AStarNode::NodeSize / 2;
+}
+
+Vector2f CollisionEntity::GridSnapMouse()
+{
+	return Vector2f(floor(Camera->GetMouseX() / AStarNode::NodeSize) * AStarNode::NodeSize + AStarNode::NodeSize / 2,
+					floor(Camera->GetMouseY() / AStarNode::NodeSize) * AStarNode::NodeSize + AStarNode::NodeSize / 2);
 }
 
 bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4)

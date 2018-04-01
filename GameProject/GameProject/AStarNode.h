@@ -10,20 +10,19 @@ public:
 	~AStarNode();
 
 	static int NodeSize;
-	//Acessors
-	Vector2f GetCenter();
-	Vector2f GetPosition();
-	float F();
+
 	bool GetWalkable();
-	float GetCost();
 	float GetTargetDistance();
+	float GetCost();
+	Vector2f GetPosition();
+	Vector2f GetCenter();
+	float F();
 	AStarNode* GetParent();
 
-	//Modifiers
 	void SetParent(AStarNode* aNode);
-	void SetTargetDistance(float aX);
+	void SetTargetDistance(float aDistance);
 	void SetCost(float aCost);
-
+	void SetWalkable(bool aWalkable);
 
 private:
 
@@ -31,8 +30,6 @@ private:
 	Vector2f myPosition;
 	float myDistanceToTarget;
 	float myCost;
-	float myWalkable;
-
-
+	bool myWalkable;
 };
 #endif // !ASTARNODE_H

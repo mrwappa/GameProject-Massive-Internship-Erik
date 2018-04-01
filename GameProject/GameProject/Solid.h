@@ -9,6 +9,9 @@ public:
 
 	Solid();
 	~Solid();
+
+	void Init(std::string aName, float aX, float aY);
 	void OnRemoval();
+	
 };
 #endif // !SOLID_H

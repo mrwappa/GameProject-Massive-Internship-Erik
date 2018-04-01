@@ -13,6 +13,7 @@ public:
 	~World();
 
 	void Update();
+	void Draw();
 
 	void CreateWorld();
 	void DestroyWorld();

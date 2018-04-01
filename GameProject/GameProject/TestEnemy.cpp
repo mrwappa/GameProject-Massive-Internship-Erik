@@ -18,35 +18,9 @@ TestEnemy::~TestEnemy()
 {
 }
 
-void TestEnemy::FindPath()
+void TestEnemy::FindPath(float aX, float aY)
 {
-
-	float dir = Math::PointDirDeg(myX, myY, Target->GetX(), Target->GetY());
-	float newDir = dir - Math::Choose(45,-45);
-	if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Math::LenDirX(64, newDir), Math::LenDirY(64, newDir)), "Solid"))
-	{
-		newDir = newDir == -45 ? newDir - 45 : newDir + 45;
-		newDir = Math::DegToRad(newDir);
-	}
-
-	myPath.Add(Vector2f(Math::LenDirX(64, newDir), Math::LenDirY(64, newDir)));
-
-	if ((dir > 315 and dir <= 360) or (dir <= 45 and dir >= 0))
-	{
-		myPath.Add(myPath[0] + Vector2f(64, 0));
-	}
-	if (dir > 45 and dir <= 135)
-	{
-		myPath.Add(myPath[0] + Vector2f(0, -64));
-	}
-	if (dir > 135 and dir <= 225)
-	{
-		myPath.Add(myPath[0] + Vector2f(-64, 0));
-	}
-	if (dir > 225 and dir <= 315)
-	{
-		myPath.Add(myPath[0] + Vector2f(0, 64));
-	}
+	myPath = AStarGrid->FindPath(SnapToGrid(myX, myY), SnapToGrid(aX, aY));
 }
 
 void TestEnemy::Update()
@@ -55,34 +29,37 @@ void TestEnemy::Update()
 
 	if (myState == PathFind)
 	{
-		if (myPrevState != PathFind)
-		{
-			FindPath();
-		}
-
 		if (myPath.Size() > 0)
 		{
-			float dir = Math::PointDirection(myX, myY, myPath[0].x, myPath[0].y);
-			myXSpeed = Math::LenDirX(3.0f, dir);
-			myYSpeed = Math::LenDirY(3.0f, dir);
+			float xTarget = myPath[myPath.Size() - 1]->GetParent()->GetCenter().x;
+			float yTarget = myPath[myPath.Size() - 1]->GetParent()->GetCenter().y;
 
-			if (abs(myX - myPath[0].x) <= abs(myXSpeed))
+			myDirection = Math::PointDirection(myX, myY, xTarget, yTarget);
+			myXSpeed = Math::LenDirX(1.0f, myDirection);
+			myYSpeed = Math::LenDirY(1.0f, myDirection);
+
+			myX += abs(myX - xTarget) < abs(myXSpeed) ? 0 : myXSpeed;
+			myY += abs(myY - yTarget) < abs(myYSpeed) ? 0 : myYSpeed;
+
+			if (abs(myX - xTarget) <= abs(myXSpeed))
 			{
-				myX = myPath[0].x;
+				myX = xTarget;
 			}
-			if (abs(myY - myPath[0].y) <= abs(myYSpeed))
+			if (abs(myY - yTarget) <= abs(myYSpeed))
 			{
-				myY = myPath[0].y;
+				myY = yTarget;
 			}
-			if (myX == myPath[0].x and myY == myPath[0].y)
+
+			if (myX == xTarget and myY == yTarget)
 			{
-				myPath.RemoveCyclicAtIndex(0);
+				myPath.Remove(myPath[myPath.Size() - 1]);
 			}
 		}
 		else
 		{
 			myState = Aggro;
 		}
+		
 	}
 
 	myPrevState = myState;
@@ -95,6 +72,7 @@ void TestEnemy::Update()
 		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 		{
 			myState = PathFind;
+			FindPath(Target->GetX(), Target->GetY());
 		}
 	}
 	
@@ -132,7 +110,7 @@ void TestEnemy::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
-	if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+	/*if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 	{
 		myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
 	}
@@ -140,7 +118,7 @@ void TestEnemy::Draw()
 	{
 		myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
 	}
-	
+	*/
 }
 
 void TestEnemy::OnRemoval()

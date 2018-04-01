@@ -227,12 +227,19 @@ inline void GrowingArray<TObjectType, TSizeType>::RemoveCyclic(const TObjectType
 template<typename TObjectType, typename TSizeType>
 inline void GrowingArray<TObjectType, TSizeType>::Remove(const TObjectType & object)
 {
-	int index = Find(object);
-	for (int i = index; i < myNrOfElements-1; i++)
+	if (myNrOfElements == 1)
 	{
-		myArray[i] = myArray[i+1]
+		myNrOfElements--;
 	}
-	myNrOfElements--;
+	if (myNrOfElements > 1)
+	{
+		int index = Find(object);
+		for (int i = index; i < myNrOfElements - 1; i++)
+		{
+			myArray[i] = myArray[i + 1];
+		}
+		myNrOfElements--;
+	}
 }
 
 //CYCLING REMOVE AT INDEX

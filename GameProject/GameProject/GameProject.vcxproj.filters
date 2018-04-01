@@ -86,7 +86,7 @@
       <UniqueIdentifier>{ff886861-6f01-48f3-aeea-ee62b5ae951d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tools/Core\AStar\AStarNode">
-      <UniqueIdentifier>{93db4fd5-6e3a-460d-8ffa-755a2effc142}</UniqueIdentifier>
+      <UniqueIdentifier>{cb55537e-1304-477d-8006-b32e507c09c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

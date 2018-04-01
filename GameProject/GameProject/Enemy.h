@@ -20,6 +20,6 @@ public:
 protected:
 	int myState;
 	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse };
-
+	float myDirection;
 };
 #endif // !ENEMY_H

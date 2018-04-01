@@ -34,7 +34,9 @@ public:
 
 	Vector2 &operator=(const Vector2 &aVector);
 
-	Vector2 &operator==(const Vector2 &aVector);
+	bool operator==(const Vector2 &aVector);
+
+	bool Equals(const Vector2 &aVector);
 
 	TType Length();
 	TType FullLength();
@@ -229,11 +231,15 @@ inline Vector2<TType>& Vector2<TType>::operator=(const Vector2 &aVector)
 }
 
 template<class TType>
-inline Vector2<TType> & Vector2<TType>::operator==(const Vector2 & aVector)
+inline bool Vector2<TType>::operator==(const Vector2 & aVector)
 {
 	return aVector.myX == myX && aVector.myY == myY;
 }
-
+template<class TType>
+inline bool Vector2<TType>::Equals(const Vector2 & aVector)
+{
+	return aVector.myX == myX && aVector.myY == myY;
+}
 //LENGTH
 template<class TType>
 inline TType Vector2<TType>::Length()

@@ -2,9 +2,17 @@
 #include "AStar.h"
 
 
-AStar::AStar(GrowingArray<GrowingArray<AStarNode*>> aGrid)
+AStar::AStar(float aRows, float aColumns)
 {
-	Grid = aGrid;
+
+	for (int i = 0; i < aRows; i++)
+	{
+		Grid.Add(new GrowingArray<AStarNode*>);
+		for (int j = 0; j < aColumns; j++)
+		{
+			Grid[i]->Add(new AStarNode(Vector2f(i, j), true));
+		}
+	}
 }
 
 
@@ -12,21 +20,112 @@ AStar::~AStar()
 {
 }
 
-int AStar::GetGridRows()
+void AStar::DestroyGrid()
 {
-	return Grid[0].Size();
+	for (int i = 0; i < Grid.Size(); i++)
+	{
+		Grid[i]->DeleteAll();
+	}
+	for (int i = 0; i < Grid.Size(); i++)
+	{
+		delete Grid[i];
+	}
 }
 
-int AStar::GetGridColummns()
+GrowingArray<AStarNode*> AStar::FindPath(Vector2f aStart, Vector2f aEnd)
 {
-	return Grid.Size();
+	/*AStarNode* start = new AStarNode(Vector2f((int)(aStart.x / AStarNode::NodeSize), (int)(aStart.y / AStarNode::NodeSize)), true);
+	AStarNode* end = new AStarNode(Vector2f((int)(aEnd.x / AStarNode::NodeSize), (int)(aEnd.y / AStarNode::NodeSize)), true);*/
+
+	AStarNode* start = Grid.FindAtIndex((int)(aStart.x / AStarNode::NodeSize))->FindAtIndex((int)(aStart.y / AStarNode::NodeSize));
+	AStarNode* end = Grid.FindAtIndex((int)(aEnd.x / AStarNode::NodeSize))->FindAtIndex((int)(aEnd.y / AStarNode::NodeSize));
+
+	if (!end->GetWalkable())
+	{
+		return NULL;
+	}
+
+	GrowingArray<AStarNode*> path;
+	GrowingArray<AStarNode*> openList;
+	GrowingArray<AStarNode*> closedList;
+	GrowingArray<AStarNode*> adjencies;
+
+	AStarNode* current = start;
+
+	openList.Add(start);
+
+	while (openList.Size() != 0 and !AtEndPosition(end->GetPosition(), &closedList))
+	{
+		current = openList[0];
+		openList.Remove(current);
+		closedList.Add(current);
+		adjencies = GetAdjacentNodes(current);
+
+		for (int i = 0; i < adjencies.Size(); i++)
+		{
+			AStarNode* node = adjencies[i];
+			if (closedList.Find(node) == -1 and node->GetWalkable())
+			{
+				if (openList.Find(node) == -1)
+				{
+					node->SetParent(current);
+					node->SetTargetDistance(abs(node->GetPosition().x - end->GetPosition().x) + abs(node->GetPosition().y - end->GetPosition().y));
+					node->SetCost(1 + node->GetParent()->GetCost());
+					openList.Add(node);
+					SortByF(&openList);
+				}
+				
+			}
+		}
+	}
+
+	if (!AtEndPosition(end->GetPosition(), &closedList))
+	{
+		return NULL;
+	}
+
+	AStarNode* node = closedList[closedList.Find(current)];
+	while (node->GetParent() != start and node != NULL)
+	{
+		path.Add(node);
+		node = node->GetParent();
+	}
+
+	return path;
+}
+
+GrowingArray<AStarNode*> AStar::GetAdjacentNodes(AStarNode* aNode)
+{
+	GrowingArray<AStarNode*> nodes;
+
+	int row = (int)aNode->GetPosition().y;
+	int col = (int)aNode->GetPosition().x;
+	
+	if (row + 1 < GetRows())
+	{
+		nodes.Add(Grid.FindAtIndex(col)->FindAtIndex(row + 1));
+	}
+	if (row - 1 >= 0)
+	{
+		nodes.Add(Grid.FindAtIndex(col)->FindAtIndex(row - 1));
+	}
+	if (col - 1 >= 0)
+	{
+		nodes.Add(Grid.FindAtIndex(col - 1)->FindAtIndex(row));
+	}
+	if (col + 1 < GetColumns())
+	{
+		nodes.Add(Grid.FindAtIndex(col + 1)->FindAtIndex(row));
+	}
+
+	return nodes;
 }
 
 bool AStar::AtEndPosition(Vector2f aEnd, GrowingArray<AStarNode*>* aClosedList)
 {
 	for (int i = 0; i < aClosedList->Size(); i++)
 	{
-		if (aClosedList->FindAtIndex(i)->GetPosition == aEnd)
+		if (aClosedList->FindAtIndex(i)->GetPosition().Equals(aEnd))
 		{
 			return true;
 		}
@@ -34,74 +133,31 @@ bool AStar::AtEndPosition(Vector2f aEnd, GrowingArray<AStarNode*>* aClosedList)
 	return false;
 }
 
-GrowingArray<AStarNode*> AStar::FindPath(Vector2f aStart, Vector2f aEnd)
+void AStar::SortByF(GrowingArray<AStarNode*>* aOpenlist)
 {
-	AStarNode* start = new AStarNode(Vector2f((int)(aStart.x / AStarNode::NodeSize), (int)(aStart.y / AStarNode::NodeSize)), true);
-	AStarNode* end = new AStarNode(Vector2f((int)(aEnd.x / AStarNode::NodeSize), (int)(aEnd.y / AStarNode::NodeSize)), true);
+	bool swapped;
 
-	GrowingArray<AStarNode*> path;
-	GrowingArray<AStarNode*> openList;
-	GrowingArray<AStarNode*> closedList;
-	GrowingArray<AStarNode*> adjancies;
-
-	AStarNode* current = start;
-
-
-	openList.Add(start);
-
-	bool atEndPosition = AtEndPosition(aEnd,&closedList);
-
-	while (openList.Size() != 0 and !atEndPosition)
+	for (int i = 0; i < aOpenlist->Size(); i++)
 	{
-		current = openList[0];
-		openList.Remove(current);
-		closedList.Add(current);
-		adjancies = GetAdjacentNodes(current);
-
-		for (int i = 0; i < adjancies.Size(); i++)
+		swapped = false;
+		for (int j = 0; j < aOpenlist->Size() - i - 1; j++)
 		{
-			
-			if (closedList.Find(adjancies.FindAtIndex(i)) != -1 and adjancies.FindAtIndex(i)->GetWalkable())
+			if (aOpenlist->FindAtIndex(j)->F() > aOpenlist->FindAtIndex(j + 1)->F())
 			{
-				AStarNode* node = adjancies[i];
-
-				node->SetParent(current);
-				node->SetTargetDistance(abs(node->GetPosition.x - aEnd.x) + abs(node->GetPosition.y - aEnd.x));
-				node->SetCost(1 + node->GetParent()->GetCost());
-				openList.Add(adjancies[i]);
-				//sort list by F
+				aOpenlist->Swap(j, j + 1);
+				swapped = true;
 			}
-
 		}
-
-		atEndPosition = AtEndPosition(aEnd, &closedList);
+		if (swapped == false) { break; }
 	}
-	return GrowingArray<AStarNode*>();
 }
 
-GrowingArray<AStarNode*> AStar::GetAdjacentNodes(AStarNode * aNode)
+int AStar::GetRows()
 {
-	GrowingArray<AStarNode*> grArray;
+	return Grid.FindAtIndex(0)->Size();
+}
 
-	int row = (int)aNode->GetPosition().y;
-	int col = (int)aNode->GetPosition().x;
-
-	if (row + 1 < GetGridRows())
-	{
-		grArray.Add(Grid[col][row + 1]);
-	}
-	if (row - 1 >= 0)
-	{
-		grArray.Add(Grid[col][row - 1]);
-	}
-	if (col - 1 >= 0)
-	{
-		grArray.Add(Grid[col - 1][row]);
-	}
-	if (col + 1 < GetGridColummns())
-	{
-		grArray.Add(Grid[col + 1][row]);
-	}
-
-	return grArray;
+int AStar::GetColumns()
+{
+	return Grid.Size();
 }

@@ -5,13 +5,14 @@
 #include "Player.h"
 #include "Line.h"
 
+
 class TestEnemy : public Enemy
 {
 public:
 	TestEnemy(float aX, float aY);
 	~TestEnemy();
 
-	void FindPath();
+	void FindPath(float aX, float aY);
 	void Update();
 	void Draw();
 
@@ -20,9 +21,7 @@ public:
 private:
 	CollisionEntity* myAttackPtr;
 
-	Line myLine;
-
+	GrowingArray<AStarNode*> myPath;
 	int myPrevState;
-	GrowingArray<Vector2f> myPath;
 };
 #endif // !TESTENEMY_H

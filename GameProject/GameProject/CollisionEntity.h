@@ -5,6 +5,7 @@
 #include "Vector2.h"
 #include "QuadTree.h"
 #include "Math.h"
+#include "AStar.h"
 
 class CollisionEntity : public Entity
 {
@@ -16,6 +17,12 @@ public:
 	static std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionList;
 
 	void OnRemoval();
+
+	static AStar* AStarGrid;
+	bool InsideGrid(float aX, float aY);
+	static Vector2f SnapToGrid(float aX, float aY);
+	static float SnapToGrid(float aX);
+	static Vector2f GridSnapMouse();
 
 	bool LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3, Vector2f aP4);
 	bool LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity* aObject);
