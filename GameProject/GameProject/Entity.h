@@ -14,7 +14,7 @@ class Entity
 {
 public:
 	Entity();
-	~Entity();
+	virtual ~Entity();
 
 	virtual void Init(std::string aName, float aX, float aY);
 
@@ -29,6 +29,7 @@ public:
 	virtual void OnRemoval();
 	static void DeleteMarkedInstances();
 	
+
 	Entity* GetObj(std::string aEntity);
 
 	//Update,Draw
@@ -67,11 +68,13 @@ public:
 	float GetY() const;
 	float GetWidth();
 	float GetHeight();
+	float GetMarkedForDelete() const;
 
 	//Modifiers
 	void SetX(float aX);
 	void SetY(float aY);
 	void SetAngle(float aAngle);
+	void SetMarkedForDelete(const bool aBool);
 
 protected:
 	float myX;
@@ -95,6 +98,7 @@ protected:
 	std::string myName;
 
 	static void DeleteInstanceMem(Entity* aEntity);
+	bool myMarkedForDelete;
 private:
 	sf::Text myText;
 	static GrowingArray<Entity*>* GrArrayPtr;

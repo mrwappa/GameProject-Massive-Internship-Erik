@@ -25,7 +25,7 @@ CollisionEntity::CollisionEntity()
 
 CollisionEntity::~CollisionEntity()
 {
-
+	
 }
 
 void CollisionEntity::Init(std::string aName, float aX, float aY)
@@ -73,9 +73,9 @@ void CollisionEntity::OnRemoval()
 
 bool CollisionEntity::InsideGrid(float aX, float aY)
 {
-	float width = (AStarGrid->GetRows() * AStarNode::NodeSize);
-	float height = (AStarGrid->GetColumns() * AStarNode::NodeSize);
-	return (SnapToGrid(aX) <= width and SnapToGrid(aX) >= 0) and (SnapToGrid(aY) <= height and SnapToGrid(aY) >= 0);
+	float width = (AStarGrid->GetColumns() * AStarNode::NodeSize);
+	float height = (AStarGrid->GetRows() * AStarNode::NodeSize);
+	return aX <= width and aX >= 0 and aY <= height and aY >= 0;
 }
 
 Vector2f CollisionEntity::SnapToGrid(float aX, float aY)
@@ -221,10 +221,13 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
-		if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
+		if (GrArrayPtr->FindAtIndex(i) != this)//no collision with itself
 		{
-			//I do not understand why the regular [] index operator is failing here
-			return GrArrayPtr->FindAtIndex(i);
+			if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
+			{
+				//I do not understand why the regular [] index operator is failing here
+				return GrArrayPtr->FindAtIndex(i);
+			}
 		}
 	}
 	return NULL;
@@ -398,6 +401,26 @@ float CollisionEntity::GetXOffset()
 float CollisionEntity::GetYOffset()
 {
 	return myBoxYOffset;
+}
+
+float CollisionEntity::GetXSpeed() const
+{
+	return myXSpeed;
+}
+
+float CollisionEntity::GetYSpeed() const
+{
+	return myYSpeed;
+}
+
+float CollisionEntity::GetXKnock() const
+{
+	return myXKnockBack;
+}
+
+float CollisionEntity::GetYKnock() const
+{
+	return myYKnockBack;
 }
 
 void CollisionEntity::SetXOffset(float aX)

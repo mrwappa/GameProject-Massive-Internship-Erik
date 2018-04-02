@@ -18,6 +18,7 @@ AStar::AStar(float aRows, float aColumns)
 
 AStar::~AStar()
 {
+
 }
 
 void AStar::DestroyGrid()
@@ -34,9 +35,6 @@ void AStar::DestroyGrid()
 
 GrowingArray<AStarNode*> AStar::FindPath(Vector2f aStart, Vector2f aEnd)
 {
-	/*AStarNode* start = new AStarNode(Vector2f((int)(aStart.x / AStarNode::NodeSize), (int)(aStart.y / AStarNode::NodeSize)), true);
-	AStarNode* end = new AStarNode(Vector2f((int)(aEnd.x / AStarNode::NodeSize), (int)(aEnd.y / AStarNode::NodeSize)), true);*/
-
 	AStarNode* start = Grid.FindAtIndex((int)(aStart.x / AStarNode::NodeSize))->FindAtIndex((int)(aStart.y / AStarNode::NodeSize));
 	AStarNode* end = Grid.FindAtIndex((int)(aEnd.x / AStarNode::NodeSize))->FindAtIndex((int)(aEnd.y / AStarNode::NodeSize));
 

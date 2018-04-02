@@ -14,6 +14,7 @@ Brick::Brick(float aX, float aY)
 
 Brick::~Brick()
 {
+
 }
 
 void Brick::Update()

@@ -35,6 +35,7 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myColor = sf::Color::White;
 	myName = aName;
 	myActive = true;
+	myMarkedForDelete = false;
 	AddInstance(this, aName);
 }
 
@@ -50,10 +51,11 @@ void Entity::AddInstance(Entity* aEntity, std::string aName)
 
 void Entity::DeleteInstance(Entity* aEntity)
 {
-	//This is extremely slow, I may just add a bool that says "MarkedForDelete"
-	//so that no search has to be done to find if it's already in the list
-	if (DeleteMarkedList.Find(aEntity) == -1)
+	//This bool check is here so that two of the same instances do not get
+	//put in the same list, leading to it trying delete something empty
+	if (!aEntity->GetMarkedForDelete())
 	{
+		aEntity->SetMarkedForDelete(true);
 		DeleteMarkedList.Add(aEntity);
 	}
 }
@@ -126,6 +128,11 @@ float Entity::GetHeight()
 	return mySprite.GetTextureHeight() * myYScale;
 }
 
+float Entity::GetMarkedForDelete() const
+{
+	return myMarkedForDelete;
+}
+
 void Entity::SetX(float aX)
 {
 	myX = aX;
@@ -139,6 +146,11 @@ void Entity::SetY(float aY)
 void Entity::SetAngle(float aAngle)
 {
 	myAngle = aAngle;
+}
+
+void Entity::SetMarkedForDelete(const bool aBool)
+{
+	myMarkedForDelete = aBool;
 }
 
 void Entity::BeginUpdate()

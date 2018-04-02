@@ -10,6 +10,7 @@ Solid::Solid()
 
 Solid::~Solid()
 {
+
 }
 void Solid::Init(std::string aName, float aX, float aY)
 {
@@ -24,7 +25,11 @@ void Solid::Init(std::string aName, float aX, float aY)
 
 void Solid::OnRemoval()
 {
-	AStarGrid->Grid.FindAtIndex(((int)myX - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->FindAtIndex(((int)myY - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->SetWalkable(true);
+	if (InsideGrid(myX,myY))
+	{
+		AStarGrid->Grid.FindAtIndex(((int)myX - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->FindAtIndex(((int)myY - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->SetWalkable(true);
+	}
+	
 	RemoveCollInstance("Solid", this);
 	CollisionEntity::OnRemoval();
 }

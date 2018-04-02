@@ -26,3 +26,8 @@ void Enemy::StateIdle()
 void Enemy::StateAggro()
 {
 }
+
+void Enemy::StatePathFind()
+{
+
+}

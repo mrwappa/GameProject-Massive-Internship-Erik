@@ -16,6 +16,7 @@ AStarNode::AStarNode(Vector2f aPosition, bool aWalkable)
 
 AStarNode::~AStarNode()
 {
+
 }
 
 bool AStarNode::GetWalkable()

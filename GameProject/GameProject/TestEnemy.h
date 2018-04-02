@@ -13,8 +13,12 @@ public:
 	~TestEnemy();
 
 	void FindPath(float aX, float aY);
+	void StateAggro();
+	void StatePathFind();
 	void Update();
 	void Draw();
+
+	
 
 	void OnRemoval();
 
@@ -23,5 +27,7 @@ private:
 
 	GrowingArray<AStarNode*> myPath;
 	int myPrevState;
+
+	Line myLine;
 };
 #endif // !TESTENEMY_H

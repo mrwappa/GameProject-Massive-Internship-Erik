@@ -39,6 +39,10 @@ void World::CreateWorld()
 	new Brick(4 * 32 + 16, 5 * 32 + 16);
 	new Brick(4 * 32 + 16, 6 * 32 + 16);
 	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
+	new TestEnemy(400,400);
+	new TestEnemy(400 + 40, 400 + 40);
+	new TestEnemy(400 - 40, 400 - 40);
+
 }
 
 void World::DestroyWorld()
@@ -54,6 +58,7 @@ void World::DestroyWorld()
 		}
 	}
 	CollisionEntity::AStarGrid->DestroyGrid();
+	delete CollisionEntity::AStarGrid;
 }
 
 void World::DrawGUI()
@@ -67,4 +72,3 @@ void World::DrawGUI()
 		Camera->SetZoom(1);
 	}
 }
-

@@ -37,6 +37,10 @@ public:
 	void UpdateBBox();
 	void DrawBBox();
 	
+	//Rotate() is broken, so is the Rotate() in the Vector2 class
+	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
+	Vector2f RotatePoint(float aX, float aY, float aAngle, Vector2f Point);
+
 	void Move(float aXSpeed, float aYSpeed);
 
 	//Compare if two rectangles contain one or the other
@@ -44,12 +48,13 @@ public:
 	
 	//Accessors
 	Vector2f GetBoxPosition() const;
-	//Rotate() is broken, so is the Rotate() in the Vector2 class
-	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
-	Vector2f RotatePoint(float aX, float aY, float aAngle, Vector2f Point);
 	RektF GetBounds() const;
 	float GetXOffset();
 	float GetYOffset();
+	float GetXSpeed() const;
+	float GetYSpeed() const;
+	float GetXKnock() const;
+	float GetYKnock() const;
 
 	//Modifiers
 	void SetXOffset(float aX);

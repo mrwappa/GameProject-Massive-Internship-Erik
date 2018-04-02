@@ -14,6 +14,7 @@ public:
 
 	virtual void StateIdle();
 	virtual void StateAggro();
+	virtual void StatePathFind();
 
 	static Player* Target;
 
