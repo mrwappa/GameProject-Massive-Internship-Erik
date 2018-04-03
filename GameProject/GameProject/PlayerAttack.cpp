@@ -14,6 +14,8 @@ PlayerAttack::PlayerAttack(float aX, float aY, Player* aTarget)
 	myBoxWidth = 7;
 	myBoxHeight = 18;
 
+	myDamage = 4;
+
 	myTarget = aTarget;
 }
 
@@ -25,7 +27,7 @@ void PlayerAttack::Update()
 {
 	myDepth = -myY;
 
-	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1)
+	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myTarget != NULL)
 	{
 		myTarget->PAttack = NULL;
 		DeleteInstance(this);

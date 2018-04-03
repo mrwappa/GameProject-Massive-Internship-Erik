@@ -36,6 +36,7 @@ void World::CreateWorld()
 	CollisionEntity::AStarGrid = new AStar(30, 17);
 	new Player(7 * 32 +16, 7 * 32 + 16);
 	new Brick(4 * 32 +16, 4 * 32 + 16);
+	new Brick(0, 0);
 	new Brick(4 * 32 + 16, 5 * 32 + 16);
 	new Brick(4 * 32 + 16, 6 * 32 + 16);
 	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);

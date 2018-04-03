@@ -32,6 +32,7 @@ public:
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true);
 	void PreventCollision(std::string aName);
 	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName);
+	CollisionEntity* NearestInstance(float aX, float aY, std::string aName);
 
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();
@@ -55,6 +56,7 @@ public:
 	float GetYSpeed() const;
 	float GetXKnock() const;
 	float GetYKnock() const;
+	float GetDamage() const;
 
 	//Modifiers
 	void SetXOffset(float aX);
@@ -76,6 +78,7 @@ protected:
 	float myBoxHeight;
 
 	float myHP;
+	float myDamage;
 
 	void AddCollInstance(CollisionEntity* aEntity);
 	void AddCollInstance(std::string aName, CollisionEntity* aEntity);
@@ -83,7 +86,6 @@ protected:
 	void RemoveCollInstance(std::string aName, CollisionEntity* aEntity);
 
 private:
-
 	
 	static GrowingArray<CollisionEntity*>* GrArrayPtr;
 };

@@ -15,12 +15,20 @@ public:
 	virtual void StateIdle();
 	virtual void StateAggro();
 	virtual void StatePathFind();
-
+	virtual void StateGrabbable();
+	virtual void StateGrabbed();
+	virtual void StateInUse();
+	
+	static sf::Color GrabColor;
 	static Player* Target;
+
+	void SetState(int aState);
+	
+	int GetState() const;
+	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse };
 
 protected:
 	int myState;
-	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse };
 	float myDirection;
 };
 #endif // !ENEMY_H

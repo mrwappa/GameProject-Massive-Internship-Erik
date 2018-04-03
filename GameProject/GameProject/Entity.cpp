@@ -153,6 +153,11 @@ void Entity::SetMarkedForDelete(const bool aBool)
 	myMarkedForDelete = aBool;
 }
 
+void Entity::SetColor(sf::Color aColor)
+{
+	myColor = aColor;
+}
+
 void Entity::BeginUpdate()
 {
 }

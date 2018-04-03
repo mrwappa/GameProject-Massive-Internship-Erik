@@ -122,6 +122,7 @@ void Player::BeginUpdate()
 		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 	}
 
+	//Default Attack
 	myAttackTimer -= 1.0f / 60.0f;
 	if (MouseCheckPressed(sf::Mouse::Button::Left) and PAttack == NULL and myAttackTimer <= 0)
 	{
@@ -147,6 +148,7 @@ void Player::BeginUpdate()
 		PAttack->SetYOffset(Math::LenDirY(18, dir));
 	}
 
+	//Camera Stuff
 	if (MouseWheelDown())
 	{
 		Camera->IncrZoom(-0.095f * Camera->GetZoom());
@@ -161,6 +163,16 @@ void Player::BeginUpdate()
 	}
 	Camera->SetX(myX);
 	Camera->SetY(myY);
+
+	Enemy* enemy = NearestGrabbable();
+	if (enemy != NULL)
+	{
+		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy == NULL)
+		{
+			GrabbableEnemy = enemy;
+			GrabbableEnemy->SetState(Enemy::Grabbed);
+		}
+	}
 }
 
 void Player::Draw()
@@ -177,6 +189,8 @@ void Player::Draw()
 	
 	Entity::Draw();
 	DrawBBox();
+
+	
 }
 
 void Player::DrawGUI()
@@ -194,7 +208,7 @@ void Player::DrawGUI()
 	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
 
 	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);*/
-
+	
 }
 
 void Player::OnRemoval()
@@ -207,51 +221,85 @@ void Player::OnRemoval()
 	CollisionEntity::OnRemoval();
 }
 
+Enemy * Player::NearestGrabbable()
+{
+
+	if (CollisionList.count("Enemy") == 0)
+	{
+		return NULL;
+	}
+	int nearestLength = -1;
+	CollisionEntity* colInstance = NULL;
+
+	GrowingArray<CollisionEntity*>* GrArrayPtr = CollisionList.at("Enemy");
+
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		Enemy* currentInstance = (Enemy*)GrArrayPtr->FindAtIndex(i);
+		if (currentInstance->GetState() == Enemy::Grabbable)
+		{
+			int instanceLength = Math::PointDistance(myX, myY, currentInstance->GetX(), currentInstance->GetY());
+			if (nearestLength == -1)
+			{
+				nearestLength = instanceLength;
+				colInstance = currentInstance;
+			}
+			else if (instanceLength < nearestLength and nearestLength != -1)
+			{
+				nearestLength = instanceLength;
+				colInstance = currentInstance;
+			}
+		}
+	}
+
+	return (Enemy*)colInstance;
+}
+
 void Player::TextureDirection(float aAngle)
 {
-	if (aAngle < 25 && aAngle > 0 || aAngle > -25 && aAngle < 0)
+	if (aAngle < 25 and aAngle > 0 || aAngle > -25 and aAngle < 0)
 	{
 		//Right
 		mySprite.SetTexture(*myCharTextures[Left],3);
 		myXScale = -2;
 	}
-	if (aAngle < -25 && aAngle > -70)
+	if (aAngle < -25 and aAngle > -70)
 	{
 		//Back Right
 		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
 		myXScale = -2;
 	}
-	if (aAngle < -70 && aAngle > -115)
+	if (aAngle < -70 and aAngle > -115)
 	{
 		//Back
 		mySprite.SetTexture(*myCharTextures[Back], 3);
 		myXScale = 2;
 	}
-	if (aAngle < -115 && aAngle > -160)
+	if (aAngle < -115 and aAngle > -160)
 	{
 		//Back Left
 		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
 		myXScale = 2;
 	}
-	if (aAngle < -160 && aAngle > -180 || aAngle > 155 && aAngle < 180)
+	if (aAngle < -160 and aAngle > -180 || aAngle > 155 and aAngle < 180)
 	{
 		//Left
 		mySprite.SetTexture(*myCharTextures[Left], 3);
 		myXScale = 2;
 	}
-	if (aAngle < 155 && aAngle > 110)
+	if (aAngle < 155 and aAngle > 110)
 	{
 		//Front Left
 		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);
 		myXScale = 2;
 	}
-	if (aAngle < 110 && aAngle > 65)
+	if (aAngle < 110 and aAngle > 65)
 	{
 		//Front
 		mySprite.SetTexture(*myCharTextures[Front], 3);
 		myXScale = 2;
 	}
-	if (aAngle < 65 && aAngle > 25)
+	if (aAngle < 65 and aAngle > 25)
 	{
 		//Front Right
 		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);

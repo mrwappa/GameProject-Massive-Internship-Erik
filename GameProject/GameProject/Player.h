@@ -21,6 +21,8 @@ public:
 
 	void OnRemoval();
 
+	Enemy* NearestGrabbable();
+	
 	PlayerAttack* PAttack;
 
 private:
@@ -45,6 +47,8 @@ private:
 	float myXSub;
 	float myYSub;
 
+	Enemy* GrabbableEnemy;
+	
 	float myLookAngle;
 	
 	float myAttackTimer;
@@ -54,7 +58,7 @@ private:
 	//thanks SFML...
 	sf::Texture* myCharTextures[5];
 	
-	enum CharTexture {Back, BackLeft, Front, FrontLeft,Left, T_SIZE};
+	enum CharTexture {Back, BackLeft, Front, FrontLeft ,Left, T_SIZE};
 
 	GSprite* myShadow;
 };

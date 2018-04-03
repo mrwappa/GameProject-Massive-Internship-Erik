@@ -11,6 +11,8 @@ TestEnemy::TestEnemy(float aX, float aY)
 	
 	myBoxWidth = 32;
 	myBoxHeight = 32;
+
+	myHP = 10;
 }
 
 
@@ -20,7 +22,7 @@ TestEnemy::~TestEnemy()
 
 void TestEnemy::FindPath(float aX, float aY)
 {
-	if (InsideGrid(aX, aY))
+	if (InsideGrid(SnapToGrid(myX), SnapToGrid(myY)) and InsideGrid(SnapToGrid(aX), SnapToGrid(aY)))
 	{
 		myPath = AStarGrid->FindPath(SnapToGrid(myX, myY), SnapToGrid(aX, aY));
 	}
@@ -82,7 +84,6 @@ void TestEnemy::StatePathFind()
 			}
 			if (abs(myY - yTarget) <= abs(myYSpeed))
 			{
-
 				myY = yTarget;
 			}
 
@@ -105,82 +106,59 @@ void TestEnemy::StatePathFind()
 	}
 }
 
+void TestEnemy::StateIdle()
+{
+
+}
+
+void TestEnemy::StateGrabbable()
+{
+	if (myState == Grabbable)
+	{
+		myColor = sf::Color::Blue;
+	}
+}
+
+void TestEnemy::StateGrabbed()
+{
+	if (myState == Grabbed)
+	{
+		myColor = sf::Color::Green;
+	}
+}
+
 void TestEnemy::Update()
 {
 	myDepth = -myY;
 
 	StatePathFind();
 	StateAggro();
+	StateGrabbable();
 
-	/*CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, "Enemy");
+	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
 
-	if (brick != NULL)
+	if (myState != Grabbable and myState != Grabbed and myState != InUse)
 	{
-		if (InstanceCollision(myX + myXSpeed + brick->GetXSpeed() + brick->GetXKnock(),
-			myY, brick))
+		if (pAttack != NULL and myAttackPtr != pAttack)
 		{
-			float brickX = brick->GetBoxPosition().x;
-			float brickWidth = brick->GetBounds().GetWidth();
-
-			if (myX > brickX and myXSpeed < 0)
-			{
-				myX = brickX + brickWidth + (myBoxWidth / 2);
-			}
-			if (myX < brickX and myXSpeed > 0)
-			{
-				myX = brickX - (myBoxWidth / 2);
-			}
+			float dir = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
+			myXKnockBack = Math::LenDirX(-19.0f, dir);
+			myYKnockBack = Math::LenDirY(-19.0f, dir);
 			myXSpeed = 0;
-			myXKnockBack = 0;
-		}
-	}
-	
-
-	brick = ObjCollision(myX, myY + myYSpeed + myYKnockBack, "Enemy");
-
-	if (brick != NULL)
-	{
-		if (InstanceCollision(myX,
-			myY + myYSpeed + brick->GetYSpeed() + brick->GetYKnock(), brick))
-		{
-			float brickY = brick->GetBoxPosition().y;
-			float brickHeight = brick->GetBounds().GetHeight();
-
-			if (myY > brickY and myYSpeed < 0)
-			{
-				myY = brickY + brickHeight + (myBoxHeight / 2);
-			}
-			if (myY < brickY and myYSpeed > 0)
-			{
-				myY = brickY - (myBoxHeight / 2);
-			}
 			myYSpeed = 0;
-			myYKnockBack = 0;
+			myHP -= pAttack->GetDamage();
 		}
-	}*/
-	
-
-	CollisionEntity* pAttack = ObjCollision(myX, myY, "PlayerAttack");
-
-	myColor = sf::Color::Red;
-	if (pAttack != NULL and myAttackPtr != pAttack)
-	{
-		myColor = sf::Color::Blue;
-		float dir = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
-		myXKnockBack = Math::LenDirX(-19.0f, dir);
-		myYKnockBack = Math::LenDirY(-19.0f, dir);
-		myXSpeed = 0;
-		myYSpeed = 0;
+		myAttackPtr = pAttack;
 	}
-	myAttackPtr = pAttack;
+	
+	if (myHP <= 0 and (myState == PathFind or myState == Aggro or myState == Idle))
+	{
+		myState = Grabbable;
+	}
 
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
 	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
-
-	
-	
-	
-	
+	//myColor = sf::Color::Red;
 }
 
 void TestEnemy::Draw()
@@ -195,7 +173,19 @@ void TestEnemy::Draw()
 	{
 		myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
 	}
+
+	for (int i = 0; i < myPath.Size(); i++)
+	{
+		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,
+							myDepth, sf::Color::White);
+	}
 	
+	
+}
+
+void TestEnemy::DrawGUI()
+{
+	DrawFont(std::to_string((int)myHP), myX, myY - 20, 24, 1, 1, sf::Color::White);
 }
 
 void TestEnemy::OnRemoval()

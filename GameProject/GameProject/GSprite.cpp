@@ -274,7 +274,7 @@ int GSprite::GetAnimationCounter() const
 //Modifiers
 void GSprite::SetTexture(std::string aFileName, int aNrOfFrames)
 {
-	if (!myTexture.loadFromFile(aFileName)) { throw "file not found"; }
+  	if (!myTexture.loadFromFile(aFileName)) { throw "file not found"; }
 
 	mySprite.setTexture(myTexture);
 	myTextureWidth = myTexture.getSize().x;

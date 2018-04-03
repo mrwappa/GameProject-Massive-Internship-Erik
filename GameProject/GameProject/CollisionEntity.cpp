@@ -315,6 +315,35 @@ CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f a
 	return NULL;
 }
 
+CollisionEntity * CollisionEntity::NearestInstance(float aX, float aY, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+
+	int nearestLength;
+	CollisionEntity* colInstance = NULL;
+
+	GrArrayPtr = CollisionList.at(aName);
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		int instanceLength = Math::PointDistance(aX, aY, GrArrayPtr->FindAtIndex(i)->GetX(), GrArrayPtr->FindAtIndex(i)->GetY());
+		if (i == 0)
+		{
+			nearestLength = instanceLength;
+			colInstance = GrArrayPtr->FindAtIndex(i);
+		}
+		else if(instanceLength < nearestLength and i != 0)
+		{
+			nearestLength = instanceLength;
+			colInstance = GrArrayPtr->FindAtIndex(i);
+		}
+	}
+
+	return colInstance;
+}
+
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)
 {
 	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),
@@ -421,6 +450,11 @@ float CollisionEntity::GetXKnock() const
 float CollisionEntity::GetYKnock() const
 {
 	return myYKnockBack;
+}
+
+float CollisionEntity::GetDamage() const
+{
+	return myDamage;
 }
 
 void CollisionEntity::SetXOffset(float aX)

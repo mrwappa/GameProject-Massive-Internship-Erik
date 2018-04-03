@@ -75,6 +75,7 @@ public:
 	void SetY(float aY);
 	void SetAngle(float aAngle);
 	void SetMarkedForDelete(const bool aBool);
+	void SetColor(sf::Color aColor);
 
 protected:
 	float myX;
