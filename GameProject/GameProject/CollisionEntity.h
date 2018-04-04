@@ -33,6 +33,7 @@ public:
 	void PreventCollision(std::string aName);
 	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName);
 	CollisionEntity* NearestInstance(float aX, float aY, std::string aName);
+	bool ObjPosition(float aX, float aY, std::string aName);
 
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();

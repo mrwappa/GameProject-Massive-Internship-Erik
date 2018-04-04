@@ -13,12 +13,15 @@ public:
 	~World();
 
 	void Update();
+	void BeginUpdate();
 	void Draw();
 
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
 
+private:
+	bool myCreateWorld;
 };
 
 #endif // !WORLD_H

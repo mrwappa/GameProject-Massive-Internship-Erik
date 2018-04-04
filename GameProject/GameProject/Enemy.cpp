@@ -45,6 +45,26 @@ void Enemy::StateInUse()
 {
 }
 
+void Enemy::StateThrown()
+{
+	if (myState == Thrown)
+	{
+		myX += myXSpeed;
+		myY += myYSpeed;
+		
+		myXSpeed = Math::Lerp(myXSpeed, 0, 0.2f);
+		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
+	}
+}
+
+void Enemy::Throw(float aSpeed, float aDir)
+{
+	myDirection = aDir;
+	myXSpeed = Math::LenDirX(aSpeed, aDir);
+	myYSpeed = Math::LenDirY(aSpeed, aDir);
+	myState = Thrown;
+}
+
 void Enemy::SetState(int aState)
 {
 	myState = aState;

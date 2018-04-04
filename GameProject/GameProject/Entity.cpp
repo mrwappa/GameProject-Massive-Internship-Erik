@@ -36,7 +36,7 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myName = aName;
 	myActive = true;
 	myMarkedForDelete = false;
-	AddInstance(this, aName);
+	AddInstance(this,aName);
 }
 
 void Entity::AddInstance(Entity* aEntity, std::string aName)
@@ -62,7 +62,7 @@ void Entity::DeleteInstance(Entity* aEntity)
 
 void Entity::OnRemoval()
 {
-
+	
 }
 
 void Entity::DeleteInstanceMem(Entity* aEntity)
@@ -74,18 +74,16 @@ void Entity::DeleteInstanceMem(Entity* aEntity)
 
 void Entity::DeleteMarkedInstances()
 {
-	GrowingArray<int> indexRemoval;
-
-	for (int i = 0; i < DeleteMarkedList.Size(); i++)
+	if (DeleteMarkedList.Size() > 0)
 	{
-		DeleteInstanceMem(DeleteMarkedList[i]);
-		indexRemoval.Add(i);
+		for (int i = 0; i < DeleteMarkedList.Size(); i++)
+		{
+			DeleteInstanceMem(DeleteMarkedList[i]);
+		}
+
+		DeleteMarkedList.RemoveAll();
 	}
 
-	for (int i = 0; i < indexRemoval.Size(); i++)
-	{
-		DeleteMarkedList.RemoveCyclicAtIndex(indexRemoval[i]);
-	}
 }
 
 Entity * Entity::GetObj(std::string aEntity)
@@ -116,6 +114,11 @@ float Entity::GetX() const
 float Entity::GetY() const
 {
 	return myY;
+}
+
+float Entity::GetDepth() const
+{
+	return myDepth;
 }
 
 float Entity::GetWidth()

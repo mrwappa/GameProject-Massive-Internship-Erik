@@ -66,6 +66,7 @@ public:
 	float GetAngle() const;
 	float GetX() const;
 	float GetY() const;
+	float GetDepth() const;
 	float GetWidth();
 	float GetHeight();
 	float GetMarkedForDelete() const;

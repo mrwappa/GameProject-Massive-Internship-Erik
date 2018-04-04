@@ -18,14 +18,17 @@ public:
 	virtual void StateGrabbable();
 	virtual void StateGrabbed();
 	virtual void StateInUse();
-	
+	virtual void StateThrown();
+
+	void Throw(float aSpeed, float aDir);
+
 	static sf::Color GrabColor;
 	static Player* Target;
 
 	void SetState(int aState);
 	
 	int GetState() const;
-	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse };
+	enum EnemyStates { Idle, Aggro, PathFind, Grabbable, Grabbed, InUse,Thrown };
 
 protected:
 	int myState;

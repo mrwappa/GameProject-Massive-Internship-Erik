@@ -33,23 +33,26 @@ void TestEnemy::StateAggro()
 	myPrevState = myState;
 	if (myState == Aggro)
 	{
-		myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
-		myXSpeed = Math::LenDirX(3.0f, myDirection);
-		myYSpeed = Math::LenDirY(3.0f, myDirection);
-
-		float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
-		if (distance <= 17)
+		if (Target != NULL)
 		{
-			myXSpeed = 0;
-			myYSpeed = 0;
+			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
+			myXSpeed = Math::LenDirX(3.0f, myDirection);
+			myYSpeed = Math::LenDirY(3.0f, myDirection);
+
+			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
+			if (distance <= 17)
+			{
+				myXSpeed = 0;
+				myYSpeed = 0;
+			}
+
+			if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+			{
+				myState = PathFind;
+				FindPath(Target->GetX(), Target->GetY());
+			}
 		}
 
-		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
-		{
-			myState = PathFind;
-			FindPath(Target->GetX(), Target->GetY());
-		}
-		
 		CollisionEntity* brick = ObjCollision(myX, myY, "Enemy");
 		if (brick != NULL)
 		{
@@ -124,6 +127,12 @@ void TestEnemy::StateGrabbed()
 	if (myState == Grabbed)
 	{
 		myColor = sf::Color::Green;
+		if(Target != NULL)
+		{
+			myX = Target->GetX();
+			myY = Target->GetY();
+			myDepth = Target->GetDepth() - 3;
+		}
 	}
 }
 
@@ -134,6 +143,8 @@ void TestEnemy::Update()
 	StatePathFind();
 	StateAggro();
 	StateGrabbable();
+	StateGrabbed();
+	StateThrown();
 
 	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
 
@@ -147,6 +158,10 @@ void TestEnemy::Update()
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myHP -= pAttack->GetDamage();
+			if (myState == PathFind)
+			{
+				myState = Aggro;
+			}
 		}
 		myAttackPtr = pAttack;
 	}
@@ -165,15 +180,19 @@ void TestEnemy::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
-	if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+	if (Target != NULL)
 	{
-		myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
+		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		{
+			myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
+		}
+		else
+		{
+			myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
+		}
 	}
-	else
-	{
-		myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
-	}
-
+	
+	//rip drawing multiple lines becuase of my bad design
 	for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,

@@ -25,10 +25,14 @@ void Solid::Init(std::string aName, float aX, float aY)
 
 void Solid::OnRemoval()
 {
-	if (InsideGrid(myX,myY))
+	if (AStarGrid != NULL)
 	{
-		AStarGrid->Grid.FindAtIndex(((int)myX - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->FindAtIndex(((int)myY - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->SetWalkable(true);
+		if (InsideGrid(myX, myY) and !ObjPosition(myX, myY, "Solid"))
+		{
+			AStarGrid->Grid.FindAtIndex(((int)myX - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->FindAtIndex(((int)myY - AStarNode::NodeSize / 2) / AStarNode::NodeSize)->SetWalkable(true);
+		}
 	}
+	
 	
 	RemoveCollInstance("Solid", this);
 	CollisionEntity::OnRemoval();

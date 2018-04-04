@@ -5,28 +5,22 @@
 
 Player::Player(float aX, float aY)
 {
-	Enemy::Target = this;
-
 	Init("Player",aX,aY);
 	
 	myX = aX;
 	myY = aY;
 
-	myShadow = new GSprite();
-	myShadow->SetTexture("Sprites/Player/spr_circle.png",1);
 
-	for (int i = 0; i < T_SIZE; i++)
-	{
-		myCharTextures[i] = new sf::Texture();
-	}
+	myShadow.SetTexture("Sprites/Player/spr_circle.png",1);
+
 	
-	myCharTextures[Back]->loadFromFile("Sprites/Player/spr_player_back.png");
-	myCharTextures[BackLeft]->loadFromFile("Sprites/Player/spr_player_back_left.png");
-	myCharTextures[Front]->loadFromFile("Sprites/Player/spr_player_front.png");
-	myCharTextures[FrontLeft]->loadFromFile("Sprites/Player/spr_player_front_left.png");
-	myCharTextures[Left]->loadFromFile("Sprites/Player/spr_player_left.png");
+	myCharTextures[Back].loadFromFile("Sprites/Player/spr_player_back.png");
+	myCharTextures[BackLeft].loadFromFile("Sprites/Player/spr_player_back_left.png");
+	myCharTextures[Front].loadFromFile("Sprites/Player/spr_player_front.png");
+	myCharTextures[FrontLeft].loadFromFile("Sprites/Player/spr_player_front_left.png");
+	myCharTextures[Left].loadFromFile("Sprites/Player/spr_player_left.png");
 	
-	mySprite.SetTexture(*myCharTextures[Front], 3);
+	mySprite.SetTexture(myCharTextures[Front], 3);
 
 	myXScale = 2.0f;
 	myYScale = myXScale;
@@ -63,6 +57,10 @@ void Player::Update()
 
 void Player::BeginUpdate()
 {
+	if (Enemy::Target == NULL)
+	{
+		Enemy::Target = this;
+	}
 	myLookAngle = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
 	myDepth = -myY;
@@ -122,31 +120,64 @@ void Player::BeginUpdate()
 		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 	}
 
+	//Enemy as attack
+	Enemy* enemy = NearestGrabbable();
+	if (enemy != NULL)
+	{
+		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy == NULL and enemy->GetState() == Enemy::Grabbable)
+		{
+			GrabbableEnemy = enemy;
+			GrabbableEnemy->SetState(Enemy::Grabbed);
+		}
+	}
+
+	if (GrabbableEnemy != NULL)
+	{
+		if (KeyboardCheck(sf::Keyboard::Space))
+		{
+			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+			GrabbableEnemy = NULL;
+		}
+		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL)
+		{
+			//unnescessary check right now, but will be relevent when more enemies appear
+			if (GrabbableEnemy->GetName() == "TestEnemy")
+			{
+
+			}
+		}
+		
+	}
+
 	//Default Attack
 	myAttackTimer -= 1.0f / 60.0f;
-	if (MouseCheckPressed(sf::Mouse::Button::Left) and PAttack == NULL and myAttackTimer <= 0)
+	if (GrabbableEnemy == NULL)
 	{
-		myAttackTimer = 0.7f;
-		PAttack = new PlayerAttack(myX, myY, this);
-	}
-	if (myAttackTimer <= 0)
-	{
-		myAttackTimer = 0;
-	}
-	myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
-	
-	if (PAttack != NULL)
-	{
-		float dir = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-		float atX = myX + Math::LenDirX(14, dir);
-		float atY = myY + Math::LenDirY(14, dir);
+		if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
+		{
+			myAttackTimer = 0.7f;
+			PAttack = new PlayerAttack(myX, myY, this);
+		}
+		if (myAttackTimer <= 0)
+		{
+			myAttackTimer = 0;
+		}
+		myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
 
-		PAttack->SetX(atX);
-		PAttack->SetY(atY);
-		PAttack->SetAngle(Math::RadToDeg(dir));
-		PAttack->SetXOffset(Math::LenDirX(18, dir));
-		PAttack->SetYOffset(Math::LenDirY(18, dir));
+		if (PAttack != NULL)
+		{
+			float dir = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+			float atX = myX + Math::LenDirX(14, dir);
+			float atY = myY + Math::LenDirY(14, dir);
+
+			PAttack->SetX(atX);
+			PAttack->SetY(atY);
+			PAttack->SetAngle(Math::RadToDeg(dir));
+			PAttack->SetXOffset(Math::LenDirX(18, dir));
+			PAttack->SetYOffset(Math::LenDirY(18, dir));
+		}
 	}
+	
 
 	//Camera Stuff
 	if (MouseWheelDown())
@@ -164,15 +195,7 @@ void Player::BeginUpdate()
 	Camera->SetX(myX);
 	Camera->SetY(myY);
 
-	Enemy* enemy = NearestGrabbable();
-	if (enemy != NULL)
-	{
-		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy == NULL)
-		{
-			GrabbableEnemy = enemy;
-			GrabbableEnemy->SetState(Enemy::Grabbed);
-		}
-	}
+	
 }
 
 void Player::Draw()
@@ -180,11 +203,11 @@ void Player::Draw()
 	myPreviousAIndex = mySprite.GetAnimationIndex();
 	if (mySprite.GetAnimationIndex() == 2)
 	{
-		myShadow->Draw(myX, myY + 16, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow.Draw(myX, myY + 16, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
 	}
 	else
 	{
-		myShadow->Draw(myX, myY + 18, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow.Draw(myX, myY + 18, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
 	}
 	
 	Entity::Draw();
@@ -213,11 +236,7 @@ void Player::DrawGUI()
 
 void Player::OnRemoval()
 {
-	for (int i = 0; i < T_SIZE; i++)
-	{
-		delete myCharTextures[i];
-	}
-	delete myShadow;
+	Enemy::Target = NULL;
 	CollisionEntity::OnRemoval();
 }
 
@@ -260,49 +279,49 @@ void Player::TextureDirection(float aAngle)
 	if (aAngle < 25 and aAngle > 0 || aAngle > -25 and aAngle < 0)
 	{
 		//Right
-		mySprite.SetTexture(*myCharTextures[Left],3);
+		mySprite.SetTexture(myCharTextures[Left],3);
 		myXScale = -2;
 	}
 	if (aAngle < -25 and aAngle > -70)
 	{
 		//Back Right
-		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
+		mySprite.SetTexture(myCharTextures[BackLeft], 3);
 		myXScale = -2;
 	}
 	if (aAngle < -70 and aAngle > -115)
 	{
 		//Back
-		mySprite.SetTexture(*myCharTextures[Back], 3);
+		mySprite.SetTexture(myCharTextures[Back], 3);
 		myXScale = 2;
 	}
 	if (aAngle < -115 and aAngle > -160)
 	{
 		//Back Left
-		mySprite.SetTexture(*myCharTextures[BackLeft], 3);
+		mySprite.SetTexture(myCharTextures[BackLeft], 3);
 		myXScale = 2;
 	}
 	if (aAngle < -160 and aAngle > -180 || aAngle > 155 and aAngle < 180)
 	{
 		//Left
-		mySprite.SetTexture(*myCharTextures[Left], 3);
+		mySprite.SetTexture(myCharTextures[Left], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 155 and aAngle > 110)
 	{
 		//Front Left
-		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);
+		mySprite.SetTexture(myCharTextures[FrontLeft], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 110 and aAngle > 65)
 	{
 		//Front
-		mySprite.SetTexture(*myCharTextures[Front], 3);
+		mySprite.SetTexture(myCharTextures[Front], 3);
 		myXScale = 2;
 	}
 	if (aAngle < 65 and aAngle > 25)
 	{
 		//Front Right
-		mySprite.SetTexture(*myCharTextures[FrontLeft], 3);
+		mySprite.SetTexture(myCharTextures[FrontLeft], 3);
 		myXScale = -2;
 	}
 }

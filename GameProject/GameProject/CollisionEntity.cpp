@@ -344,6 +344,24 @@ CollisionEntity * CollisionEntity::NearestInstance(float aX, float aY, std::stri
 	return colInstance;
 }
 
+bool CollisionEntity::ObjPosition(float aX, float aY, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return false;
+	}
+	GrArrayPtr = CollisionList.at(aName);
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (aX ==  GrArrayPtr->FindAtIndex(i)->GetX() and aY == GrArrayPtr->FindAtIndex(i)->GetY())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)
 {
 	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),

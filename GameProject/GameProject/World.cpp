@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
 
-
-
 World::World()
 {
 	Entity::Init("World", 0, 0);
@@ -20,6 +18,11 @@ void World::Update()
 	
 }
 
+void World::BeginUpdate()
+{
+	CreateWorld();
+}
+
 void World::Draw()
 {
 	mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, -99999, 1, sf::Color::Black, 0);
@@ -32,18 +35,22 @@ void World::Draw()
 
 void World::CreateWorld()
 {
-	AStarNode::NodeSize = 32.0f;
-	CollisionEntity::AStarGrid = new AStar(30, 17);
-	new Player(7 * 32 +16, 7 * 32 + 16);
-	new Brick(4 * 32 +16, 4 * 32 + 16);
-	new Brick(0, 0);
-	new Brick(4 * 32 + 16, 5 * 32 + 16);
-	new Brick(4 * 32 + 16, 6 * 32 + 16);
-	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
-	new TestEnemy(400,400);
-	new TestEnemy(400 + 40, 400 + 40);
-	new TestEnemy(400 - 40, 400 - 40);
-
+	if (myCreateWorld)
+	{
+		AStarNode::NodeSize = 32.0f;
+		CollisionEntity::AStarGrid = new AStar(30, 17);
+		new Player(7 * 32 + 16, 7 * 32 + 16);
+		new Brick(4 * 32 + 16, 4 * 32 + 16);
+		new Brick(0, 0);
+		new Brick(4 * 32 + 16, 5 * 32 + 16);
+		new Brick(4 * 32 + 16, 6 * 32 + 16);
+		new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
+		new TestEnemy(400, 400);
+		new TestEnemy(400 + 40, 400 + 40);
+		new TestEnemy(400 - 40, 400 - 40);
+		myCreateWorld = false;
+	}
+	
 }
 
 void World::DestroyWorld()
@@ -60,16 +67,15 @@ void World::DestroyWorld()
 	}
 	CollisionEntity::AStarGrid->DestroyGrid();
 	delete CollisionEntity::AStarGrid;
+	CollisionEntity::AStarGrid = NULL;
 }
 
 void World::DrawGUI()
 {
-	//This is done in DrawGUI() because otherwise two of every objects Sprite will be drawn on one frame
-	//It's nitpicky but also something annoying that I'd rather not deal with.
 	if (KeyboardCheckPressed(sf::Keyboard::R))
 	{
 		DestroyWorld();
-		CreateWorld();
+		myCreateWorld = true;
 		Camera->SetZoom(1);
 	}
 }
