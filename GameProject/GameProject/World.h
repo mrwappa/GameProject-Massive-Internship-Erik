@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Brick.h"
 #include "TestEnemy.h"
+#include "ProjectileEnemy.h"
 
 class World : public Entity
 {

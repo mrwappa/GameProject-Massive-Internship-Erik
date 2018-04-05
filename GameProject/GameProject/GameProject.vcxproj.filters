@@ -88,6 +88,12 @@
     <Filter Include="Tools/Core\AStar\AStarNode">
       <UniqueIdentifier>{cb55537e-1304-477d-8006-b32e507c09c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemies\ProjectileEnemy">
+      <UniqueIdentifier>{91a87cc5-a10c-4eb2-8a7b-e218d4507668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemies\ProjectileEnemy\Projectile">
+      <UniqueIdentifier>{68bfaa98-f11d-4156-a66d-92388890ce2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -162,6 +168,12 @@
     <ClInclude Include="AStarNode.h">
       <Filter>Tools/Core\AStar\AStarNode</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectileEnemy.h">
+      <Filter>Game\Enemies\ProjectileEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Game\Enemies\ProjectileEnemy\Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -221,6 +233,12 @@
     </ClCompile>
     <ClCompile Include="AStarNode.cpp">
       <Filter>Tools/Core\AStar\AStarNode</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileEnemy.cpp">
+      <Filter>Game\Enemies\ProjectileEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Game\Enemies\ProjectileEnemy\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

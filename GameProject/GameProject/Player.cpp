@@ -12,7 +12,6 @@ Player::Player(float aX, float aY)
 
 
 	myShadow.SetTexture("Sprites/Player/spr_circle.png",1);
-
 	
 	myCharTextures[Back].loadFromFile("Sprites/Player/spr_player_back.png");
 	myCharTextures[BackLeft].loadFromFile("Sprites/Player/spr_player_back_left.png");
@@ -25,9 +24,9 @@ Player::Player(float aX, float aY)
 	myXScale = 2.0f;
 	myYScale = myXScale;
 
-	myMovementSpeed = 4.5f;
-	myXSpeedMax = myMovementSpeed;
-	myYSpeedMax = myMovementSpeed;
+	myMoveSpeed = 4.5f;
+	myXSpeedMax = myMoveSpeed;
+	myYSpeedMax = myMoveSpeed;
 
 	myXAcceleration = 0.7f;
 	myYAcceleration = 0.7f;
@@ -42,6 +41,7 @@ Player::Player(float aX, float aY)
 	myPreviousAIndex = 0;
 
 	myAttackTimer = 0.f;
+	myDamage = 4;
 }
 
 
@@ -83,14 +83,14 @@ void Player::BeginUpdate()
 	myXSub = std::min(myXRestitution, std::abs(myXSpeed)) * Math::Sign(myXSpeed) * (myXDir == 0);
 	myYSub = std::min(myYRestitution, std::abs(myYSpeed)) * Math::Sign(myYSpeed) * (myYDir == 0);
 
-	myXSpeed = Math::Clamp(myXSpeed + myXAdd - myXSub, -myMovementSpeed, myMovementSpeed);
-	myYSpeed = Math::Clamp(myYSpeed + myYAdd - myYSub, -myMovementSpeed, myMovementSpeed);
+	myXSpeed = Math::Clamp(myXSpeed + myXAdd - myXSub, -myMoveSpeed, myMoveSpeed);
+	myYSpeed = Math::Clamp(myYSpeed + myYAdd - myYSub, -myMoveSpeed, myMoveSpeed);
 
 	//Diagonals
 	if (myXSpeed != 0 and myYSpeed != 0)
 	{
 		float dist = Math::SQRT2((myXSpeed * myXSpeed) + (myYSpeed * myYSpeed));
-		float mdist = std::min(myMovementSpeed, dist);
+		float mdist = std::min(myMoveSpeed, dist);
 		myXSpeed = (myXSpeed / dist) * mdist;
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
@@ -119,36 +119,7 @@ void Player::BeginUpdate()
 	{
 		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 	}
-
-	//Enemy as attack
-	Enemy* enemy = NearestGrabbable();
-	if (enemy != NULL)
-	{
-		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy == NULL and enemy->GetState() == Enemy::Grabbable)
-		{
-			GrabbableEnemy = enemy;
-			GrabbableEnemy->SetState(Enemy::Grabbed);
-		}
-	}
-
-	if (GrabbableEnemy != NULL)
-	{
-		if (KeyboardCheck(sf::Keyboard::Space))
-		{
-			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
-			GrabbableEnemy = NULL;
-		}
-		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL)
-		{
-			//unnescessary check right now, but will be relevent when more enemies appear
-			if (GrabbableEnemy->GetName() == "TestEnemy")
-			{
-
-			}
-		}
-		
-	}
-
+	
 	//Default Attack
 	myAttackTimer -= 1.0f / 60.0f;
 	if (GrabbableEnemy == NULL)
@@ -178,7 +149,6 @@ void Player::BeginUpdate()
 		}
 	}
 	
-
 	//Camera Stuff
 	if (MouseWheelDown())
 	{
@@ -188,14 +158,57 @@ void Player::BeginUpdate()
 	{
 		Camera->IncrZoom(0.095f * Camera->GetZoom());
 	}
-	if (KeyboardCheckPressed(sf::Keyboard::Space))
-	{
-		Camera->ShakeScreen(6.0f);
-	}
+
 	Camera->SetX(myX);
 	Camera->SetY(myY);
+}
 
-	
+void Player::EndUpdate()
+{
+	bool grabbedThisFrame = false;
+
+	//Enemy as weapon
+	if (GrabbableEnemy == NULL)
+	{
+		Enemy* enemy = NearestGrabbable();
+		if (enemy != NULL)
+		{
+			if (Math::PointDistance(myX, myY, enemy->GetX(), enemy->GetY()) < 80 and enemy->GetState() == Enemy::Grabbable)
+			{
+				enemy->SetColor(Enemy::GrabColor);
+				if (KeyboardCheckPressed(sf::Keyboard::LShift))
+				{
+					GrabbableEnemy = enemy;
+					GrabbableEnemy->SetState(Enemy::Grabbed);
+					grabbedThisFrame = true;
+				}
+			}
+		}
+	}
+
+	//Enemy as attack
+	if (GrabbableEnemy != NULL)
+	{
+		if (KeyboardCheckPressed(sf::Keyboard::Space))
+		{
+			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+			GrabbableEnemy = NULL;
+		}
+		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
+		{
+			GrabbableEnemy->SetState(Enemy::Grabbable);
+			GrabbableEnemy = NULL;
+		}
+		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL)
+		{
+			//unnescessary check right now, but will be relevent when more enemies appear
+			if (GrabbableEnemy->GetName() == "TestEnemy")
+			{
+
+			}
+		}
+
+	}
 }
 
 void Player::Draw()

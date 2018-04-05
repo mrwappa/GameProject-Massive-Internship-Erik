@@ -7,7 +7,7 @@ AStar* CollisionEntity::AStarGrid;
 
 CollisionEntity::CollisionEntity()
 {
-	myMovementSpeed = 0;
+	myMoveSpeed = 0;
 	myXSpeed = 0;
 	myYSpeed = 0;
 	myXKnockBack = 0;
@@ -483,4 +483,19 @@ void CollisionEntity::SetXOffset(float aX)
 void CollisionEntity::SetYOffset(float aY)
 {
 	myBoxYOffset = aY;
+}
+
+void CollisionEntity::IncrHP(float aX)
+{
+	myHP += aX;
+}
+
+void CollisionEntity::SetXKnock(float aX)
+{
+	myXKnockBack = aX;
+}
+
+void CollisionEntity::SetYKnock(float aY)
+{
+	myYKnockBack = aY;
 }

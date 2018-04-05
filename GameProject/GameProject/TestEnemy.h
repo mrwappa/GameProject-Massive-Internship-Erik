@@ -9,14 +9,12 @@
 class TestEnemy : public Enemy
 {
 public:
+
 	TestEnemy(float aX, float aY);
 	~TestEnemy();
 
-	void FindPath(float aX, float aY);
-
 	void StateAggro();
 	void StatePathFind();
-	void StateIdle();
 	void StateGrabbable();
 	void StateGrabbed();
 
@@ -27,9 +25,6 @@ public:
 	void OnRemoval();
 
 private:
-	PlayerAttack* myAttackPtr;
-
-	GrowingArray<AStarNode*> myPath;
 	int myPrevState;
 
 	Line myLine;

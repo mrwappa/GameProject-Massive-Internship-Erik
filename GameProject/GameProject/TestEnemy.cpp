@@ -7,10 +7,11 @@ TestEnemy::TestEnemy(float aX, float aY)
 	Init("TestEnemy", aX, aY);
 	myState = Aggro;
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
-	myColor = sf::Color::Red;
 	
 	myBoxWidth = 32;
 	myBoxHeight = 32;
+
+	myMoveSpeed = Math::FRand(2.0f,3.0f);
 
 	myHP = 10;
 }
@@ -18,14 +19,6 @@ TestEnemy::TestEnemy(float aX, float aY)
 
 TestEnemy::~TestEnemy()
 {
-}
-
-void TestEnemy::FindPath(float aX, float aY)
-{
-	if (InsideGrid(SnapToGrid(myX), SnapToGrid(myY)) and InsideGrid(SnapToGrid(aX), SnapToGrid(aY)))
-	{
-		myPath = AStarGrid->FindPath(SnapToGrid(myX, myY), SnapToGrid(aX, aY));
-	}
 }
 
 void TestEnemy::StateAggro()
@@ -36,8 +29,8 @@ void TestEnemy::StateAggro()
 		if (Target != NULL)
 		{
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
-			myXSpeed = Math::LenDirX(3.0f, myDirection);
-			myYSpeed = Math::LenDirY(3.0f, myDirection);
+			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
+			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
 			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
 			if (distance <= 17)
@@ -76,8 +69,8 @@ void TestEnemy::StatePathFind()
 			float yTarget = myPath[myPath.Size() - 1]->GetParent()->GetCenter().y;
 
 			myDirection = Math::PointDirection(myX, myY, xTarget, yTarget);
-			myXSpeed = Math::LenDirX(3.0f, myDirection);
-			myYSpeed = Math::LenDirY(3.0f, myDirection);
+			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
+			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 		
 			Move(abs(myX - xTarget) < abs(myXSpeed) ? 0 : myXSpeed, abs(myY - yTarget) < abs(myYSpeed) ? 0 : myYSpeed);
 
@@ -109,16 +102,13 @@ void TestEnemy::StatePathFind()
 	}
 }
 
-void TestEnemy::StateIdle()
-{
-
-}
-
 void TestEnemy::StateGrabbable()
 {
 	if (myState == Grabbable)
 	{
-		myColor = sf::Color::Blue;
+		Move(myXSpeed, myYSpeed);
+		myXSpeed = Math::Lerp(myXSpeed, 0, 0.5f);
+		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
 	}
 }
 
@@ -126,11 +116,10 @@ void TestEnemy::StateGrabbed()
 {
 	if (myState == Grabbed)
 	{
-		myColor = sf::Color::Green;
 		if(Target != NULL)
 		{
-			myX = Target->GetX();
-			myY = Target->GetY();
+			myX = Math::Lerp(myX,Target->GetX(),0.6f);
+			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 2,0.6f);
 			myDepth = Target->GetDepth() - 3;
 		}
 	}
@@ -138,6 +127,8 @@ void TestEnemy::StateGrabbed()
 
 void TestEnemy::Update()
 {
+	myColor = sf::Color::Red;
+
 	myDepth = -myY;
 
 	StatePathFind();
@@ -166,14 +157,13 @@ void TestEnemy::Update()
 		myAttackPtr = pAttack;
 	}
 	
-	if (myHP <= 0 and (myState == PathFind or myState == Aggro or myState == Idle))
+	if (myHP <= 0 and Alive())
 	{
 		myState = Grabbable;
 	}
 
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
 	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
-	//myColor = sf::Color::Red;
 }
 
 void TestEnemy::Draw()
@@ -192,7 +182,7 @@ void TestEnemy::Draw()
 		}
 	}
 	
-	//rip drawing multiple lines becuase of my bad design
+	//rip drawing multiple lines because of my and SFMLs bad design
 	for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,

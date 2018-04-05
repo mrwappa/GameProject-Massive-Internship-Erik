@@ -142,6 +142,6 @@ void Camera::IncrZoom(float aX)
 
 void Camera::ShakeScreen(float aX)
 {
-	myScreenShake = aX;
+	myScreenShake += aX;
 }
 

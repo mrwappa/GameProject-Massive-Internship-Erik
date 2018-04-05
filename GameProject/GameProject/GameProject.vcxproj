@@ -168,6 +168,8 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttack.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileEnemy.h" />
     <ClInclude Include="QuadNode.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Rekt.h" />
@@ -194,6 +196,8 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttack.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileEnemy.cpp" />
     <ClCompile Include="QuadNode.cpp" />
     <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">

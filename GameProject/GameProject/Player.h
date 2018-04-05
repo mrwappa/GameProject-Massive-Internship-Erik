@@ -16,6 +16,8 @@ public:
 
 	void Update();
 	void BeginUpdate();
+	void EndUpdate();
+
 	void Draw();
 	void DrawGUI();
 
@@ -54,8 +56,7 @@ private:
 	float myAttackTimer;
 
 	void TextureDirection(float aAngle);
-	//if these textures are not created and deleted on the heap, I get a memory leak
-	//thanks SFML...
+
 	sf::Texture myCharTextures[5];
 	
 	enum CharTexture {Back, BackLeft, Front, FrontLeft ,Left, T_SIZE};

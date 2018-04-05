@@ -62,10 +62,14 @@ public:
 	//Modifiers
 	void SetXOffset(float aX);
 	void SetYOffset(float aY);
+	void IncrHP(float aX);
+	void SetXKnock(float aX);
+	void SetYKnock(float aY);
 
 protected:
 
-	float myMovementSpeed;
+	float myMoveSpeed;
+	float myDirection;
 	float myXSpeed;
 	float myYSpeed;
 	float myXKnockBack;
