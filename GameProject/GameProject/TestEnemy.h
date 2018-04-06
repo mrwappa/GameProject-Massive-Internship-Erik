@@ -14,9 +14,6 @@ public:
 	~TestEnemy();
 
 	void StateAggro();
-	void StatePathFind();
-	void StateGrabbable();
-	void StateGrabbed();
 
 	void Update();
 	void Draw();

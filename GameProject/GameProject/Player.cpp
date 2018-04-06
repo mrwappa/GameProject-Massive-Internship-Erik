@@ -9,8 +9,7 @@ Player::Player(float aX, float aY)
 	
 	myX = aX;
 	myY = aY;
-
-
+	
 	myShadow.SetTexture("Sprites/Player/spr_circle.png",1);
 	
 	myCharTextures[Back].loadFromFile("Sprites/Player/spr_player_back.png");
@@ -122,6 +121,12 @@ void Player::BeginUpdate()
 	
 	//Default Attack
 	myAttackTimer -= 1.0f / 60.0f;
+	if (myAttackTimer <= 0)
+	{
+		myAttackTimer = 0;
+	}
+	myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
+
 	if (GrabbableEnemy == NULL)
 	{
 		if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
@@ -129,11 +134,8 @@ void Player::BeginUpdate()
 			myAttackTimer = 0.7f;
 			PAttack = new PlayerAttack(myX, myY, this);
 		}
-		if (myAttackTimer <= 0)
-		{
-			myAttackTimer = 0;
-		}
-		myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
+		
+		
 
 		if (PAttack != NULL)
 		{
@@ -197,6 +199,7 @@ void Player::EndUpdate()
 		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
 		{
 			GrabbableEnemy->SetState(Enemy::Grabbable);
+			GrabbableEnemy->SetZ(15);
 			GrabbableEnemy = NULL;
 		}
 		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL)

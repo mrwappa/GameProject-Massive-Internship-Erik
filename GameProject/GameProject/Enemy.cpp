@@ -7,7 +7,10 @@ sf::Color Enemy::GrabColor = sf::Color::Color(125,125,125,125);
 
 Enemy::Enemy()
 {
+	myZSpeed = 3.0f;
+
 	AddCollInstance("Enemy", this);
+	myShadow.SetTexture("Sprites/Player/spr_circle.png", 1);
 }
 
 
@@ -61,7 +64,7 @@ void Enemy::StatePathFind()
 
 			if (myX == xTarget and myY == yTarget)
 			{
-				if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+				if (!LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
 					myPath.RemoveAll();
 				}
@@ -80,11 +83,19 @@ void Enemy::StatePathFind()
 
 void Enemy::StateGrabbable()
 {
+	
 	if (myState == Grabbable)
 	{
-		Move(myXSpeed, myYSpeed);
+		myAnimationSpeed = Math::Lerp(myAnimationSpeed,0,0.4f);
+		PreventCollision("Solid");
+		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
+
 		myXSpeed = Math::Lerp(myXSpeed, 0, 0.2f);
 		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
+		myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.2f);
+		myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.2f);
+
+		Fall();
 	}
 }
 
@@ -110,12 +121,14 @@ void Enemy::StateThrown()
 {
 	if (myState == Thrown)
 	{
+		PreventCollision("Solid");
 		Move(myXSpeed, myYSpeed);
 		
 		myXSpeed = Math::Lerp(myXSpeed, 0, 0.2f);
 		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
+		Fall();
 
-		if (abs(myXSpeed) < 0.1 and abs(myYSpeed) < 0.1)
+		if (abs(myXSpeed) < 0.3f or abs(myYSpeed) < 0.3f)
 		{
 			myXSpeed = 0;
 			myYSpeed = 0;
@@ -130,7 +143,7 @@ void Enemy::StateThrown()
 
 				enemy->IncrHP(-(4 + static_cast<CollisionEntity*>(GetObj("Player"))->GetDamage()));
 				
-				myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY);
+				myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);
 				myXSpeed = Math::LenDirX(13, myDirection);
 				myYSpeed = Math::LenDirY(13, myDirection);
 
@@ -147,10 +160,35 @@ void Enemy::StateThrown()
 
 void Enemy::Throw(float aSpeed, float aDir)
 {
+	myZ = 15;
 	myDirection = aDir;
 	myXSpeed = Math::LenDirX(aSpeed, aDir);
 	myYSpeed = Math::LenDirY(aSpeed, aDir);
 	myState = Thrown;
+}
+
+void Enemy::Fall()
+{
+	myZSpeed -= 0.35f;
+	if ((myZ + myZSpeed) < 0)
+	{
+		while (myZ + Math::Sign(myZSpeed) > 0)
+		{
+			myZ += Math::Sign(myZSpeed);
+		}
+		if (abs(myZSpeed) > 1.5f)
+		{
+			myZSpeed *= -0.74f;
+		}
+		else
+		{
+			myZSpeed = 0;
+		}
+	}
+	else
+	{
+		myZ += myZSpeed;
+	}
 }
 
 void Enemy::FindPath(float aX, float aY)
@@ -161,9 +199,19 @@ void Enemy::FindPath(float aX, float aY)
 	}
 }
 
+void Enemy::DrawShadow(float aX, float aY, float aXScale, float aYScale)
+{
+	myShadow.Draw(aX, aY, aXScale, aYScale, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+}
+
 void Enemy::SetState(int aState)
 {
 	myState = aState;
+}
+
+void Enemy::SetZ(float aZ)
+{
+	myZ = aZ;
 }
 
 int Enemy::GetState() const

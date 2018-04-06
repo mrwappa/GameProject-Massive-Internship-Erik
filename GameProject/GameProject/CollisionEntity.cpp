@@ -7,6 +7,8 @@ AStar* CollisionEntity::AStarGrid;
 
 CollisionEntity::CollisionEntity()
 {
+	myZ = 0;
+
 	myMoveSpeed = 0;
 	myXSpeed = 0;
 	myYSpeed = 0;
@@ -137,8 +139,8 @@ bool CollisionEntity::LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, Col
 	//Rotate all points
 	for (int i = 0; i < 4; i++)
 	{
-		ORectangleEdges[i] = RotatePoint(aObject->GetX() + aObject->GetXOffset(), aObject->GetY() + aObject->GetYOffset(), Math::DegToRad(aObject->GetAngle()),
-										ORectangleEdges[i] - Vector2f(aObject->GetXOffset(), aObject->GetYOffset()));
+		ORectangleEdges[i] = RotatePoint(aObject->GetX() + aObject->GetXOffset(), aObject->GetY() + aObject->GetYOffset() - aObject->GetZ(), Math::DegToRad(aObject->GetAngle()),
+										ORectangleEdges[i] - Vector2f(aObject->GetXOffset(), aObject->GetYOffset() - aObject->GetZ()));
 	}
 
 	for (int i = 0; i < 2; i++)
@@ -192,8 +194,8 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	//Rotate all points
 	for (int i = 0; i < 4; i++)
 	{
-		TRectangleEdges[i] = RotatePoint(t->GetX() + t->GetXOffset(), t->GetY() + t->GetYOffset(), Math::DegToRad(t->GetAngle()), TRectangleEdges[i] - Vector2f(t->GetXOffset(), t->GetYOffset()));
-		ORectangleEdges[i] = RotatePoint(o->GetX() + o->GetXOffset(), o->GetY() + o->GetYOffset(), Math::DegToRad(o->GetAngle()), ORectangleEdges[i] - Vector2f(o->GetXOffset(), o->GetYOffset()));
+		TRectangleEdges[i] = RotatePoint(t->GetX() + t->GetXOffset(), t->GetY() + t->GetYOffset() - t->GetZ(), Math::DegToRad(t->GetAngle()), TRectangleEdges[i] - Vector2f(t->GetXOffset(), t->GetYOffset() - t->GetZ()));
+		ORectangleEdges[i] = RotatePoint(o->GetX() + o->GetXOffset(), o->GetY() + o->GetYOffset() - o->GetZ(), Math::DegToRad(o->GetAngle()), ORectangleEdges[i] - Vector2f(o->GetXOffset(), o->GetYOffset() - o->GetZ()));
 	}
 
 	//Check Intersection for rectangle edges
@@ -328,7 +330,7 @@ CollisionEntity * CollisionEntity::NearestInstance(float aX, float aY, std::stri
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
-		int instanceLength = Math::PointDistance(aX, aY, GrArrayPtr->FindAtIndex(i)->GetX(), GrArrayPtr->FindAtIndex(i)->GetY());
+		int instanceLength = Math::PointDistance(aX, aY - myZ, GrArrayPtr->FindAtIndex(i)->GetX(), GrArrayPtr->FindAtIndex(i)->GetY());
 		if (i == 0)
 		{
 			nearestLength = instanceLength;
@@ -365,7 +367,7 @@ bool CollisionEntity::ObjPosition(float aX, float aY, std::string aName)
 void CollisionEntity::UpdateBBoxManually(float aX, float aY)
 {
 	myBoundingBox = RektF(aX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),
-		                  aY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2),
+		                  aY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2) - myZ,
 						  myBoxWidth * abs(myXScale),
 						  myBoxHeight * abs(myYScale));
 }
@@ -373,14 +375,22 @@ void CollisionEntity::UpdateBBoxManually(float aX, float aY)
 void CollisionEntity::UpdateBBox()
 {
 	myBoundingBox = RektF(myX + myBoxXOffset - (myBoxWidth * abs(myXScale) / 2),
-						  myY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2),
+						  myY + myBoxYOffset - (myBoxHeight * abs(myYScale) / 2) - myZ,
 						  myBoxWidth * abs(myXScale),
 						  myBoxHeight * abs(myYScale));
 }
 
 void CollisionEntity::DrawBBox()
 {
-	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset, myBoxWidth * myXScale, myBoxHeight  * myYScale, myAngle, myDepth - 1, 0.5f, sf::Color::Black);
+	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset - myZ, myBoxWidth * myXScale, myBoxHeight  * myYScale, myAngle, myDepth - 1, 0.5f, sf::Color::Black);
+}
+
+void CollisionEntity::Draw()
+{
+	if (mySprite.GetTextureWidth() > 0)
+	{
+		mySprite.Draw(myX, myY - myZ, myXScale, myYScale, myAngle, myDepth, myAlpha, myColor, myAnimationSpeed);
+	}
 }
 
 void CollisionEntity::Move(float aXSpeed, float aYSpeed)
@@ -405,7 +415,7 @@ bool CollisionEntity::ContainRekt(RektF aRect1, RektF aRect2)
 
 Vector2f CollisionEntity::GetBoxPosition() const
 {
-	return Vector2f(myBoundingBox.GetX() + myBoxXOffset,myBoundingBox.GetY() + myBoxYOffset);
+	return Vector2f(myBoundingBox.GetX() + myBoxXOffset,myBoundingBox.GetY() + myBoxYOffset - myZ);
 }
 
 Vector2f CollisionEntity::Rotate(float aX, float aY, float aAngle, Vector2f aPoint)
@@ -438,6 +448,11 @@ Vector2f CollisionEntity::RotatePoint(float aX, float aY, float aAngle, Vector2f
 RektF CollisionEntity::GetBounds() const
 {
 	return myBoundingBox;
+}
+
+float CollisionEntity::GetZ() const
+{
+	return myZ;
 }
 
 float CollisionEntity::GetXOffset()

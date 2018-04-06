@@ -38,6 +38,8 @@ public:
 	void UpdateBBoxManually(float aX, float aY);
 	void UpdateBBox();
 	void DrawBBox();
+
+	void Draw();
 	
 	//Rotate() is broken, so is the Rotate() in the Vector2 class
 	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);
@@ -47,10 +49,11 @@ public:
 
 	//Compare if two rectangles contain one or the other
 	bool ContainRekt(RektF aRect1, RektF aRect2);
-	
+
 	//Accessors
 	Vector2f GetBoxPosition() const;
 	RektF GetBounds() const;
+	float GetZ() const;
 	float GetXOffset();
 	float GetYOffset();
 	float GetXSpeed() const;
@@ -67,6 +70,8 @@ public:
 	void SetYKnock(float aY);
 
 protected:
+	
+	float myZ;
 
 	float myMoveSpeed;
 	float myDirection;
@@ -84,7 +89,7 @@ protected:
 
 	float myHP;
 	float myDamage;
-
+	
 	void AddCollInstance(CollisionEntity* aEntity);
 	void AddCollInstance(std::string aName, CollisionEntity* aEntity);
 	void RemoveCollInstance(CollisionEntity* aEntity);

@@ -6,10 +6,14 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 {
 	Init("ProjectileEnemy", aX, aY);
 	myState = Aggro;
-	mySprite.SetTexture("Sprites/32x32Block.png", 1);
+	mySprite.SetTexture("Sprites/Enemies/spr_floating_enemy.png", 1);
 
-	myBoxWidth = 32;
-	myBoxHeight = 32;
+	myBoxWidth = 12;
+	myBoxHeight = 12;
+
+	myXScale = 2;
+	myYScale = myXScale;
+	myZ = 20;
 
 	myMoveSpeed = 1.5f;
 
@@ -75,7 +79,7 @@ void ProjectileEnemy::StateAttack()
 		myAttackTimer -= 1.0f / 60.0f;
 		if (myAttackTimer <= 0)
 		{
-			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY())/* - Math::DegToRad(Math::IRand(-18,18)*/ /** Math::IRand(0,1)*/;
+			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
 			new Projectile(myX, myY, 7.0f, myDirection, false);
 
 			myState = Aggro;
@@ -87,7 +91,7 @@ void ProjectileEnemy::StateAttack()
 void ProjectileEnemy::Update()
 {
 	myDepth = -myY;
-	myColor = sf::Color::Blue;
+	myColor = sf::Color::White;
 
 	StatePathFind();
 	StateAggro();
@@ -121,26 +125,40 @@ void ProjectileEnemy::Update()
 		myState = Grabbable;
 	}
 
+	
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
 	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
 }
 
 void ProjectileEnemy::Draw()
 {
-	Entity::Draw();
+	CollisionEntity::Draw();
 	DrawBBox();
 	if (Target != NULL)
 	{
 		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 		{
-			myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
+			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
 		}
 		else
 		{
-			myLine.DrawLinePos(myX, myY, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
+			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
 		}
 	}
 
+	if (myState != Grabbed)
+	{
+		if (Alive())
+		{
+			DrawShadow(myX, myY + myZ, 1.35f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+		}
+		else
+		{
+			DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.35f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+		}
+	}
+	
+	
 	//rip drawing multiple lines because of my and SFMLs bad design
 	for (int i = 0; i < myPath.Size(); i++)
 	{
