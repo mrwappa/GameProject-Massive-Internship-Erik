@@ -4,9 +4,10 @@
 std::map<std::string, GrowingArray<Entity*>*> Entity::SuperList;
 GrowingArray<Entity*>* Entity::GrArrayPtr;
 GrowingArray<Entity*> Entity::DeleteMarkedList;
+GrowingArray<Entity*> Entity::DrawList;
 InputHandler* Entity::Input;
 Camera* Entity::Camera;
-sf::Sprite Entity::Pixel;
+GSprite Entity::Pixel;
 sf::Font* Entity::MainFont;
 
 Entity::Entity()
@@ -37,6 +38,7 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myActive = true;
 	myMarkedForDelete = false;
 	AddInstance(this,aName);
+	DrawList.Add(this);
 }
 
 void Entity::AddInstance(Entity* aEntity, std::string aName)
@@ -67,6 +69,7 @@ void Entity::OnRemoval()
 
 void Entity::DeleteInstanceMem(Entity* aEntity)
 {
+	DrawList.Remove(aEntity);
 	aEntity->OnRemoval();
 	GrArrayPtr = SuperList.at(aEntity->GetName());
 	GrArrayPtr->DeleteCyclic(aEntity);
@@ -83,7 +86,6 @@ void Entity::DeleteMarkedInstances()
 
 		DeleteMarkedList.RemoveAll();
 	}
-
 }
 
 Entity * Entity::GetObj(std::string aEntity)
@@ -177,7 +179,7 @@ void Entity::Draw()
 {
 	if (mySprite.GetTextureWidth() > 0)
 	{
-		mySprite.Draw(myX, myY, myXScale, myYScale, myAngle, myDepth, myAlpha, myColor, myAnimationSpeed);
+		mySprite.Draw(myX, myY, myXScale, myYScale, myAngle, myAlpha, myColor, myAnimationSpeed);
 	}
 }
 
@@ -186,14 +188,61 @@ void Entity::DrawGUI()
 
 }
 
+int Entity::Partition(int aLow, int aHigh)
+{
+	int i = aLow;
+	int j = aHigh + 1;
+	while (true)
+	{
+		while (DrawList[++i]->GetDepth() < DrawList[aLow]->GetDepth())
+		{
+			if (i == aHigh)
+			{
+				break;
+			}
+		}
+		while (DrawList[aLow]->GetDepth() < DrawList[--j]->GetDepth())
+		{
+			if (j == aLow)
+			{
+				break;
+			}
+		}
+
+		if (i >= j) break;
+
+		DrawList.Swap(i, j);
+	}
+
+	DrawList.Swap(aLow, j);
+
+	return j;
+}
+
+void Entity::QuickSort(int aLow, int aHigh)
+{
+	if (aHigh <= aLow) return;
+
+	int j = Partition(aLow, aHigh);
+	QuickSort(aLow, j - 1);
+	QuickSort(j + 1, aHigh);
+}
+
+void Entity::DrawAll()
+{
+	if (DrawList.Size() > 1)
+	{
+		QuickSort(0, DrawList.Size() - 1);
+	}
+	for (int i = 0; i < DrawList.Size(); i++)
+	{
+		DrawList[i]->Draw();
+	}
+}
+
 void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aDepth, float aAlpha, sf::Color aColor)
 {
-	if (myPixel.GetTextureWidth() == 0)
-	{
-		//myPixel.SetSprite(Pixel);
-		myPixel.SetTexture("Sprites/spr_pixel.png", 1);
-	}
-	myPixel.Draw(aX, aY, aWidth, aHeight, aAngle, aDepth, aAlpha, aColor,0);
+	Pixel.Draw(aX, aY, aWidth, aHeight, aAngle, aAlpha, aColor,0);
 }
 
 void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float aXScale ,float aYScale, sf::Color aColor)

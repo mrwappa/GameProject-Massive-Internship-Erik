@@ -16,6 +16,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+
 }
 
 void Enemy::OnRemoval()
@@ -103,11 +104,12 @@ void Enemy::StateGrabbed()
 {
 	if (myState == Grabbed)
 	{
+		myZ = 0;
 		if (Target != NULL)
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
-			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 2, 0.6f);
-			myDepth = Target->GetDepth() - 3;
+			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
+			myDepth = Target->GetDepth() + 3;
 		}
 	}
 }
@@ -128,14 +130,14 @@ void Enemy::StateThrown()
 		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
 		Fall();
 
-		if (abs(myXSpeed) < 0.3f or abs(myYSpeed) < 0.3f)
+		if (abs(myXSpeed) < 0.5f and abs(myYSpeed) < 0.5f)
 		{
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myState = Grabbable;
 		}
 
-		if (abs(myXSpeed) > 1.5f and abs(myYSpeed) > 1.5f)
+		if (abs(myXSpeed) > 1.5f or abs(myYSpeed) > 1.5f)
 		{
 			Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
 			if (enemy != NULL and enemy->Alive())
@@ -143,7 +145,8 @@ void Enemy::StateThrown()
 
 				enemy->IncrHP(-(4 + static_cast<CollisionEntity*>(GetObj("Player"))->GetDamage()));
 				
-				myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);
+				//myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);
+				myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
 				myXSpeed = Math::LenDirX(13, myDirection);
 				myYSpeed = Math::LenDirY(13, myDirection);
 
@@ -195,13 +198,13 @@ void Enemy::FindPath(float aX, float aY)
 {
 	if (InsideGrid(SnapToGrid(myX), SnapToGrid(myY)) and InsideGrid(SnapToGrid(aX), SnapToGrid(aY)))
 	{
-		myPath = AStarGrid->FindPath(SnapToGrid(myX, myY), SnapToGrid(aX, aY));
+		myPath = AStarGrid->FindPath(SnapToGrid(myX, myY - myZ), SnapToGrid(aX, aY));
 	}
 }
 
 void Enemy::DrawShadow(float aX, float aY, float aXScale, float aYScale)
 {
-	myShadow.Draw(aX, aY, aXScale, aYScale, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+	myShadow.Draw(aX, aY, aXScale, aYScale, 0, 0.6f, sf::Color::Black, 0);
 }
 
 void Enemy::SetState(int aState)
@@ -221,5 +224,5 @@ int Enemy::GetState() const
 
 bool Enemy::Alive() const
 {
-	return myState == Idle or myState == Aggro or myState == PathFind;
+	return myState == Idle or myState == Aggro or myState == PathFind or myState == Attack;
 }

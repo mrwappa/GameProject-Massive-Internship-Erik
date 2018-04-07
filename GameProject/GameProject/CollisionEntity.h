@@ -68,6 +68,7 @@ public:
 	void IncrHP(float aX);
 	void SetXKnock(float aX);
 	void SetYKnock(float aY);
+	void SetDirection(float aDirection);
 
 protected:
 	

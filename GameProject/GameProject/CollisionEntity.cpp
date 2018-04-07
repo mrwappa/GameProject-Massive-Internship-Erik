@@ -389,7 +389,7 @@ void CollisionEntity::Draw()
 {
 	if (mySprite.GetTextureWidth() > 0)
 	{
-		mySprite.Draw(myX, myY - myZ, myXScale, myYScale, myAngle, myDepth, myAlpha, myColor, myAnimationSpeed);
+		mySprite.Draw(myX, myY - myZ, myXScale, myYScale, myAngle, myAlpha, myColor, myAnimationSpeed);
 	}
 }
 
@@ -513,4 +513,9 @@ void CollisionEntity::SetXKnock(float aX)
 void CollisionEntity::SetYKnock(float aY)
 {
 	myYKnockBack = aY;
+}
+
+void CollisionEntity::SetDirection(float aDirection)
+{
+	myDirection = aDirection;
 }

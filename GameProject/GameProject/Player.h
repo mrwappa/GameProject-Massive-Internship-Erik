@@ -57,7 +57,7 @@ private:
 
 	void TextureDirection(float aAngle);
 
-	sf::Texture myCharTextures[5];
+	std::string myCharTextures[5];
 	
 	enum CharTexture {Back, BackLeft, Front, FrontLeft ,Left, T_SIZE};
 

@@ -12,26 +12,19 @@ class GSprite
 {
 public:
 	GSprite();
-	GSprite(sf::Texture aTexture, int aNrOfFrames);
 	~GSprite();
 	static sf::RenderWindow* Window;
+	static std::map<std::string, std::pair<sf::Texture*,sf::Sprite*>*> SpriteList;
 	static Camera* Camera;
-	static GrowingArray<GSprite*> SpriteList;
 	
-	static int Partition(int aLow, int aHigh);
-	static void QuickSort(int aLow, int aHigh);
-	static void SortDepth();
-	static void DrawAllSprites();
+ 	static void DeleteAllSprites();
 
 	//A GSprite can only be drawn in the game world or GUI, not both at once
-	void Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
-	void DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aDepth, float aAlpha, sf::Color aColor, float aAnimationSpeed);
+	void Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed);
+	void DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed);
 	void DrawGUI(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed);
 
 	//Accessors
-	float GetDepth();
-	sf::Sprite GetSprite();
-	sf::Texture GetTexture();
 	float GetTextureWidth();
 	float GetTextureHeight();
 	int GetAnimationIndex() const;
@@ -40,18 +33,13 @@ public:
 
 	//Modifiers
 	void SetTexture(std::string aFileName, int aNrOfFrames);
-	void SetTexture(sf::Texture aTexture, int aNrOfFrames);
-
-	void SetSprite(sf::Sprite aSprite);
-	void SetDepth(float aDepth);
 	void SetAnimationIndex(int aIndex);
 	void SetAnimationSpeed(float aSpeed);
 
 private:
-	sf::Texture myTexture;
-	sf::Sprite mySprite;
-
-	float myDepth;
+	sf::Texture* myTexture;
+	sf::Sprite* mySprite;
+	
 	float myWidth;
 	float myHeight;
 	float myTextureWidth;

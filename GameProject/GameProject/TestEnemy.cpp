@@ -14,8 +14,8 @@ TestEnemy::TestEnemy(float aX, float aY)
 	myYScale = myXScale;
 	myZ = 20;
 
-	myBoxWidth = 12;
-	myBoxHeight = 12;
+	myBoxWidth = 16;
+	myBoxHeight = 8;
 
 	myMoveSpeed = Math::FRand(2.0f,3.0f);
 
@@ -25,6 +25,7 @@ TestEnemy::TestEnemy(float aX, float aY)
 
 TestEnemy::~TestEnemy()
 {
+
 }
 
 void TestEnemy::StateAggro()
@@ -60,8 +61,43 @@ void TestEnemy::StateAggro()
 			myYSpeed += Math::LenDirY(-1.0f, myDirection);
 		}
 
-		PreventCollision("Brick");
+		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
+	}
+}
+
+void TestEnemy::StateInUse()
+{
+	if (myState == InUse)
+	{
+		if (myZ <= -1)
+		{
+			myRetract = true;
+			myZ = -0.99f;
+			Camera->ShakeScreen(8);
+		}
+		if (!myRetract)
+		{
+			myZ -= 1.8f;
+			myExtraX += Math::LenDirX(6, myDirection);
+			myExtraY += Math::LenDirY(6, myDirection);
+		}
+		else
+		{
+			myZ += 1.2f;
+			myExtraX -= Math::LenDirX(6, myDirection);
+			myExtraY -= Math::LenDirY(6, myDirection);
+
+			if (myZ >= GetHeight() / 2.0f)
+			{
+				myState = Grabbed;
+				myRetract = false;
+				myExtraX = 0;
+				myExtraY = 0;
+			}
+		}
+		myX = Target->GetX() + myExtraX;
+		myY = Target->GetY() + myExtraY - myZ;
 	}
 }
 
@@ -69,13 +105,14 @@ void TestEnemy::Update()
 {
 	myColor = sf::Color::White;
 
-	myDepth = -myY;
+	myDepth = myY;
 
 	StatePathFind();
 	StateAggro();
 	StateGrabbable();
 	StateGrabbed();
 	StateThrown();
+	StateInUse();
 
 	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
 
@@ -108,8 +145,7 @@ void TestEnemy::Update()
 
 void TestEnemy::Draw()
 {
-	CollisionEntity::Draw();
-	DrawBBox();
+	
 	if (Target != NULL)
 	{
 		if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
@@ -133,7 +169,8 @@ void TestEnemy::Draw()
 		}
 	}
 	
-	
+	CollisionEntity::Draw();
+	DrawBBox();
 	//rip drawing multiple lines because of my and SFMLs bad design
 	for (int i = 0; i < myPath.Size(); i++)
 	{
@@ -145,9 +182,6 @@ void TestEnemy::Draw()
 void TestEnemy::DrawGUI()
 {
 	DrawFont(std::to_string((int)myHP), myX, myY , 24, 1, 1, sf::Color::White);
+	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
 }
 
-void TestEnemy::OnRemoval()
-{
-
-}

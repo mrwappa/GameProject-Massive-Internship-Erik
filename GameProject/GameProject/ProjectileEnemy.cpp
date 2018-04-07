@@ -18,7 +18,6 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 	myMoveSpeed = 1.5f;
 
 	myAttackTimer = Math::FRand(2, 5);
-
 	myHP = 10;
 }
 
@@ -85,12 +84,14 @@ void ProjectileEnemy::StateAttack()
 			myState = Aggro;
 			myAttackTimer = Math::FRand(2, 5);
 		}
+
+		Move(myXKnockBack,myYKnockBack);
 	}
 }
 
 void ProjectileEnemy::Update()
 {
-	myDepth = -myY;
+	myDepth = myY;
 	myColor = sf::Color::White;
 
 	StatePathFind();
@@ -131,9 +132,7 @@ void ProjectileEnemy::Update()
 }
 
 void ProjectileEnemy::Draw()
-{
-	CollisionEntity::Draw();
-	DrawBBox();
+{	
 	if (Target != NULL)
 	{
 		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
@@ -157,8 +156,10 @@ void ProjectileEnemy::Draw()
 			DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.35f + myZ / 100.0f, 0.8f + myZ / 100.0f);
 		}
 	}
-	
-	
+
+	CollisionEntity::Draw();
+	DrawBBox();
+
 	//rip drawing multiple lines because of my and SFMLs bad design
 	for (int i = 0; i < myPath.Size(); i++)
 	{
@@ -170,4 +171,5 @@ void ProjectileEnemy::Draw()
 void ProjectileEnemy::DrawGUI()
 {
 	DrawFont(std::to_string((int)myHP), myX, myY - 20, 24, 1, 1, sf::Color::White);
+	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
 }

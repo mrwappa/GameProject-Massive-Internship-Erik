@@ -9,14 +9,14 @@ Player::Player(float aX, float aY)
 	
 	myX = aX;
 	myY = aY;
-	
+
 	myShadow.SetTexture("Sprites/Player/spr_circle.png",1);
 	
-	myCharTextures[Back].loadFromFile("Sprites/Player/spr_player_back.png");
-	myCharTextures[BackLeft].loadFromFile("Sprites/Player/spr_player_back_left.png");
-	myCharTextures[Front].loadFromFile("Sprites/Player/spr_player_front.png");
-	myCharTextures[FrontLeft].loadFromFile("Sprites/Player/spr_player_front_left.png");
-	myCharTextures[Left].loadFromFile("Sprites/Player/spr_player_left.png");
+	myCharTextures[Back] = ("Sprites/Player/spr_player_back.png");
+	myCharTextures[BackLeft] = ("Sprites/Player/spr_player_back_left.png");
+	myCharTextures[Front] = ("Sprites/Player/spr_player_front.png");
+	myCharTextures[FrontLeft] = ("Sprites/Player/spr_player_front_left.png");
+	myCharTextures[Left] = ("Sprites/Player/spr_player_left.png");
 	
 	mySprite.SetTexture(myCharTextures[Front], 3);
 
@@ -62,7 +62,7 @@ void Player::BeginUpdate()
 	}
 	myLookAngle = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
-	myDepth = -myY;
+	myDepth = myY;
 
 	//Check keys
 	W = KeyboardCheck(sf::Keyboard::W);
@@ -202,12 +202,14 @@ void Player::EndUpdate()
 			GrabbableEnemy->SetZ(15);
 			GrabbableEnemy = NULL;
 		}
-		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL)
+		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
 		{
 			//unnescessary check right now, but will be relevent when more enemies appear
 			if (GrabbableEnemy->GetName() == "TestEnemy")
 			{
-
+				GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
+				GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+				GrabbableEnemy->SetState(Enemy::InUse);
 			}
 		}
 
@@ -219,14 +221,14 @@ void Player::Draw()
 	myPreviousAIndex = mySprite.GetAnimationIndex();
 	if (mySprite.GetAnimationIndex() == 2)
 	{
-		myShadow.Draw(myX, myY + 16, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow.Draw(myX, myY + 16, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
 	}
 	else
 	{
-		myShadow.Draw(myX, myY + 18, 1.5f, 1.2f, 0, myDepth + 1, 0.6f, sf::Color::Black, 0);
+		myShadow.Draw(myX, myY + 18, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
 	}
 	
-	Entity::Draw();
+	CollisionEntity::Draw();
 	DrawBBox();
 
 	

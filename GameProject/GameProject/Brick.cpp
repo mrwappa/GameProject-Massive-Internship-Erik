@@ -8,7 +8,7 @@ Brick::Brick(float aX, float aY)
 
 	myBoxWidth = 32;
 	myBoxHeight = 32;
-	myDepth = -myY;
+	myDepth = myY;
 }
 
 

@@ -25,7 +25,7 @@ PlayerAttack::~PlayerAttack()
 
 void PlayerAttack::Update()
 {
-	myDepth = -myY;
+	myDepth = myY;
 
 	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myTarget != NULL)
 	{
@@ -33,5 +33,11 @@ void PlayerAttack::Update()
 		DeleteInstance(this);
 	}
 
+	
+}
+
+void PlayerAttack::Draw()
+{
+	Entity::Draw();
 	DrawBBox();
 }

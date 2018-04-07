@@ -5,7 +5,10 @@ World::World()
 {
 	Entity::Init("World", 0, 0);
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
+	myCreateWorld = true;
 	CreateWorld();
+
+	myDepth = 99999;
 }
 
 
@@ -25,7 +28,7 @@ void World::BeginUpdate()
 
 void World::Draw()
 {
-	mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, -99999, 1, sf::Color::Black, 0);
+	mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, 1, sf::Color::Black, 0);
 
 	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::Space))
 	{

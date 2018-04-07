@@ -14,15 +14,19 @@ public:
 	~TestEnemy();
 
 	void StateAggro();
+	void StateInUse();
 
 	void Update();
 	void Draw();
 	void DrawGUI();
-	
-	void OnRemoval();
 
 private:
 	int myPrevState;
+
+	//For InUse State
+	float myExtraX;
+	float myExtraY;
+	bool myRetract;
 
 	Line myLine;
 };

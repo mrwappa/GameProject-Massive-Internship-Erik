@@ -11,6 +11,7 @@ public:
 	~PlayerAttack();
 
 	void Update();
+	void Draw();
 
 private:
 	Player* myTarget;

@@ -20,6 +20,7 @@ public:
 
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
+	static GrowingArray<Entity*> DrawList;
 	
 	static Camera* Camera;
 	
@@ -38,9 +39,13 @@ public:
 	virtual void EndUpdate();
 	virtual void Draw();
 	virtual void DrawGUI();
+
+	static int Partition(int aLow, int aHigh);
+	static void QuickSort(int aLow, int aHigh);
+	static void DrawAll();
 	
 	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle,float aDepth , float aAlpha, sf::Color aColor);
-	static sf::Sprite Pixel;
+	static GSprite Pixel;
 
 	//Font
 	static sf::Font* MainFont;
@@ -93,7 +98,6 @@ protected:
 	float myAnimationSpeed;
 	
 	GSprite mySprite;
-	GSprite myPixel;
 	//If the entity is drawn and updated
 	bool myActive;
 	//Exists for design purposes(like getting an instance from the SuperList)
