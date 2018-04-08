@@ -191,17 +191,20 @@ void Player::EndUpdate()
 	//Enemy as attack
 	if (GrabbableEnemy != NULL)
 	{
+		//Throw
 		if (KeyboardCheckPressed(sf::Keyboard::Space))
 		{
 			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
 			GrabbableEnemy = NULL;
 		}
+		//Drop
 		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
 		{
 			GrabbableEnemy->SetState(Enemy::Grabbable);
 			GrabbableEnemy->SetZ(15);
 			GrabbableEnemy = NULL;
 		}
+		//Attack
 		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
 		{
 			//unnescessary check right now, but will be relevent when more enemies appear
@@ -209,6 +212,10 @@ void Player::EndUpdate()
 			{
 				GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
 				GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+				GrabbableEnemy->SetState(Enemy::InUse);
+			}
+			else
+			{
 				GrabbableEnemy->SetState(Enemy::InUse);
 			}
 		}

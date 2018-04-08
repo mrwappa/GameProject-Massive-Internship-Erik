@@ -43,6 +43,7 @@ public:
 protected:
 
 	int myState;
+	int myPrevState;
 	float myZSpeed;
 
 	GrowingArray<AStarNode*> myPath;

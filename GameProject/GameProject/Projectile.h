@@ -7,7 +7,7 @@
 class Projectile : public CollisionEntity
 {
 public:
-	Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat);
+	Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat, Enemy* aEnemy);
 	~Projectile();
 
 	void Update();
@@ -16,5 +16,6 @@ public:
 
 private:
 	bool myEnemyThreat;
+	Enemy* myIgnorable;
 };
 #endif // !PROJECTILE_H

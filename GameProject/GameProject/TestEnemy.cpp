@@ -39,7 +39,7 @@ void TestEnemy::StateAggro()
 			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
-			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
+			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed - myZ, Target->GetX(), Target->GetY());
 			if (distance <= 17)
 			{
 				myXSpeed = 0;
@@ -78,15 +78,15 @@ void TestEnemy::StateInUse()
 		}
 		if (!myRetract)
 		{
-			myZ -= 1.8f;
-			myExtraX += Math::LenDirX(6, myDirection);
-			myExtraY += Math::LenDirY(6, myDirection);
+			myZ -= 2.2f;
+			myExtraX += Math::LenDirX(8, myDirection);
+			myExtraY += Math::LenDirY(8, myDirection);
 		}
 		else
 		{
-			myZ += 1.2f;
-			myExtraX -= Math::LenDirX(6, myDirection);
-			myExtraY -= Math::LenDirY(6, myDirection);
+			myZ += 1.4f;
+			myExtraX -= Math::LenDirX(8, myDirection);
+			myExtraY -= Math::LenDirY(8, myDirection);
 
 			if (myZ >= GetHeight() / 2.0f)
 			{

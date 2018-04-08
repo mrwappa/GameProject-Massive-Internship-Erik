@@ -41,6 +41,7 @@ void Enemy::StateAttack()
 
 void Enemy::StatePathFind()
 {
+	myPrevState = myState;
 	if (myState == PathFind)
 	{
 		if (myPath.Size() > 0)

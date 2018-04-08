@@ -56,7 +56,7 @@ void Camera::Update()
 	myMouseX = myX - myViewWidth / 2 + sf::Mouse::getPosition().x / ((float)myMonitorWidth / (float)myViewWidth);
 	myMouseY = myY - myViewHeight / 2 + sf::Mouse::getPosition().y / ((float)myMonitorHeight / (float)myViewHeight);
 
-	myScreenShake = Math::Lerp(myScreenShake, 0, 0.55f);
+	myScreenShake = Math::Lerp(myScreenShake, 0, 0.35f);
 	
 	myView.setCenter(myX + myScreenShake * Math::IRand(-2,2), myY + myScreenShake * Math::IRand(-2, 2));
 	myView.setSize(sf::Vector2f(myViewWidth, myViewHeight));
@@ -144,4 +144,3 @@ void Camera::ShakeScreen(float aX)
 {
 	myScreenShake += aX;
 }
-

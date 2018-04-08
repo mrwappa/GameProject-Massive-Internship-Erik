@@ -15,6 +15,8 @@ public:
 
 	void StateAggro();
 	void StateAttack();
+	void StateInUse();
+	void StateGrabbed();
 
 	void Update();
 

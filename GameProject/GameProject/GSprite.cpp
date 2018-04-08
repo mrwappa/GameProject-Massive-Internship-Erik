@@ -163,7 +163,10 @@ void GSprite::SetTexture(std::string aFileName, int aNrOfFrames)
 		myTexture = SpriteList[aFileName]->first;
 		mySprite = SpriteList[aFileName]->second;
 
-		if (!myTexture->loadFromFile(aFileName)) { throw "file not found"; }
+		if (!myTexture->loadFromFile(aFileName)) 
+		{ 
+			throw "file not found"; 
+		}
 		myTexture->setSmooth(false);
 		mySprite->setTexture(*myTexture);
 	}

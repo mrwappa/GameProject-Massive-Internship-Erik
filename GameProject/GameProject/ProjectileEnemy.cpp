@@ -79,7 +79,7 @@ void ProjectileEnemy::StateAttack()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
-			new Projectile(myX, myY, 7.0f, myDirection, false);
+			new Projectile(myX, myY, 7.0f, myDirection, false,NULL);
 
 			myState = Aggro;
 			myAttackTimer = Math::FRand(2, 5);
@@ -87,6 +87,52 @@ void ProjectileEnemy::StateAttack()
 
 		Move(myXKnockBack,myYKnockBack);
 	}
+}
+
+void ProjectileEnemy::StateInUse()
+{
+	if (myState == InUse)
+	{
+		myAttackTimer -= 1.0f / 60.0f;
+
+		myZ = 0;
+		if (Target != NULL)
+		{
+			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
+			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
+			myDepth = Target->GetDepth() + 3;
+		}
+		if (myAttackTimer <= 0)
+		{
+			myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+			new Projectile(myX, myY, 7.0f, myDirection, true,this);
+			myAttackTimer = 0.2f;
+			myState = Grabbed;
+		}
+		
+	}
+}
+
+void ProjectileEnemy::StateGrabbed()
+{
+	if (myPrevState == Grabbable)
+	{
+		myAttackTimer = 0;
+	}
+	if (myState == Grabbed)
+	{
+		
+		myAttackTimer -= 1.0f / 60.0f;
+
+		myZ = 0;
+		if (Target != NULL)
+		{
+			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
+			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
+			myDepth = Target->GetDepth() + 3;
+		}
+	}
+	
 }
 
 void ProjectileEnemy::Update()
@@ -100,6 +146,7 @@ void ProjectileEnemy::Update()
 	StateGrabbable();
 	StateGrabbed();
 	StateThrown();
+	StateInUse();
 
 	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
 
@@ -145,7 +192,7 @@ void ProjectileEnemy::Draw()
 		}
 	}
 
-	if (myState != Grabbed)
+	if (myState != Grabbed and myState != InUse)
 	{
 		if (Alive())
 		{

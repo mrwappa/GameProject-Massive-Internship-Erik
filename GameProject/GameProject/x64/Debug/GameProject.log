@@ -1,15 +1,2 @@
-﻿  GSprite.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(59): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(85): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(91): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(116): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(122): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(142): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(147): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(152): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(176): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(177): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(178): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\gsprite.cpp(183): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+﻿  Brick.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe
