@@ -1,2 +1,33 @@
-﻿  Brick.cpp
+﻿  TestEnemy.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\testenemy.cpp(83): warning C4018: '<': signed/unsigned mismatch
+  Enemy.cpp
+  CollisionEntity.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(78): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(79): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(221): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(224): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(245): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(249): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(273): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(297): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(300): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(359): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(380): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(382): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\collisionentity.cpp(405): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
+  Skipping... (no relevant changes detected)
+  main.cpp
+  World.cpp
+  Wall.cpp
+  Solid.cpp
+  ProjectileEnemy.cpp
+  Projectile.cpp
+  PlayerAttack.cpp
+  Player.cpp
+  Brick.cpp
+  BoxTest.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

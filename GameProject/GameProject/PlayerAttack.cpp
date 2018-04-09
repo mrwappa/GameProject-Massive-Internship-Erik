@@ -39,5 +39,5 @@ void PlayerAttack::Update()
 void PlayerAttack::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }

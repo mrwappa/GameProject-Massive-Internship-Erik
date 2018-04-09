@@ -28,6 +28,8 @@ private:
 	float myExtraY;
 	bool myRetract;
 
+	GrowingArray<CollisionEntity*>* myEnemyTargets;
+
 	Line myLine;
 };
 #endif // !TESTENEMY_H

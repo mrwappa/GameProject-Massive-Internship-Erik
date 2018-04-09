@@ -40,7 +40,7 @@ void TestEnemy::StateAggro()
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
 			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed - myZ, Target->GetX(), Target->GetY());
-			if (distance <= 17)
+			if (distance <= 5)
 			{
 				myXSpeed = 0;
 				myYSpeed = 0;
@@ -75,18 +75,38 @@ void TestEnemy::StateInUse()
 			myRetract = true;
 			myZ = -0.99f;
 			Camera->ShakeScreen(8);
+			
+			myEnemyTargets = &ObjDistanceList(myX, myY,80, "Enemy");
+
+			if (myEnemyTargets != NULL)
+			{
+				for (int i = 0; i < myEnemyTargets->Size(); i++)
+				{
+					if (static_cast<Enemy*>(myEnemyTargets->FindAtIndex(i))->Alive())
+					{
+						float dir = Math::PointDirection(myX, myY, myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY());
+						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(7, dir));
+						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(7, dir));
+						myEnemyTargets->FindAtIndex(i)->IncrHP(-(myDamage + Target->GetDamage()));
+					}
+				}
+			}
+			//myEnemyTargets->RemoveAll();
+			myEnemyTargets = NULL;
+			
+			
 		}
 		if (!myRetract)
 		{
 			myZ -= 2.2f;
-			myExtraX += Math::LenDirX(8, myDirection);
-			myExtraY += Math::LenDirY(8, myDirection);
+			myExtraX += Math::LenDirX(7, myDirection);
+			myExtraY += Math::LenDirY(7, myDirection);
 		}
 		else
 		{
 			myZ += 1.4f;
-			myExtraX -= Math::LenDirX(8, myDirection);
-			myExtraY -= Math::LenDirY(8, myDirection);
+			myExtraX -= Math::LenDirX(7, myDirection);
+			myExtraY -= Math::LenDirY(7, myDirection);
 
 			if (myZ >= GetHeight() / 2.0f)
 			{
@@ -103,44 +123,7 @@ void TestEnemy::StateInUse()
 
 void TestEnemy::Update()
 {
-	myColor = sf::Color::White;
-
-	myDepth = myY;
-
-	StatePathFind();
-	StateAggro();
-	StateGrabbable();
-	StateGrabbed();
-	StateThrown();
-	StateInUse();
-
-	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
-
-	if (Alive())
-	{
-		if (pAttack != NULL and myAttackPtr != pAttack)
-		{
-			float dir = Math::PointDirection(myX, myY - myZ, Target->GetX(), Target->GetY());
-			myXKnockBack = Math::LenDirX(-19.0f, dir);
-			myYKnockBack = Math::LenDirY(-19.0f, dir);
-			myXSpeed = 0;
-			myYSpeed = 0;
-			myHP -= pAttack->GetDamage();
-			if (myState == PathFind)
-			{
-				myState = Aggro;
-			}
-		}
-		myAttackPtr = pAttack;
-	}
-	
-	if (myHP <= 0 and Alive())
-	{
-		myState = Grabbable;
-	}
-
-	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
-	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
+	Enemy::Update();
 }
 
 void TestEnemy::Draw()
@@ -148,14 +131,14 @@ void TestEnemy::Draw()
 	
 	if (Target != NULL)
 	{
-		if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		/*if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 		{
 			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
 		}
 		else
 		{
 			myLine.DrawLinePos(myX , myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
-		}
+		}*/
 	}
 	if (myState != Grabbed)
 	{
@@ -170,18 +153,18 @@ void TestEnemy::Draw()
 	}
 	
 	CollisionEntity::Draw();
-	DrawBBox();
-	//rip drawing multiple lines because of my and SFMLs bad design
-	for (int i = 0; i < myPath.Size(); i++)
+	//DrawBBox();
+
+	/*for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,
 							myDepth, sf::Color::White);
-	}
+	}*/
 }
 
 void TestEnemy::DrawGUI()
 {
-	DrawFont(std::to_string((int)myHP), myX, myY , 24, 1, 1, sf::Color::White);
+	//DrawFont(std::to_string((int)myHP), myX, myY , 24, 1, 1, sf::Color::White);
 	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
 }
 

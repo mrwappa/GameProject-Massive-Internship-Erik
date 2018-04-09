@@ -282,8 +282,7 @@ void Entity::DrawFontGUI(std::string aText, float aX, float aY, float aSize, flo
 
 	myText.setScale(aXScale / Camera->GetZoom(), aYScale / Camera->GetZoom());
 	myText.setStyle(sf::Text::Regular);
-
-
+	
 	Camera->Window->draw(myText);
 }
 

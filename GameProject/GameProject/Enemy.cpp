@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "PlayerAttack.h"
 
 Player* Enemy::Target;
 sf::Color Enemy::GrabColor = sf::Color::Color(125,125,125,125);
@@ -88,6 +89,12 @@ void Enemy::StateGrabbable()
 	
 	if (myState == Grabbable)
 	{
+		if (InstanceCollision(myX, myY, Target))
+		{
+			myDirection = Math::PointDirection(Target->GetX(), Target->GetY(), myX, myY);
+			myXSpeed = Math::LenDirX(2.f, myDirection);
+			myYSpeed = Math::LenDirY(2.f, myDirection);
+		}
 		myAnimationSpeed = Math::Lerp(myAnimationSpeed,0,0.4f);
 		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
@@ -124,7 +131,20 @@ void Enemy::StateThrown()
 {
 	if (myState == Thrown)
 	{
-		PreventCollision("Solid");
+		//PreventCollision("Solid");
+		CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
+
+		if (brick != NULL and myThrowAlarm.GetTick() == -1)
+		{
+			myXSpeed = -myXSpeed;
+			myXKnockBack = -myXKnockBack;
+			myYSpeed = -myYSpeed;
+			myYKnockBack = -myYKnockBack;
+
+			myThrowAlarm.SetTick(5);
+			Camera->ShakeScreen(5.0f);
+		}
+
 		Move(myXSpeed, myYSpeed);
 		
 		myXSpeed = Math::Lerp(myXSpeed, 0, 0.2f);
@@ -136,6 +156,8 @@ void Enemy::StateThrown()
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myState = Grabbable;
+
+			
 		}
 
 		if (abs(myXSpeed) > 1.5f or abs(myYSpeed) > 1.5f)
@@ -144,7 +166,7 @@ void Enemy::StateThrown()
 			if (enemy != NULL and enemy->Alive())
 			{
 
-				enemy->IncrHP(-(4 + static_cast<CollisionEntity*>(GetObj("Player"))->GetDamage()));
+				enemy->IncrHP(-(4 + Target->GetDamage() /*static_cast<CollisionEntity*>(GetObj("Player"))->GetDamage()*/ ));
 				
 				//myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);
 				myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
@@ -153,13 +175,73 @@ void Enemy::StateThrown()
 
 				enemy->SetXKnock(-myXSpeed * 1.5f);
 				enemy->SetYKnock(-myYSpeed * 1.5f);
-				Camera->ShakeScreen(30.0f);
+				Camera->ShakeScreen(25.0f);
 
 				myState = Grabbable;
 			}
 		}
 		
 	}
+}
+
+void Enemy::Update()
+{
+	myColor = sf::Color::White;
+
+	myDepth = myY;
+
+	StatePathFind();
+	StateIdle();
+	StateAggro();
+	StateAttack();
+	StateGrabbable();
+	StateGrabbed();
+	StateThrown();
+	StateInUse();
+
+	
+	if (Alive())
+	{
+		PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
+		Projectile* projectile = (Projectile*)ObjCollision(myX, myY, "Projectile");
+
+		if (projectile != NULL and projectile->GetEnemyThreat())
+		{
+			myDirection = Math::PointDirection(projectile->GetX(), projectile->GetY(), myX, myY - myZ);
+			myXKnockBack = Math::LenDirX(10, myDirection);
+			myYKnockBack = Math::LenDirY(10, myDirection);
+
+			myHP -= projectile->GetDamage();
+
+			DeleteInstance(projectile);
+		}
+		if (pAttack != NULL and myAttackPtr != pAttack)
+		{
+			float dir = Math::PointDirection(myX, myY - myZ, Target->GetX(), Target->GetY());
+			myXKnockBack = Math::LenDirX(-19.0f, dir);
+			myYKnockBack = Math::LenDirY(-19.0f, dir);
+			myXSpeed = 0;
+			myYSpeed = 0;
+			myHP -= pAttack->GetDamage();
+			if (myState == PathFind)
+			{
+				myState = Aggro;
+			}
+		}
+		myAttackPtr = pAttack;
+	}
+
+	if (myHP <= 0 and Alive())
+	{
+		myYKnockBack = 0;
+		myXKnockBack = 0;
+		myXSpeed = 0;
+		myYSpeed = 0;
+		myState = Grabbable;
+	}
+
+	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
+	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
 }
 
 void Enemy::Throw(float aSpeed, float aDir)
@@ -207,6 +289,11 @@ void Enemy::DrawShadow(float aX, float aY, float aXScale, float aYScale)
 {
 	myShadow.Draw(aX, aY, aXScale, aYScale, 0, 0.6f, sf::Color::Black, 0);
 }
+
+
+
+
+
 
 void Enemy::SetState(int aState)
 {

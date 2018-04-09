@@ -235,6 +235,55 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 	return NULL;
 }
 
+GrowingArray<CollisionEntity*> CollisionEntity::ObjCollisionList(float aX, float aY, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+	UpdateBBoxManually(aX, aY);
+	myAngle = fmod(myAngle, 360);
+	GrArrayPtr = CollisionList.at(aName);
+
+	GrowingArray<CollisionEntity*> entities;
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (GrArrayPtr->FindAtIndex(i) != this)//no collision with itself
+		{
+			if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
+			{
+				//I do not understand why the regular [] index operator is failing here
+				entities.Add(GrArrayPtr->FindAtIndex(i));
+			}
+		}
+	}
+
+	return entities;
+}
+
+GrowingArray<CollisionEntity*> CollisionEntity::ObjDistanceList(float aX, float aY, float aDistance, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+	GrArrayPtr = CollisionList.at(aName);
+
+	GrowingArray<CollisionEntity*> entities;
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (GrArrayPtr->FindAtIndex(i) != this)//no collision with itself
+		{
+			if (Math::PointDistance(aX, aY - myZ, GrArrayPtr->FindAtIndex(i)->GetX(), GrArrayPtr->FindAtIndex(i)->GetY() - GrArrayPtr->FindAtIndex(i)->GetZ()) <= aDistance)
+			{
+				entities.Add((GrArrayPtr->FindAtIndex(i)));
+			}
+		}
+	}
+	return entities;
+}
+
+
 bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aObject, bool aUpdateBBox)
 {
 	if (aObject == NULL)
@@ -396,7 +445,7 @@ void CollisionEntity::Draw()
 void CollisionEntity::Move(float aXSpeed, float aYSpeed)
 {
 	//add slowmotion
-	//change or add itself to some quadnode in the quadtree collision structure(if that is ever gonna happen)
+	//change or add itself to some quadnode in the quadtree collision structure(if quadtree ever happens)
 	myPreviousX = myX;
 	myPreviousY = myY;
 

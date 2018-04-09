@@ -94,6 +94,15 @@
     <Filter Include="Game\Enemies\ProjectileEnemy\Projectile">
       <UniqueIdentifier>{68bfaa98-f11d-4156-a66d-92388890ce2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Solids\Wall">
+      <UniqueIdentifier>{207559f1-be3b-4408-bd07-cc9843f36c33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools/Core\Alarm">
+      <UniqueIdentifier>{1f5aaf4f-4072-4e37-a36e-f2b8d20eae0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CollisionEntity\BoxTest">
+      <UniqueIdentifier>{a9e62737-4b83-403a-b48c-56605323778e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -174,6 +183,15 @@
     <ClInclude Include="Projectile.h">
       <Filter>Game\Enemies\ProjectileEnemy\Projectile</Filter>
     </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Game\Solids\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Alarm.h">
+      <Filter>Tools/Core\Alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxTest.h">
+      <Filter>Game\CollisionEntity\BoxTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -239,6 +257,15 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Game\Enemies\ProjectileEnemy\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Game\Solids\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Alarm.cpp">
+      <Filter>Tools/Core\Alarm</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxTest.cpp">
+      <Filter>Game\CollisionEntity\BoxTest</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

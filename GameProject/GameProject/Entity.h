@@ -9,6 +9,7 @@
 #include "InputHandler.h"
 #include "GSprite.h"
 #include "Camera.h"
+#include "Alarm.h"
 
 class Entity
 {

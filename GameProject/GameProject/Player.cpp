@@ -39,6 +39,7 @@ Player::Player(float aX, float aY)
 
 	myPreviousAIndex = 0;
 
+	myHP = 10;
 	myAttackTimer = 0.f;
 	myDamage = 4;
 }
@@ -94,8 +95,39 @@ void Player::BeginUpdate()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
-	PreventCollision("Brick");
-	Move(myXSpeed, myYSpeed);
+
+	Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
+	Projectile* projectile = (Projectile*)ObjCollision(myX, myY, "Projectile");
+	if (myHurtAlarm.GetTick() == -1)
+	{
+		if (projectile != NULL and !projectile->GetEnemyThreat())
+		{
+			myDirection = Math::PointDirection(projectile->GetX(), projectile->GetY(), myX, myY);
+			myXKnockBack = Math::LenDirX(10, myDirection);
+			myYKnockBack = Math::LenDirY(10, myDirection);
+
+			myHP -= projectile->GetDamage();
+			myHurtAlarm.SetTick(20);
+
+			DeleteInstance(projectile);
+		}
+		if (enemy != NULL and enemy->Alive())
+		{
+			myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY() - enemy->GetZ(), myX, myY);
+			myXKnockBack = Math::LenDirX(15, myDirection);
+			myYKnockBack = Math::LenDirY(15, myDirection);
+
+			myHP -= enemy->GetDamage();
+			myHurtAlarm.SetTick(25);
+		}
+	}
+	
+
+	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.3f);
+	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.3f);
+
+	PreventCollision("Solid");
+	Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
 
 	//Sprite Animation Speed
 	float trueXSpeed = abs(myX - myPreviousX);
@@ -125,30 +157,13 @@ void Player::BeginUpdate()
 	{
 		myAttackTimer = 0;
 	}
-	myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
-
-	if (GrabbableEnemy == NULL)
+	if (myHurtAlarm.GetTick() != -1)
 	{
-		if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
-		{
-			myAttackTimer = 0.7f;
-			PAttack = new PlayerAttack(myX, myY, this);
-		}
-		
-		
-
-		if (PAttack != NULL)
-		{
-			float dir = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-			float atX = myX + Math::LenDirX(14, dir);
-			float atY = myY + Math::LenDirY(14, dir);
-
-			PAttack->SetX(atX);
-			PAttack->SetY(atY);
-			PAttack->SetAngle(Math::RadToDeg(dir));
-			PAttack->SetXOffset(Math::LenDirX(18, dir));
-			PAttack->SetYOffset(Math::LenDirY(18, dir));
-		}
+		myColor = sf::Color::Color(Math::IRand(0,255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255));
+	}
+	else
+	{
+		myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
 	}
 	
 	//Camera Stuff
@@ -169,58 +184,84 @@ void Player::EndUpdate()
 {
 	bool grabbedThisFrame = false;
 
-	//Enemy as weapon
-	if (GrabbableEnemy == NULL)
+	if (myHurtAlarm.GetTick() == -1)
 	{
-		Enemy* enemy = NearestGrabbable();
-		if (enemy != NULL)
+		//Enemy as weapon
+		if (GrabbableEnemy == NULL)
 		{
-			if (Math::PointDistance(myX, myY, enemy->GetX(), enemy->GetY()) < 80 and enemy->GetState() == Enemy::Grabbable)
+			Enemy* enemy = NearestGrabbable();
+			if (enemy != NULL)
 			{
-				enemy->SetColor(Enemy::GrabColor);
-				if (KeyboardCheckPressed(sf::Keyboard::LShift))
+				if (Math::PointDistance(myX, myY, enemy->GetX(), enemy->GetY()) < 80 and enemy->GetState() == Enemy::Grabbable)
 				{
-					GrabbableEnemy = enemy;
-					GrabbableEnemy->SetState(Enemy::Grabbed);
-					grabbedThisFrame = true;
+					enemy->SetColor(Enemy::GrabColor);
+					if (KeyboardCheckPressed(sf::Keyboard::LShift))
+					{
+						GrabbableEnemy = enemy;
+						GrabbableEnemy->SetState(Enemy::Grabbed);
+						grabbedThisFrame = true;
+					}
 				}
 			}
 		}
-	}
 
-	//Enemy as attack
-	if (GrabbableEnemy != NULL)
-	{
-		//Throw
-		if (KeyboardCheckPressed(sf::Keyboard::Space))
+		//Enemy as attack
+		if (GrabbableEnemy != NULL)
 		{
-			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
-			GrabbableEnemy = NULL;
-		}
-		//Drop
-		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
-		{
-			GrabbableEnemy->SetState(Enemy::Grabbable);
-			GrabbableEnemy->SetZ(15);
-			GrabbableEnemy = NULL;
-		}
-		//Attack
-		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
-		{
-			//unnescessary check right now, but will be relevent when more enemies appear
-			if (GrabbableEnemy->GetName() == "TestEnemy")
+			//Throw
+			if (KeyboardCheckPressed(sf::Keyboard::Space))
 			{
-				GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
-				GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
-				GrabbableEnemy->SetState(Enemy::InUse);
+				GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+				GrabbableEnemy = NULL;
 			}
-			else
+			//Drop
+			if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
 			{
-				GrabbableEnemy->SetState(Enemy::InUse);
+				GrabbableEnemy->SetState(Enemy::Grabbable);
+				GrabbableEnemy->SetZ(15);
+				GrabbableEnemy = NULL;
+			}
+			//Attack
+			if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
+			{
+				//unnescessary check right now, but will be relevent when more enemies appear
+				if (GrabbableEnemy->GetName() == "TestEnemy")
+				{
+					GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
+					GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+					GrabbableEnemy->SetState(Enemy::InUse);
+				}
+				else
+				{
+					GrabbableEnemy->SetState(Enemy::InUse);
+				}
 			}
 		}
 
+		//Default Attack
+		if (GrabbableEnemy == NULL)
+		{
+			if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
+			{
+				myAttackTimer = 0.7f;
+				PAttack = new PlayerAttack(myX, myY, this);
+			}
+
+			if (PAttack != NULL)
+			{
+				myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
+				float atX = myX + Math::LenDirX(14, myDirection);
+				float atY = myY + Math::LenDirY(14, myDirection);
+
+				PAttack->SetX(atX);
+				PAttack->SetY(atY);
+				PAttack->SetAngle(Math::RadToDeg(myDirection));
+				PAttack->SetXOffset(Math::LenDirX(18, myDirection));
+				PAttack->SetYOffset(Math::LenDirY(18, myDirection));
+			}
+		}
 	}
+	
 }
 
 void Player::Draw()
@@ -243,7 +284,7 @@ void Player::Draw()
 
 void Player::DrawGUI()
 {
-
+	//DrawFontGUI("capsLock", 0, 0, 24, 1, 1, sf::Color::White);
 	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("TestEnemy:" + std::to_string(SuperList.at("TestEnemy")->Size()), 0, 120, 24, 1, 1, sf::Color::White);
@@ -256,7 +297,6 @@ void Player::DrawGUI()
 	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
 
 	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);*/
-	
 }
 
 void Player::OnRemoval()

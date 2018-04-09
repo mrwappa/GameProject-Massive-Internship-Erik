@@ -6,6 +6,8 @@
 #include "Brick.h"
 #include "TestEnemy.h"
 #include "ProjectileEnemy.h"
+#include "Wall.h"
+#include "BoxTest.h"
 
 class World : public Entity
 {

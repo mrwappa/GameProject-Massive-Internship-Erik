@@ -34,6 +34,10 @@ void World::Draw()
 	{
 		new Brick(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
 	}
+	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::LShift))
+	{
+		new Wall(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
+	}
 }
 
 void World::CreateWorld()
@@ -51,6 +55,8 @@ void World::CreateWorld()
 		new ProjectileEnemy(400, 400);
 		new TestEnemy(400 + 40, 400 + 40);
 		new TestEnemy(400 - 40, 400 - 40);
+		/*new BoxTest(300, 300, true);
+		new BoxTest(300 + 42, 300, false);*/
 		myCreateWorld = false;
 	}
 	
@@ -58,6 +64,7 @@ void World::CreateWorld()
 
 void World::DestroyWorld()
 {
+	
 	for (auto const &instance : Entity::SuperList)
 	{
 		for (int i = 0; i < instance.second->Size(); i++)

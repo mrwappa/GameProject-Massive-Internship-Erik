@@ -14,6 +14,8 @@ public:
 
 	void Draw();
 
+	bool GetEnemyThreat();
+
 private:
 	bool myEnemyThreat;
 	Enemy* myIgnorable;

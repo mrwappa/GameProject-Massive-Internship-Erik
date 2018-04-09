@@ -22,6 +22,8 @@ public:
 	virtual void StateInUse();
 	virtual void StateThrown();
 
+	void Update();
+
 	void Throw(float aSpeed, float aDir);
 	void Fall();
 
@@ -29,6 +31,7 @@ public:
 
 	void DrawShadow(float aX, float aY, float aXScale, float aYScale);
 
+	
 
 	static sf::Color GrabColor;
 	static Player* Target;
@@ -46,10 +49,15 @@ protected:
 	int myPrevState;
 	float myZSpeed;
 
+	Alarm myThrowAlarm;
+
 	GrowingArray<AStarNode*> myPath;
 
 	PlayerAttack* myAttackPtr;
 
 	GSprite myShadow;
+
+
+
 };
 #endif // !ENEMY_H

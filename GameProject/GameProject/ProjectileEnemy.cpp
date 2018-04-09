@@ -66,7 +66,7 @@ void ProjectileEnemy::StateAggro()
 			myYSpeed += Math::LenDirY(-1.0f, myDirection);
 		}
 
-		PreventCollision("Brick");
+		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
 	}
 }
@@ -137,59 +137,21 @@ void ProjectileEnemy::StateGrabbed()
 
 void ProjectileEnemy::Update()
 {
-	myDepth = myY;
-	myColor = sf::Color::White;
-
-	StatePathFind();
-	StateAggro();
-	StateAttack();
-	StateGrabbable();
-	StateGrabbed();
-	StateThrown();
-	StateInUse();
-
-	PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
-
-	if (myState != Grabbable and myState != Grabbed and myState != InUse)
-	{
-		if (pAttack != NULL and myAttackPtr != pAttack)
-		{
-			float dir = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
-			myXKnockBack = Math::LenDirX(-19.0f, dir);
-			myYKnockBack = Math::LenDirY(-19.0f, dir);
-			myXSpeed = 0;
-			myYSpeed = 0;
-			myHP -= pAttack->GetDamage();
-			if (myState == PathFind)
-			{
-				myState = Aggro;
-			}
-		}
-		myAttackPtr = pAttack;
-	}
-
-	if (myHP <= 0 and Alive())
-	{
-		myState = Grabbable;
-	}
-
-	
-	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
-	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
+	Enemy::Update();
 }
 
 void ProjectileEnemy::Draw()
 {	
 	if (Target != NULL)
 	{
-		if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		/*if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 		{
 			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
 		}
 		else
 		{
 			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
-		}
+		}*/
 	}
 
 	if (myState != Grabbed and myState != InUse)
@@ -205,18 +167,17 @@ void ProjectileEnemy::Draw()
 	}
 
 	CollisionEntity::Draw();
-	DrawBBox();
-
-	//rip drawing multiple lines because of my and SFMLs bad design
-	for (int i = 0; i < myPath.Size(); i++)
+	//DrawBBox();
+	
+	/*for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,
 			myDepth, sf::Color::White);
-	}
+	}*/
 }
 
 void ProjectileEnemy::DrawGUI()
 {
-	DrawFont(std::to_string((int)myHP), myX, myY - 20, 24, 1, 1, sf::Color::White);
+	//DrawFont(std::to_string((int)myHP), myX, myY - 20, 24, 1, 1, sf::Color::White);
 	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
 }

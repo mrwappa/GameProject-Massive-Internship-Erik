@@ -30,7 +30,7 @@ void Projectile::Update()
 {
 	myDepth = myY;
 
-	if (myEnemyThreat)
+	/*if (myEnemyThreat)
 	{
 		Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
 
@@ -45,7 +45,7 @@ void Projectile::Update()
 		{
 			DeleteInstance(this);
 		}
-	}
+	}*/
 
 	CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
 	if (brick != NULL)
@@ -60,4 +60,9 @@ void Projectile::Draw()
 {
 	Entity::Draw();
 	DrawBBox();
+}
+
+bool Projectile::GetEnemyThreat()
+{
+	return myEnemyThreat;
 }

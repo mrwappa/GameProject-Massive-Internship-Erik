@@ -6,7 +6,7 @@ Brick::Brick(float aX, float aY)
 	Init("Brick",aX,aY);
 	//mySprite.SetTexture("Sprites/32x32Block.png", 1);
 
-	myBoxWidth = 16;
+	myBoxWidth = 14;
 	myBoxHeight = 16;
 	myXScale = 2;
 	myYScale = 2;
@@ -25,6 +25,8 @@ void Brick::Update()
 {
 	if (myCheckAdjacent)
 	{
+		//Instead of this I could check the AStarGrid for adjacent nodes if they are walkable or not(should be faster)
+		//Realizing it probably won't work because there's a difference between Wall and Brick.
 		bool brickU = ObjPosition(myX, myY - 32,"Brick");
 		bool brickD = ObjPosition(myX, myY + 32, "Brick");
 		bool brickL = ObjPosition(myX - 32, myY, "Brick");
@@ -49,6 +51,8 @@ void Brick::Update()
 		}
 		if (!brickU and !brickD and !brickL and !brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKFILLED, 1);
 		}
 		if (brickU and brickD and !brickL and brickR)
@@ -66,27 +70,39 @@ void Brick::Update()
 		}
 		if (!brickU and brickD and brickL and brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKU, 1);
 		}
 		if (!brickU and !brickD and brickL and brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKUD, 1);
 		}
 		if (!brickU and !brickD and !brickL and brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKUDL, 1);
 		}
 		if (!brickU and !brickD and brickL and !brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKUDL, 1);
 			myXScale = -2;
 		}
 		if (!brickU and brickD and !brickL and brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKUL, 1);
 		}
 		if (!brickU and brickD and brickL and !brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKUL, 1);
 			myXScale = -2;
 		}
@@ -101,6 +117,8 @@ void Brick::Update()
 		}
 		if (!brickU and brickD and !brickL and !brickR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = 8;
 			mySprite.SetTexture(BRICKULR, 1);
 		}
 
@@ -111,5 +129,5 @@ void Brick::Update()
 void Brick::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }

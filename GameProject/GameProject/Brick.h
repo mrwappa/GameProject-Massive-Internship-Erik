@@ -27,7 +27,7 @@ public:
 
 
 private:
-	bool myCheckAdjacent;
+	
 
 };
 

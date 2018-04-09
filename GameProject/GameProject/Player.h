@@ -5,6 +5,7 @@
 #include "Math.h"
 #include "Dust.h"
 #include "Enemy.h"
+#include "Projectile.h"
 
 class PlayerAttack;
 
@@ -50,6 +51,7 @@ private:
 	float myYSub;
 
 	Enemy* GrabbableEnemy;
+	Alarm myHurtAlarm;
 	
 	float myLookAngle;
 	
