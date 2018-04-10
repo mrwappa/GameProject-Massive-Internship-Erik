@@ -163,6 +163,9 @@
     <ClInclude Include="Dust.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="GroundEdge.h" />
+    <ClInclude Include="GroundPillar.h" />
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="InputHandler.h" />
@@ -194,6 +197,9 @@
     <ClCompile Include="Dust.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="GroundEdge.cpp" />
+    <ClCompile Include="GroundPillar.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Line.cpp" />

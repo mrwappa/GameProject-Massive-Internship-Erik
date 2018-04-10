@@ -21,7 +21,6 @@ public:
 	void DrawGUI();
 
 private:
-	int myPrevState;
 
 	//For InUse State
 	float myExtraX;

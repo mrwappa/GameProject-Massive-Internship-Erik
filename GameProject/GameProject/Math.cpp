@@ -71,7 +71,6 @@ float Math::Lerp(float aStart, float aEnd, float aPercent)
 {
 	float clampedP = Clamp(aPercent, 0, 1);
 	return (aEnd - aStart) * (-2.0f * powf(clampedP, 3.0f) + 3.0f * powf(clampedP, 2.0f)) + aStart;
-	//return aStart * aPercent + aEnd * (1 -aPercent);
 }
 
 float Math::FRand(float aLow, float aHigh)

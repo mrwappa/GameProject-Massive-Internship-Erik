@@ -8,6 +8,9 @@
 #include "ProjectileEnemy.h"
 #include "Wall.h"
 #include "BoxTest.h"
+#include "Ground.h"
+#include "GroundEdge.h"
+#include "GroundPillar.h"
 
 class World : public Entity
 {
@@ -19,12 +22,10 @@ public:
 	void BeginUpdate();
 	void Draw();
 
-	void CreateWorld();
+	void CreateWorld(float aRows, float aColumns);
 	void DestroyWorld();
 	void DrawGUI();
 
-private:
-	bool myCreateWorld;
 };
 
 #endif // !WORLD_H

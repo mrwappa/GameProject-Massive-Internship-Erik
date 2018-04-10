@@ -13,6 +13,8 @@ public:
 	CollisionEntity();
 	~CollisionEntity();
 	
+	static float SlowMo;
+
 	void Init(std::string aName, float aX, float aY);
 	static std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionList;
 
@@ -30,7 +32,7 @@ public:
 
 	CollisionEntity* ObjCollision(float aX, float aY, std::string aName);
 	GrowingArray<CollisionEntity*> ObjCollisionList(float aX, float aY, std::string aName);
-	GrowingArray<CollisionEntity*> ObjDistanceList(float aX, float aY, float aDistance, std::string aName);
+	GrowingArray<CollisionEntity*>* ObjDistanceList(float aX, float aY, float aDistance, std::string aName);
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true);
 	void PreventCollision(std::string aName);
 	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName);

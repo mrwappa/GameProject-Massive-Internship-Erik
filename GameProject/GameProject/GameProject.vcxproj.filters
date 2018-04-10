@@ -103,6 +103,18 @@
     <Filter Include="Game\CollisionEntity\BoxTest">
       <UniqueIdentifier>{a9e62737-4b83-403a-b48c-56605323778e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Solids\GroundEdge">
+      <UniqueIdentifier>{803e38e9-8aad-4499-83f9-46a2c68fa730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids\Appearance%28only for visuals%29">
+      <UniqueIdentifier>{987c293e-552d-426f-99bf-26b7bc7807b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids\Appearance%28only for visuals%29\Ground">
+      <UniqueIdentifier>{5f27f90f-f6da-4f57-b242-ed0fd6d9d65a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Solids\Appearance%28only for visuals%29\GroundPillar">
+      <UniqueIdentifier>{66919917-3a15-4113-a115-77ccc391ed61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -192,6 +204,15 @@
     <ClInclude Include="BoxTest.h">
       <Filter>Game\CollisionEntity\BoxTest</Filter>
     </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Game\Solids\Appearance%28only for visuals%29\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundEdge.h">
+      <Filter>Game\Solids\GroundEdge</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundPillar.h">
+      <Filter>Game\Solids\Appearance%28only for visuals%29\GroundPillar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -266,6 +287,15 @@
     </ClCompile>
     <ClCompile Include="BoxTest.cpp">
       <Filter>Game\CollisionEntity\BoxTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>Game\Solids\Appearance%28only for visuals%29\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundEdge.cpp">
+      <Filter>Game\Solids\GroundEdge</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundPillar.cpp">
+      <Filter>Game\Solids\Appearance%28only for visuals%29\GroundPillar</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

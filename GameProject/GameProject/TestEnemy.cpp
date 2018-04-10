@@ -76,7 +76,7 @@ void TestEnemy::StateInUse()
 			myZ = -0.99f;
 			Camera->ShakeScreen(8);
 			
-			myEnemyTargets = &ObjDistanceList(myX, myY,80, "Enemy");
+			myEnemyTargets = ObjDistanceList(myX, myY,80, "Enemy");
 
 			if (myEnemyTargets != NULL)
 			{
@@ -84,14 +84,15 @@ void TestEnemy::StateInUse()
 				{
 					if (static_cast<Enemy*>(myEnemyTargets->FindAtIndex(i))->Alive())
 					{
-						float dir = Math::PointDirection(myX, myY, myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY());
-						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(7, dir));
-						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(7, dir));
+						float dir = Math::PointDirection(myX, myY - myZ, myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY() - myEnemyTargets->FindAtIndex(i)->GetZ());
+						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(15, dir));
+						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(15, dir));
 						myEnemyTargets->FindAtIndex(i)->IncrHP(-(myDamage + Target->GetDamage()));
 					}
 				}
 			}
-			//myEnemyTargets->RemoveAll();
+			//myEnemyTargets->RemoveAll(); 
+			delete myEnemyTargets;
 			myEnemyTargets = NULL;
 			
 			

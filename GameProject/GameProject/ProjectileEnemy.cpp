@@ -19,6 +19,8 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 
 	myAttackTimer = Math::FRand(2, 5);
 	myHP = 10;
+
+	myDeflate = false;
 }
 
 
@@ -33,7 +35,7 @@ void ProjectileEnemy::StateAggro()
 		myAttackTimer -= 1.0f / 60.0f;
 		if (myAttackTimer <= 0)
 		{
-			myAttackTimer = 0.5f;
+			myAttackTimer = 0.2f;
 			myState = Attack;
 		}
 
@@ -44,12 +46,11 @@ void ProjectileEnemy::StateAggro()
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
 			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
-			if (distance <= 17)
+			if (distance <= 8)
 			{
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-
 			
 			if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 			{
@@ -79,11 +80,14 @@ void ProjectileEnemy::StateAttack()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
-			new Projectile(myX, myY, 7.0f, myDirection, false,NULL);
-
+			new Projectile(myX, myY - myZ, 7.0f, myDirection, false,NULL);
+			myDeflate = true;
 			myState = Aggro;
 			myAttackTimer = Math::FRand(2, 5);
+
 		}
+
+		
 
 		Move(myXKnockBack,myYKnockBack);
 	}
@@ -105,9 +109,10 @@ void ProjectileEnemy::StateInUse()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-			new Projectile(myX, myY, 7.0f, myDirection, true,this);
+			new Projectile(myX, myY - myZ, 7.0f, myDirection, true,this);
 			myAttackTimer = 0.2f;
 			myState = Grabbed;
+			myDeflate = true;
 		}
 		
 	}
@@ -121,7 +126,6 @@ void ProjectileEnemy::StateGrabbed()
 	}
 	if (myState == Grabbed)
 	{
-		
 		myAttackTimer -= 1.0f / 60.0f;
 
 		myZ = 0;
@@ -137,7 +141,24 @@ void ProjectileEnemy::StateGrabbed()
 
 void ProjectileEnemy::Update()
 {
+	if (myDeflate)
+	{
+		myXScale = Math::Lerp(myXScale, 1.2f, 0.15f);
+		myYScale = Math::Lerp(myXScale, 1.5f, 0.1f);
+
+		if (myXScale = 1.2f)
+		{
+			myDeflate = false;
+		}
+	}
+	else
+	{
+		myXScale = Math::Lerp(myXScale, 2.f, 0.3f);
+		myYScale = Math::Lerp(myXScale, 2.f, 0.2f);
+	}
+
 	Enemy::Update();
+
 }
 
 void ProjectileEnemy::Draw()

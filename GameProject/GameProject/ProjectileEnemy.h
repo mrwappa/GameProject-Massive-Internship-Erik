@@ -28,6 +28,8 @@ private:
 	Line myLine;
 
 	float myAttackTimer;
+
+	bool myDeflate;
 };
 
 #endif // !PROJECTILEENEMY_H

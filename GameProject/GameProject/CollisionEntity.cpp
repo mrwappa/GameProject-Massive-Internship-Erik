@@ -4,6 +4,7 @@
 std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionEntity::CollisionList;
 GrowingArray<CollisionEntity*>* CollisionEntity::GrArrayPtr;
 AStar* CollisionEntity::AStarGrid;
+float CollisionEntity::SlowMo = 1;
 
 CollisionEntity::CollisionEntity()
 {
@@ -261,7 +262,7 @@ GrowingArray<CollisionEntity*> CollisionEntity::ObjCollisionList(float aX, float
 	return entities;
 }
 
-GrowingArray<CollisionEntity*> CollisionEntity::ObjDistanceList(float aX, float aY, float aDistance, std::string aName)
+GrowingArray<CollisionEntity*>* CollisionEntity::ObjDistanceList(float aX, float aY, float aDistance, std::string aName)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -269,14 +270,17 @@ GrowingArray<CollisionEntity*> CollisionEntity::ObjDistanceList(float aX, float 
 	}
 	GrArrayPtr = CollisionList.at(aName);
 
-	GrowingArray<CollisionEntity*> entities;
+	//Reason for creating this on the heap is that I get a null exception at TestEnemy
+	//when trying to interpret the objects in the list as Enemy*, and this fixes that.
+	//Have no idea why though...
+	GrowingArray<CollisionEntity*>* entities = new GrowingArray<CollisionEntity*>;
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
 		if (GrArrayPtr->FindAtIndex(i) != this)//no collision with itself
 		{
 			if (Math::PointDistance(aX, aY - myZ, GrArrayPtr->FindAtIndex(i)->GetX(), GrArrayPtr->FindAtIndex(i)->GetY() - GrArrayPtr->FindAtIndex(i)->GetZ()) <= aDistance)
 			{
-				entities.Add((GrArrayPtr->FindAtIndex(i)));
+				entities->Add((GrArrayPtr->FindAtIndex(i)));
 			}
 		}
 	}

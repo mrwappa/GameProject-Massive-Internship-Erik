@@ -229,6 +229,7 @@ void Enemy::Update()
 			}
 		}
 		myAttackPtr = pAttack;
+		
 	}
 
 	if (myHP <= 0 and Alive())

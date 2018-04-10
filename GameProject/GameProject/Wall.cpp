@@ -27,8 +27,7 @@ void Wall::Update()
 		bool wallD = ObjPosition(myX, myY + 32, "Wall");
 		bool wallL = ObjPosition(myX - 32, myY, "Wall");
 		bool wallR = ObjPosition(myX + 32, myY, "Wall");
-
-
+		
 		if (wallD and wallL and wallR)
 		{
 			mySprite.SetTexture(WALLM, 1);
@@ -39,14 +38,20 @@ void Wall::Update()
 		}
 		if (!wallD and !wallL and wallR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = -8;
 			mySprite.SetTexture(WALLDL, 1);
 		}
 		if (!wallD and wallL and wallR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = -8;
 			mySprite.SetTexture(WALLMD, 1);
 		}
 		if (!wallD and !wallL and !wallR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = -8;
 			mySprite.SetTexture(WALLMM, 1);
 		}
 		if (wallD and wallL and !wallR)
@@ -55,6 +60,8 @@ void Wall::Update()
 		}
 		if (!wallD and wallL and !wallR)
 		{
+			myBoxHeight = 8;
+			myBoxYOffset = -8;
 			mySprite.SetTexture(WALLRD, 1);
 		}
 		
@@ -65,5 +72,5 @@ void Wall::Update()
 void Wall::Draw()
 {
 	Entity::Draw();
-	//DrawBBox();
+	DrawBBox();
 }
