@@ -50,6 +50,7 @@ void Enemy::StatePathFind()
 			float xTarget = myPath[myPath.Size() - 1]->GetParent()->GetCenter().x;
 			float yTarget = myPath[myPath.Size() - 1]->GetParent()->GetCenter().y;
 
+			//It's possible that lerping to the position is a better solution here
 			myDirection = Math::PointDirection(myX, myY, xTarget, yTarget);
 			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
@@ -134,7 +135,7 @@ void Enemy::StateThrown()
 		//PreventCollision("Solid");
 		CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
 
-		if (brick != NULL and myThrowAlarm.GetTick() == -1)
+		if (brick != NULL and myThrowAlarm.GetTick() == -1 and brick->GetName() != "GroundEdge")
 		{
 			myXSpeed = -myXSpeed;
 			myXKnockBack = -myXKnockBack;
@@ -188,7 +189,7 @@ void Enemy::Update()
 {
 	myColor = sf::Color::White;
 
-	myDepth = myY;
+	myDepth = myY - myZ;
 
 	StatePathFind();
 	StateIdle();
@@ -205,6 +206,7 @@ void Enemy::Update()
 		PlayerAttack* pAttack = (PlayerAttack*)ObjCollision(myX, myY, "PlayerAttack");
 		Projectile* projectile = (Projectile*)ObjCollision(myX, myY, "Projectile");
 
+		//Hit by Projectile
 		if (projectile != NULL and projectile->GetEnemyThreat())
 		{
 			myDirection = Math::PointDirection(projectile->GetX(), projectile->GetY(), myX, myY - myZ);
@@ -215,11 +217,13 @@ void Enemy::Update()
 
 			DeleteInstance(projectile);
 		}
+
+		//Hit by PlayerAttack
 		if (pAttack != NULL and myAttackPtr != pAttack)
 		{
 			float dir = Math::PointDirection(myX, myY - myZ, Target->GetX(), Target->GetY());
-			myXKnockBack = Math::LenDirX(-19.0f, dir);
-			myYKnockBack = Math::LenDirY(-19.0f, dir);
+			myXKnockBack = Math::LenDirX(-12.0f, dir);
+			myYKnockBack = Math::LenDirY(-12.0f, dir);
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myHP -= pAttack->GetDamage();

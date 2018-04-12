@@ -20,7 +20,7 @@ BoxTest::~BoxTest()
 
 void BoxTest::Update()
 {
-	myDepth = myDepth;
+	myDepth = myY;
 	CollisionEntity* box = ObjCollision(myX, myY, "BoxTest");
 
 	myColor = sf::Color::Green;
@@ -48,6 +48,16 @@ void BoxTest::Update()
 		{
 			myZ -= 2;
 		}
+		if (KeyboardCheck(sf::Keyboard::U))
+		{
+			myXScale += 0.05f;
+			myYScale = myXScale;
+		}
+		if (KeyboardCheck(sf::Keyboard::J))
+		{
+			myXScale -= 0.05f;
+			myYScale = myXScale;
+		}
 
 		if (MouseCheck(sf::Mouse::Left))
 		{
@@ -73,6 +83,16 @@ void BoxTest::Update()
 		if (KeyboardCheck(sf::Keyboard::Num0))
 		{
 			myZ -= 2;
+		}
+		if (KeyboardCheck(sf::Keyboard::Subtract))
+		{
+			myXScale += 0.05f;
+			myYScale = myXScale;
+		}
+		if (KeyboardCheck(sf::Keyboard::Add))
+		{
+			myXScale -= 0.05f;
+			myYScale = myXScale;
 		}
 
 		if (MouseCheck(sf::Mouse::Right))

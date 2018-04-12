@@ -17,7 +17,7 @@ TestEnemy::TestEnemy(float aX, float aY)
 	myBoxWidth = 16;
 	myBoxHeight = 8;
 
-	myMoveSpeed = Math::FRand(2.0f,3.0f);
+	myMoveSpeed = Math::FRand(1.0f,1.5f);
 
 	myHP = 10;
 }
@@ -88,6 +88,13 @@ void TestEnemy::StateInUse()
 						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(15, dir));
 						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(15, dir));
 						myEnemyTargets->FindAtIndex(i)->IncrHP(-(myDamage + Target->GetDamage()));
+					}
+					else
+					{
+						float dir = Math::PointDirection(myX, myY - myZ, myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY() - myEnemyTargets->FindAtIndex(i)->GetZ());
+						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(4, dir));
+						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(4, dir));
+						static_cast<Enemy*>(myEnemyTargets->FindAtIndex(i))->SetZ(Math::IRand(12,20));
 					}
 				}
 			}

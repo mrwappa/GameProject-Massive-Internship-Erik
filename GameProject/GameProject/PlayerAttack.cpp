@@ -9,12 +9,12 @@ PlayerAttack::PlayerAttack(float aX, float aY, Player* aTarget)
 	
 	myColor = sf::Color::Color(158,52,41);
 	myAnimationSpeed = 0.6f;
-	myXScale = 2;
+	myXScale = 2.3f;
 	myYScale = Math::Choose(myXScale,-myXScale);
 	myBoxWidth = 7;
 	myBoxHeight = 18;
 
-	myDamage = 4;
+	myDamage = 2.5f;
 
 	myTarget = aTarget;
 }
@@ -32,8 +32,6 @@ void PlayerAttack::Update()
 		myTarget->PAttack = NULL;
 		DeleteInstance(this);
 	}
-
-	
 }
 
 void PlayerAttack::Draw()

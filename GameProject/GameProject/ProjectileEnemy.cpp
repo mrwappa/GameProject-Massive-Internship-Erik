@@ -15,7 +15,7 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 	myYScale = myXScale;
 	myZ = 20;
 
-	myMoveSpeed = 1.5f;
+	myMoveSpeed = 0.8f;
 
 	myAttackTimer = Math::FRand(2, 5);
 	myHP = 10;
@@ -80,7 +80,7 @@ void ProjectileEnemy::StateAttack()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
-			new Projectile(myX, myY - myZ, 7.0f, myDirection, false,NULL);
+			new Projectile(myX, myY - myZ, 7.0f, myDirection, false);
 			myDeflate = true;
 			myState = Aggro;
 			myAttackTimer = Math::FRand(2, 5);
@@ -109,7 +109,7 @@ void ProjectileEnemy::StateInUse()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-			new Projectile(myX, myY - myZ, 7.0f, myDirection, true,this);
+			new Projectile(myX, myY - myZ, 7.0f, myDirection, true);
 			myAttackTimer = 0.2f;
 			myState = Grabbed;
 			myDeflate = true;

@@ -7,7 +7,7 @@
 class Projectile : public CollisionEntity
 {
 public:
-	Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat, Enemy* aEnemy);
+	Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat);
 	~Projectile();
 
 	void Update();

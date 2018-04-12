@@ -1,17 +1,2 @@
-﻿  World.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(47): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(66): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(70): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(71): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(83): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(84): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(92): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(117): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
+﻿  ProjectileEnemy.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

@@ -183,75 +183,74 @@ void Player::BeginUpdate()
 void Player::EndUpdate()
 {
 	bool grabbedThisFrame = false;
+	//Enemy as weapon
+	if (GrabbableEnemy == NULL)
+	{
+		Enemy* enemy = NearestGrabbable();
+		if (enemy != NULL)
+		{
+			if (Math::PointDistance(myX, myY, enemy->GetX(), enemy->GetY()) < 80 and enemy->GetState() == Enemy::Grabbable)
+			{
+				enemy->SetColor(Enemy::GrabColor);
+				if (KeyboardCheckPressed(sf::Keyboard::LShift))
+				{
+					GrabbableEnemy = enemy;
+					GrabbableEnemy->SetState(Enemy::Grabbed);
+					grabbedThisFrame = true;
+				}
+			}
+		}
+	}
+
+	//Enemy as attack
+	if (GrabbableEnemy != NULL)
+	{
+		//Throw
+		if (KeyboardCheckPressed(sf::Keyboard::Space))
+		{
+			GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+			GrabbableEnemy = NULL;
+		}
+		//Drop
+		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
+		{
+			GrabbableEnemy->SetState(Enemy::Grabbable);
+			GrabbableEnemy->SetZ(15);
+			GrabbableEnemy = NULL;
+		}
+		//Attack
+		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
+		{
+			//unnescessary check right now, but will be relevent when more enemies appear
+			if (GrabbableEnemy->GetName() == "TestEnemy")
+			{
+				GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
+				GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+				GrabbableEnemy->SetState(Enemy::InUse);
+			}
+			else
+			{
+				GrabbableEnemy->SetState(Enemy::InUse);
+			}
+		}
+	}
 
 	if (myHurtAlarm.GetTick() == -1)
 	{
-		//Enemy as weapon
-		if (GrabbableEnemy == NULL)
-		{
-			Enemy* enemy = NearestGrabbable();
-			if (enemy != NULL)
-			{
-				if (Math::PointDistance(myX, myY, enemy->GetX(), enemy->GetY()) < 80 and enemy->GetState() == Enemy::Grabbable)
-				{
-					enemy->SetColor(Enemy::GrabColor);
-					if (KeyboardCheckPressed(sf::Keyboard::LShift))
-					{
-						GrabbableEnemy = enemy;
-						GrabbableEnemy->SetState(Enemy::Grabbed);
-						grabbedThisFrame = true;
-					}
-				}
-			}
-		}
-
-		//Enemy as attack
-		if (GrabbableEnemy != NULL)
-		{
-			//Throw
-			if (KeyboardCheckPressed(sf::Keyboard::Space))
-			{
-				GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
-				GrabbableEnemy = NULL;
-			}
-			//Drop
-			if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
-			{
-				GrabbableEnemy->SetState(Enemy::Grabbable);
-				GrabbableEnemy->SetZ(15);
-				GrabbableEnemy = NULL;
-			}
-			//Attack
-			if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)
-			{
-				//unnescessary check right now, but will be relevent when more enemies appear
-				if (GrabbableEnemy->GetName() == "TestEnemy")
-				{
-					GrabbableEnemy->SetZ(GrabbableEnemy->GetHeight() / 1.5f);
-					GrabbableEnemy->SetDirection(Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
-					GrabbableEnemy->SetState(Enemy::InUse);
-				}
-				else
-				{
-					GrabbableEnemy->SetState(Enemy::InUse);
-				}
-			}
-		}
-
 		//Default Attack
 		if (GrabbableEnemy == NULL)
 		{
 			if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
 			{
-				myAttackTimer = 0.7f;
+				myAttackTimer = 0.4f;
 				PAttack = new PlayerAttack(myX, myY, this);
 			}
 
 			if (PAttack != NULL)
 			{
 				myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-				float atX = myX + Math::LenDirX(14, myDirection);
-				float atY = myY + Math::LenDirY(14, myDirection);
+				float atX = myX + Math::LenDirX(18, myDirection);
+				float atY = myY + Math::LenDirY(18, myDirection);
 
 				PAttack->SetX(atX);
 				PAttack->SetY(atY);

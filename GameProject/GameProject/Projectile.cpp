@@ -2,7 +2,7 @@
 #include "Projectile.h"
 
 
-Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat, Enemy* aEnemy)
+Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat)
 {
 	Init("Projectile", aX, aY);
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
@@ -17,8 +17,7 @@ Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool 
 
 	myXSpeed = Math::LenDirX(aSpeed, aDirection);
 	myYSpeed = Math::LenDirY(aSpeed, aDirection);
-
-	myIgnorable = aEnemy;
+	myDamage = 4;
 }
 
 
@@ -30,25 +29,14 @@ void Projectile::Update()
 {
 	myDepth = myY;
 
-	/*if (myEnemyThreat)
-	{
-		Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
-
-		if (enemy != NULL and enemy != myIgnorable and enemy->Alive())
-		{
-			DeleteInstance(this);
-		}
-	}
-	else
-	{
-		if (InstanceCollision(myX, myY, (CollisionEntity*)Enemy::Target))
-		{
-			DeleteInstance(this);
-		}
-	}*/
-
 	CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
-	if (brick != NULL)
+	if (brick != NULL and brick->GetName() != "GroundEdge")
+	{
+		DeleteInstance(this);
+	}
+
+	if (myX < Camera->GetX() - (Camera->GetViewWidth() / 2) - 50 or myX > Camera->GetX() + (Camera->GetViewWidth() / 2) + 50 or
+		myY < Camera->GetY() - (Camera->GetViewHeight() / 2) - 50 or myY > Camera->GetY() + (Camera->GetViewHeight() / 2) + 50)
 	{
 		DeleteInstance(this);
 	}
