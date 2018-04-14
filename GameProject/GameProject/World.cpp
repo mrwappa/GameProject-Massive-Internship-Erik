@@ -5,9 +5,11 @@ World::World()
 {
 	Entity::Init("World", 0, 0);
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
-	CreateWorld(30,17);
+	CreateWorld(16,12);
 
 	myDepth = 99999;
+
+	
 }
 
 
@@ -47,8 +49,7 @@ void World::CreateWorld(float aRows, float aColumns)
 	AStarNode::NodeSize = 32.0f;
 	CollisionEntity::AStarGrid = new AStar(aRows, aColumns);
 
-
-	for (int i = 0; i < aRows; i++)
+	/*for (int i = 0; i < aRows; i++)
 	{
 		for (int j = 0; j < aColumns; j++)
 		{
@@ -92,17 +93,20 @@ void World::CreateWorld(float aRows, float aColumns)
 				new Ground(i * AStarNode::NodeSize, j * AStarNode::NodeSize);
 			}
 		}
-	}
+	}*/
+	
+	new LevelSection((AStarNode::NodeSize * 16) / 2, (AStarNode::NodeSize * 12) / 2,"Maps/Test1.txt");
+	new LevelSection((AStarNode::NodeSize * 16) * 1.5f, (AStarNode::NodeSize * 12) * 1.5f, "Maps/Test1.txt");
 
 	new Player(7 * 32 + 16, 7 * 32 + 16);
-	new Brick(4 * 32 + 16, 4 * 32 + 16);
+	/*new Brick(4 * 32 + 16, 4 * 32 + 16);
 	new Brick(4 * 32 + 16, 5 * 32 + 16);
 	new Brick(4 * 32 + 16, 6 * 32 + 16);
 	new Wall(4 * 32 + 16, 7 * 32 + 16);
 	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
 	new ProjectileEnemy(400, 400);
 	new TestEnemy(400 + 40, 400 + 40);
-	new TestEnemy(400 - 40, 400 - 40);
+	new TestEnemy(400 - 40, 400 - 40);*/
 	/*new BoxTest(300, 300, true);
 	new BoxTest(300 + 42, 300, false);*/
 	
@@ -132,7 +136,7 @@ void World::DrawGUI()
 	if (KeyboardCheckPressed(sf::Keyboard::R))
 	{
 		DestroyWorld();
-		CreateWorld(30, 17);
+		CreateWorld(16, 12);
 		Camera->SetZoom(1);
 	}
 }

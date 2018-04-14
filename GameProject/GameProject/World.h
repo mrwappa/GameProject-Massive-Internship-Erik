@@ -1,7 +1,6 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "Entity.h"
 #include "Player.h"
 #include "Brick.h"
 #include "TestEnemy.h"
@@ -11,6 +10,7 @@
 #include "Ground.h"
 #include "GroundEdge.h"
 #include "GroundPillar.h"
+#include "LevelSection.h"
 
 class World : public Entity
 {

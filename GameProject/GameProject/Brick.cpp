@@ -122,7 +122,7 @@ void Brick::Update()
 			mySprite.SetTexture(BRICKULR, 1);
 		}
 
-		//myCheckAdjacent = false;
+		myCheckAdjacent = false;
 	}
 }
 

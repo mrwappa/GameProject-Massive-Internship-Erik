@@ -169,6 +169,7 @@
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="LevelSection.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="GroundPillar.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="LevelSection.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />

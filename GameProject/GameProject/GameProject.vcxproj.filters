@@ -115,6 +115,9 @@
     <Filter Include="Game\Solids\Appearance%28only for visuals%29\GroundPillar">
       <UniqueIdentifier>{66919917-3a15-4113-a115-77ccc391ed61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\World\LevelSection">
+      <UniqueIdentifier>{8ac70792-4315-46bf-971d-d7beef491488}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -213,6 +216,9 @@
     <ClInclude Include="GroundPillar.h">
       <Filter>Game\Solids\Appearance%28only for visuals%29\GroundPillar</Filter>
     </ClInclude>
+    <ClInclude Include="LevelSection.h">
+      <Filter>Game\World\LevelSection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -296,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="GroundPillar.cpp">
       <Filter>Game\Solids\Appearance%28only for visuals%29\GroundPillar</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSection.cpp">
+      <Filter>Game\World\LevelSection</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

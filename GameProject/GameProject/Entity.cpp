@@ -240,7 +240,7 @@ void Entity::DrawAll()
 	}
 }
 
-void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aDepth, float aAlpha, sf::Color aColor)
+void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor)
 {
 	Pixel.Draw(aX, aY, aWidth, aHeight, aAngle, aAlpha, aColor,0);
 }

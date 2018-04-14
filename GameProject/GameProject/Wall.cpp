@@ -10,7 +10,7 @@ Wall::Wall(float aX, float aY)
 	myBoxHeight = 16;
 	myXScale = 2;
 	myYScale = 2;
-	myDepth = myY;
+	myDepth = myY - 20;
 
 	myCheckAdjacent = true;
 }
@@ -65,7 +65,7 @@ void Wall::Update()
 			mySprite.SetTexture(WALLRD, 1);
 		}
 		
-		//myCheckAdjacent = false;
+		myCheckAdjacent = false;
 	}
 }
 

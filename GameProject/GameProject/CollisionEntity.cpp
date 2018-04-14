@@ -324,6 +324,9 @@ void CollisionEntity::PreventCollision(std::string aName)
 {
 	CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, aName);
 
+	float prevXSpeed = myXSpeed;
+	float prevYSpeed = myYSpeed;
+
 	if (brick != NULL)
 	{
 		float brickBoxX = brick->GetBoxPosition().x;
@@ -350,6 +353,14 @@ void CollisionEntity::PreventCollision(std::string aName)
 		}
 		myYSpeed = 0;
 		myYKnockBack = 0;
+	}
+
+	//Going diagonally may still get entity stuck in a brick
+	//Therefore we do an extra check to push it out
+	if (InstanceCollision(myX, myY, brick,false))
+	{
+		myX -= Math::Sign(prevXSpeed);
+		myY -= Math::Sign(prevYSpeed);
 	}
 }
 
@@ -435,7 +446,7 @@ void CollisionEntity::UpdateBBox()
 
 void CollisionEntity::DrawBBox()
 {
-	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset - myZ, myBoxWidth * myXScale, myBoxHeight  * myYScale, myAngle, myDepth - 1, 0.5f, sf::Color::Black);
+	DrawRect(myX + myBoxXOffset, myY + myBoxYOffset - myZ, myBoxWidth * myXScale, myBoxHeight  * myYScale, myAngle, 0.5f, sf::Color::Black);
 }
 
 void CollisionEntity::Draw()

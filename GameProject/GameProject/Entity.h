@@ -45,7 +45,7 @@ public:
 	static void QuickSort(int aLow, int aHigh);
 	static void DrawAll();
 	
-	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle,float aDepth , float aAlpha, sf::Color aColor);
+	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle , float aAlpha, sf::Color aColor);
 	static GSprite Pixel;
 
 	//Font
