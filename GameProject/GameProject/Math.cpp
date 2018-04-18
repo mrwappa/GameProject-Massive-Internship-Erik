@@ -81,7 +81,7 @@ float Math::FRand(float aLow, float aHigh)
 	return dist(g);
 }
 
-float Math::IRand(float aLow, float aHigh)
+int Math::IRand(int aLow, int aHigh)
 {
 	std::mt19937 g(std::random_device{}());
 	std::uniform_int_distribution<int> dist(aLow, aHigh);

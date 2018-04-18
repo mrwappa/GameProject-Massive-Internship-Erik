@@ -284,6 +284,7 @@ GrowingArray<CollisionEntity*>* CollisionEntity::ObjDistanceList(float aX, float
 			}
 		}
 	}
+
 	return entities;
 }
 
@@ -320,8 +321,10 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aO
 	
 }
 
-void CollisionEntity::PreventCollision(std::string aName)
+bool CollisionEntity::PreventCollision(std::string aName)
 {
+	bool collision = false;
+
 	CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, aName);
 
 	float prevXSpeed = myXSpeed;
@@ -338,6 +341,7 @@ void CollisionEntity::PreventCollision(std::string aName)
 		}
 		myXSpeed = 0;
 		myXKnockBack = 0;
+		collision = true;
 	}
 
 	brick = ObjCollision(myX, myY + myYSpeed + myYKnockBack, aName);
@@ -353,15 +357,21 @@ void CollisionEntity::PreventCollision(std::string aName)
 		}
 		myYSpeed = 0;
 		myYKnockBack = 0;
+		collision = true;
 	}
 
 	//Going diagonally may still get entity stuck in a brick
 	//Therefore we do an extra check to push it out
-	if (InstanceCollision(myX, myY, brick,false))
+	if (prevXSpeed != 0 and prevYSpeed != 0)
 	{
-		myX -= Math::Sign(prevXSpeed);
-		myY -= Math::Sign(prevYSpeed);
+		if (InstanceCollision(myX, myY, brick, true))
+		{
+			myX -= Math::Sign(prevXSpeed);
+			myY -= Math::Sign(prevYSpeed);
+		}
 	}
+	
+	return collision;
 }
 
 CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName)

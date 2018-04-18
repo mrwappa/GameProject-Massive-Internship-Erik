@@ -5,7 +5,6 @@
 TestEnemy::TestEnemy(float aX, float aY)
 {
 	Init("TestEnemy", aX, aY);
-	myState = Aggro;
 	mySprite.SetTexture("Sprites/Enemies/spr_fly_enemy.png", 4);
 
 	myAnimationSpeed = 0.2f;
@@ -20,6 +19,8 @@ TestEnemy::TestEnemy(float aX, float aY)
 	myMoveSpeed = Math::FRand(1.0f,1.5f);
 
 	myHP = 10;
+
+	myDamage = 3;
 }
 
 
@@ -76,7 +77,7 @@ void TestEnemy::StateInUse()
 			myZ = -0.99f;
 			Camera->ShakeScreen(8);
 			
-			myEnemyTargets = ObjDistanceList(myX, myY,80, "Enemy");
+			myEnemyTargets = ObjDistanceList(myX, myY,60, "Enemy");
 
 			if (myEnemyTargets != NULL)
 			{

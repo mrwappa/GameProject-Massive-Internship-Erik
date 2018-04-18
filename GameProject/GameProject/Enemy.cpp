@@ -9,7 +9,7 @@ sf::Color Enemy::GrabColor = sf::Color::Color(125,125,125,125);
 Enemy::Enemy()
 {
 	myZSpeed = 3.0f;
-
+	myState = Idle;
 	AddCollInstance("Enemy", this);
 	myShadow.SetTexture("Sprites/Player/spr_circle.png", 1);
 }
@@ -28,6 +28,43 @@ void Enemy::OnRemoval()
 
 void Enemy::StateIdle()
 {
+	if (myState == Idle)
+	{
+		if (myWalkAlarm.GetTick() == -1)
+		{
+			myDirection = Math::DegToRad(Math::IRand(0, 360));
+			float length = Math::IRand(40, 100);
+			myWalkPoint = Vector2f(myX + Math::LenDirX(length,myDirection),myY + Math::LenDirY(length,myDirection));
+			myWalkAlarm.SetTick(Math::IRand(60, 120));
+		}
+		
+		myDirection = Math::PointDirection(myX, myY, myWalkPoint.x, myWalkPoint.y);
+		myXSpeed = Math::LenDirX(myMoveSpeed / 1.5f, myDirection);
+		myYSpeed = Math::LenDirY(myMoveSpeed / 1.5f, myDirection);
+
+		if (PreventCollision("Solid"))
+		{
+			myDirection = Math::DegToRad(Math::IRand(0, 360));
+			float length = Math::IRand(40, 100);
+			myWalkPoint = Vector2f(myX + Math::LenDirX(length, myDirection),myY + Math::LenDirY(length, myDirection));
+			myWalkAlarm.SetTick(Math::IRand(60, 120));
+		}
+
+		if (Math::PointDistance(myX, myY, myWalkPoint.x, myWalkPoint.y) <= Math::PointDistance(0, 0, myXSpeed, myYSpeed))
+		{
+			myXSpeed = 0;
+			myYSpeed = 0;
+			myX = myWalkPoint.x;
+			myY = myWalkPoint.y;
+		}
+
+		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
+
+		if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		{
+			myState = Aggro;
+		}
+	}
 }
 
 void Enemy::StateAggro()
@@ -96,6 +133,7 @@ void Enemy::StateGrabbable()
 			myXSpeed = Math::LenDirX(2.f, myDirection);
 			myYSpeed = Math::LenDirY(2.f, myDirection);
 		}
+
 		myAnimationSpeed = Math::Lerp(myAnimationSpeed,0,0.4f);
 		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
@@ -137,10 +175,10 @@ void Enemy::StateThrown()
 
 		if (brick != NULL and myThrowAlarm.GetTick() == -1 and brick->GetName() != "GroundEdge")
 		{
-			myXSpeed = -myXSpeed;
-			myXKnockBack = -myXKnockBack;
-			myYSpeed = -myYSpeed;
-			myYKnockBack = -myYKnockBack;
+			myXSpeed = -myXSpeed / 1.7f;
+			myXKnockBack = -myXKnockBack / 1.7f;
+			myYSpeed = -myYSpeed / 1.7f;
+			myYKnockBack = -myYKnockBack / 1.7f;
 
 			myThrowAlarm.SetTick(5);
 			Camera->ShakeScreen(5.0f);
@@ -157,8 +195,6 @@ void Enemy::StateThrown()
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myState = Grabbable;
-
-			
 		}
 
 		if (abs(myXSpeed) > 1.5f or abs(myYSpeed) > 1.5f)
@@ -167,7 +203,7 @@ void Enemy::StateThrown()
 			if (enemy != NULL and enemy->Alive())
 			{
 
-				enemy->IncrHP(-(4 + Target->GetDamage() /*static_cast<CollisionEntity*>(GetObj("Player"))->GetDamage()*/ ));
+				enemy->IncrHP(-(4 + Target->GetDamage()));
 				
 				//myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);
 				myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
@@ -185,12 +221,41 @@ void Enemy::StateThrown()
 	}
 }
 
+void Enemy::StateFallInAbyss()
+{
+	if (myState == FallInAbyss)
+	{
+		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
+		myXSpeed = Math::Lerp(myXSpeed, 0, 0.25f);
+		myYSpeed = Math::Lerp(myYSpeed, 0, 0.25f);
+
+		if (myXScale >= 0.2f)
+		{
+			myZ -= 4;
+		}
+		myXScale -= 0.07f;
+		myYScale -= 0.07f;
+
+		if (myXScale <= 0.08f)
+		{
+			DeleteInstance(this);
+		}
+	}
+}
+
 void Enemy::Update()
 {
 	myColor = sf::Color::White;
 
-	myDepth = myY - myZ;
-
+	if (myState == FallInAbyss)
+	{
+		myDepth = myY - 100;
+	}
+	else
+	{
+		myDepth = myY - myZ;
+	}
+	
 	StatePathFind();
 	StateIdle();
 	StateAggro();
@@ -199,7 +264,7 @@ void Enemy::Update()
 	StateGrabbed();
 	StateThrown();
 	StateInUse();
-
+	StateFallInAbyss();
 	
 	if (Alive())
 	{
@@ -227,13 +292,12 @@ void Enemy::Update()
 			myXSpeed = 0;
 			myYSpeed = 0;
 			myHP -= pAttack->GetDamage();
-			if (myState == PathFind)
+			if (myState == PathFind or myState == Idle)
 			{
 				myState = Aggro;
 			}
 		}
 		myAttackPtr = pAttack;
-		
 	}
 
 	if (myHP <= 0 and Alive())
@@ -243,6 +307,14 @@ void Enemy::Update()
 		myXSpeed = 0;
 		myYSpeed = 0;
 		myState = Grabbable;
+	}
+
+	if (myState == Thrown or myState == Grabbable)
+	{
+		if (ObjCollision(myX, myY, "LevelSection") == NULL)
+		{
+			myState = FallInAbyss;
+		}
 	}
 
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
@@ -292,13 +364,12 @@ void Enemy::FindPath(float aX, float aY)
 
 void Enemy::DrawShadow(float aX, float aY, float aXScale, float aYScale)
 {
-	myShadow.Draw(aX, aY, aXScale, aYScale, 0, 0.6f, sf::Color::Black, 0);
+	if (myState != FallInAbyss)
+	{
+		myShadow.Draw(aX, aY, aXScale, aYScale, 0, 0.6f, sf::Color::Black, 0);
+	}
+	
 }
-
-
-
-
-
 
 void Enemy::SetState(int aState)
 {

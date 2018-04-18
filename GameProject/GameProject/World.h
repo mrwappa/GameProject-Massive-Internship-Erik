@@ -22,10 +22,13 @@ public:
 	void BeginUpdate();
 	void Draw();
 
-	void CreateWorld(float aRows, float aColumns);
+	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
 
+private:
+	int myWorldHeight;
+	int myWorldWidth;
 };
 
 #endif // !WORLD_H

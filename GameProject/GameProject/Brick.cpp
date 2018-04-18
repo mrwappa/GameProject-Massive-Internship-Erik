@@ -11,7 +11,6 @@ Brick::Brick(float aX, float aY)
 	myXScale = 2;
 	myYScale = 2;
 	myDepth = myY;
-
 	myCheckAdjacent = true;
 }
 

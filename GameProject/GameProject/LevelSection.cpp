@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "LevelSection.h"
 
+float LevelSection::SWidth;
+float LevelSection::SHeight;
 
 LevelSection::LevelSection(float aX, float aY, std::string aSection)
 {
 	Init("LevelSection", aX, aY);
 
-	myRows = 16;
-	myColumns = 12;
+	myRows = SWidth;
+	myColumns = SHeight;
 
 	myBoxWidth = AStarNode::NodeSize * myRows;
 	myBoxHeight = AStarNode::NodeSize * myColumns;
@@ -28,44 +30,140 @@ void LevelSection::Update()
 {
 	if (myCheckAdjacent)
 	{
+		bool sectionU = ObjPosition(myX, myY - myBoxHeight, "LevelSection");
+		bool sectionD = ObjPosition(myX, myY + myBoxHeight, "LevelSection");
+		bool sectionL = ObjPosition(myX - myBoxWidth, myY, "LevelSection");
+		bool sectionR = ObjPosition(myX + myBoxWidth, myY, "LevelSection");
+
 		for (int i = 0; i < myRows; i++)
 		{
 			for (int j = 0; j < myColumns; j++)
 			{
-				if (i == 0 and j == 0)
+				if (i == 0 and j == 0)//UP LEFT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::UpLeft);
+					if (sectionU and !sectionL)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Left);
+					}
+					else if (sectionL and !sectionU)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Up);
+					}
+					else if (sectionL and sectionU)
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
+					else
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::UpLeft);
+					}
+					
 				}
-				else if (i == myRows - 1 and j == 0)
+				else if (i == myRows - 1 and j == 0)//UP RIGHT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::UpRight);
+					if (sectionU and !sectionR)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Right);
+					}
+					else if (sectionR and !sectionU)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Up);
+					}
+					else if (sectionR and sectionU)
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
+					else
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::UpRight);
+					}
 				}
-				else if (i == 0 and j == myColumns - 1)
+				else if (i == 0 and j == myColumns - 1)//DOWN LEFT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::DownLeft);
-					new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Left);
+					if (sectionD and !sectionL)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Left);
+					}
+					else if (sectionL and !sectionD)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Down);
+						new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Middle);
+					}
+					else if (sectionL and sectionD)
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
+					else
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::DownLeft);
+						new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Left);
+					}
 				}
-				else if (i == myRows - 1 and j == myColumns - 1)
+				else if (i == myRows - 1 and j == myColumns - 1)//DOWN RIGHT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::DownRight);
-					new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Right);
+					if (sectionD and !sectionR)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Right);
+					}
+					else if (sectionR and !sectionD)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Down);
+						new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Middle);
+					}
+					else if (sectionR and sectionD)
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
+					else
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::DownRight);
+						new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Right);
+					}
 				}
-				else if (i == 0 and j > 0 and j <= myColumns)
+				else if (i == 0 and j > 0 and j <= myColumns)//LEFT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Left);
+					if (!sectionL)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Left);
+					}
+					else
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
 				}
-				else if (i > 0 and i <= myRows and j == 0)
+				else if (i > 0 and i <= myRows and j == 0)//UP
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Up);
+					if (!sectionU)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Up);
+					}
+					else
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
 				}
-				else if (i > 0 and i <= myRows and j == myColumns - 1)
+				else if (i > 0 and i <= myRows and j == myColumns - 1)//DOWN
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Down);
-					new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Middle);
+					if (!sectionD)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Down);
+						new GroundPillar(SnapToSectionX(i), SnapToSectionY(j) + 64, GroundPillar::Middle);
+					}
+					else
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
 				}
-				else if (i == myRows - 1 and j > 0 and j <= myColumns)
+				else if (i == myRows - 1 and j > 0 and j <= myColumns)//RIGHT
 				{
-					new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Right);
+					if (!sectionR)
+					{
+						new GroundEdge(SnapToSectionX(i), SnapToSectionY(j), GroundEdge::Right);
+					}
+					else
+					{
+						new Ground(SnapToSectionX(i), SnapToSectionY(j));
+					}
 				}
 				else
 				{
@@ -113,7 +211,7 @@ void LevelSection::Update()
 
 void LevelSection::Draw()
 {
-	DrawBBox();
+	//DrawBBox();
 }
 
 float LevelSection::SnapToSectionX(float aIndex)

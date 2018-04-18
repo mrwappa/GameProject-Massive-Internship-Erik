@@ -5,10 +5,10 @@
 Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat)
 {
 	Init("Projectile", aX, aY);
-	mySprite.SetTexture("Sprites/32x32Block.png", 1);
+	mySprite.SetTexture("Sprites/Player/spr_circle.png", 1);
 
 	myXScale = 0.5f;
-	myYScale = 0.5f;
+	myYScale = myXScale;
 	myBoxWidth = 32;
 	myBoxHeight = 32;
 
@@ -47,7 +47,7 @@ void Projectile::Update()
 void Projectile::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }
 
 bool Projectile::GetEnemyThreat()

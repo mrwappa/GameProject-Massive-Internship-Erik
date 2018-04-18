@@ -22,6 +22,9 @@ public:
 	LevelSection(float aX, float aY, std::string aSection);
 	~LevelSection();
 
+	static float SWidth;
+	static float SHeight;
+
 	void Update();
 	void Draw();
 

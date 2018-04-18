@@ -5,11 +5,12 @@ World::World()
 {
 	Entity::Init("World", 0, 0);
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
-	CreateWorld(16,12);
+	
+	myWorldWidth = 0;
+	myWorldHeight = 0;
+	CreateWorld();
 
 	myDepth = 99999;
-
-	
 }
 
 
@@ -32,7 +33,7 @@ void World::BeginUpdate()
 
 void World::Draw()
 {
-	mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, 1, sf::Color::Black, 0);
+	/*mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, 1, sf::Color::Black, 0);
 
 	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::Space))
 	{
@@ -41,72 +42,33 @@ void World::Draw()
 	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::LShift))
 	{
 		new Wall(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
-	}
+	}*/
 }
 
-void World::CreateWorld(float aRows, float aColumns)
+void World::CreateWorld()
 {
+	myWorldWidth++;
+	myWorldHeight++;
 	AStarNode::NodeSize = 32.0f;
-	CollisionEntity::AStarGrid = new AStar(aRows, aColumns);
-
-	/*for (int i = 0; i < aRows; i++)
-	{
-		for (int j = 0; j < aColumns; j++)
-		{
-			if (i == 0 and j == 0)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::UpLeft);
-			}
-			else if (i == aRows - 1 and j == 0)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::UpRight);
-			}
-			else if (i == 0 and j == aColumns - 1)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::DownLeft);
-				new GroundPillar(i * AStarNode::NodeSize, j * AStarNode::NodeSize + 64, GroundPillar::Left);
-			}
-			else if (i == aRows - 1 and j == aColumns - 1)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::DownRight);
-				new GroundPillar(i * AStarNode::NodeSize, j * AStarNode::NodeSize + 64, GroundPillar::Right);
-			}
-			else if (i == 0 and j > 0 and j <= aColumns)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::Left);
-			}
-			else if (i > 0 and i <= aRows and j == 0)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::Up);
-			}
-			else if (i > 0 and i <= aRows and j == aColumns -1)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::Down);
-				new GroundPillar(i * AStarNode::NodeSize, j * AStarNode::NodeSize + 64, GroundPillar::Middle);
-			}
-			else if (i == aRows -1 and j > 0 and j <= aColumns)
-			{
-				new GroundEdge(i * AStarNode::NodeSize, j * AStarNode::NodeSize, GroundEdge::Right);
-			}
-			else
-			{
-				new Ground(i * AStarNode::NodeSize, j * AStarNode::NodeSize);
-			}
-		}
-	}*/
+	LevelSection::SWidth = 16;
+	LevelSection::SHeight = 12;
 	
-	new LevelSection((AStarNode::NodeSize * 16) / 2, (AStarNode::NodeSize * 12) / 2,"Maps/Test1.txt");
-	new LevelSection((AStarNode::NodeSize * 16) * 1.5f, (AStarNode::NodeSize * 12) * 1.5f, "Maps/Test1.txt");
+	CollisionEntity::AStarGrid = new AStar(LevelSection::SWidth * myWorldWidth, LevelSection::SHeight * myWorldHeight);
+	
+	for (int i = 0; i < myWorldHeight; i++)
+	{
+		for (int j = 0; j < myWorldWidth; j++)
+		{
+			new LevelSection((LevelSection::SWidth * AStarNode::NodeSize / 2) + LevelSection::SWidth * AStarNode::NodeSize * j,
+							 (LevelSection::SHeight * AStarNode::NodeSize / 2) + LevelSection::SHeight * AStarNode::NodeSize * i, "Maps/Test1.txt");
+		}
+	}
 
 	new Player(7 * 32 + 16, 7 * 32 + 16);
-	/*new Brick(4 * 32 + 16, 4 * 32 + 16);
-	new Brick(4 * 32 + 16, 5 * 32 + 16);
-	new Brick(4 * 32 + 16, 6 * 32 + 16);
-	new Wall(4 * 32 + 16, 7 * 32 + 16);
 	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
-	new ProjectileEnemy(400, 400);
-	new TestEnemy(400 + 40, 400 + 40);
-	new TestEnemy(400 - 40, 400 - 40);*/
+	new ProjectileEnemy(300, 300);
+	new TestEnemy(300 , 350);
+	new TestEnemy(300 - 40, 350 - 40);
 	/*new BoxTest(300, 300, true);
 	new BoxTest(300 + 42, 300, false);*/
 	
@@ -126,6 +88,7 @@ void World::DestroyWorld()
 			}
 		}
 	}
+
 	CollisionEntity::AStarGrid->DestroyGrid();
 	delete CollisionEntity::AStarGrid;
 	CollisionEntity::AStarGrid = NULL;
@@ -136,7 +99,7 @@ void World::DrawGUI()
 	if (KeyboardCheckPressed(sf::Keyboard::R))
 	{
 		DestroyWorld();
-		CreateWorld(16, 12);
+		CreateWorld();
 		Camera->SetZoom(1);
 	}
 }

@@ -38,3 +38,10 @@ void Solid::OnRemoval()
 	CollisionEntity::OnRemoval();
 }
 
+void Solid::Draw()
+{
+	int index = CollisionList["Solid"]->Find(this);
+	DrawFont(std::to_string(index),myX,myY,24,1,1,sf::Color::White);
+	Entity::Draw();
+}
+

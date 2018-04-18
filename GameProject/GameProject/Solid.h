@@ -13,7 +13,9 @@ public:
 
 	void Init(std::string aName, float aX, float aY);
 	void OnRemoval();
-	
+	void Draw();
+
+
 protected:
 	bool myCheckAdjacent;
 };

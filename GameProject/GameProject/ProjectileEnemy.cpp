@@ -5,7 +5,6 @@
 ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 {
 	Init("ProjectileEnemy", aX, aY);
-	myState = Aggro;
 	mySprite.SetTexture("Sprites/Enemies/spr_floating_enemy.png", 1);
 
 	myBoxWidth = 12;
@@ -21,6 +20,8 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 	myHP = 10;
 
 	myDeflate = false;
+
+	myDamage = 3;
 }
 
 
@@ -153,8 +154,12 @@ void ProjectileEnemy::Update()
 	}
 	else
 	{
-		myXScale = Math::Lerp(myXScale, 2.f, 0.3f);
-		myYScale = Math::Lerp(myXScale, 2.f, 0.2f);
+		if (myState != FallInAbyss)
+		{
+			myXScale = Math::Lerp(myXScale, 2.f, 0.3f);
+			myYScale = Math::Lerp(myXScale, 2.f, 0.2f);
+		}
+		
 	}
 
 	Enemy::Update();

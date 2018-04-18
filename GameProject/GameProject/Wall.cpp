@@ -72,5 +72,5 @@ void Wall::Update()
 void Wall::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }

@@ -27,7 +27,7 @@ public:
 	static float PointDistance(float aX1, float aY1, float aX2, float aY2);
 	static float Lerp(float aStart, float aEnd, float aPercent);
 	static float FRand(float aLow, float aHigh);
-	static float IRand(float aLow, float aHigh);
+	static int IRand(int aLow, int aHigh);
 	static float Decimal(float aX);
 	static float SetDecimal(float aTarget, float aX);
 	static float LenDirX(float aLength, float aDirection);

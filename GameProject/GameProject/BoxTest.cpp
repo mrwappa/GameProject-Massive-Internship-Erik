@@ -106,5 +106,5 @@ void BoxTest::Update()
 void BoxTest::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }
