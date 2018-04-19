@@ -7,6 +7,8 @@ Player::Player(float aX, float aY)
 {
 	Init("Player",aX,aY);
 	
+	Enemy::Target = this;
+
 	myX = aX;
 	myY = aY;
 
@@ -151,12 +153,7 @@ void Player::BeginUpdate()
 		new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 	}
 	
-	//Default Attack
-	myAttackTimer -= 1.0f / 60.0f;
-	if (myAttackTimer <= 0)
-	{
-		myAttackTimer = 0;
-	}
+
 	if (myHurtAlarm.GetTick() != -1)
 	{
 		myColor = sf::Color::Color(Math::IRand(0,255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255));
@@ -235,9 +232,16 @@ void Player::EndUpdate()
 		}
 	}
 
+	//Default Attack
+	myAttackTimer -= 1.0f / 60.0f;
+	if (myAttackTimer <= 0)
+	{
+		myAttackTimer = 0;
+	}
+
 	if (myHurtAlarm.GetTick() == -1)
 	{
-		//Default Attack
+		
 		if (GrabbableEnemy == NULL)
 		{
 			if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)

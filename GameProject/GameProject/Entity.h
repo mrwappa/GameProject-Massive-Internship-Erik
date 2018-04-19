@@ -10,6 +10,7 @@
 #include "GSprite.h"
 #include "Camera.h"
 #include "Alarm.h"
+#include <thread>
 
 class Entity
 {
@@ -24,7 +25,9 @@ public:
 	static GrowingArray<Entity*> DrawList;
 	
 	static Camera* Camera;
-	
+	static std::thread* SortDrawThread;
+	static bool SortInDrawThread;
+
 	//Add, Destroy instance in game loop
 	void AddInstance(Entity* aEntity, std::string aName);
 	void DeleteInstance(Entity* aEntity);
@@ -41,11 +44,18 @@ public:
 	virtual void Draw();
 	virtual void DrawGUI();
 
+	//Sorting Entities depending on their depth
 	static int Partition(int aLow, int aHigh);
 	static void QuickSort(int aLow, int aHigh);
+	static void SortDrawList();
+	static void BubbleSort();
+	static void BubbleSortInDrawThread();
 	static void DrawAll();
+	static bool DrawListSorted;
+	static bool DrawListUnfinished;
 	
 	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle , float aAlpha, sf::Color aColor);
+	void DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor);
 	static GSprite Pixel;
 
 	//Font
@@ -69,6 +79,7 @@ public:
 	//Accessors
 	bool GetActive() const;
 	std::string GetName() const;
+	GSprite* GetSprite();
 	float GetAngle() const;
 	float GetX() const;
 	float GetY() const;
@@ -83,6 +94,8 @@ public:
 	void SetAngle(float aAngle);
 	void SetMarkedForDelete(const bool aBool);
 	void SetColor(sf::Color aColor);
+	void SetActive(const bool aBool);
+	void SetDrawing(const bool aBool);
 
 protected:
 	float myX;
@@ -101,13 +114,17 @@ protected:
 	GSprite mySprite;
 	//If the entity is drawn and updated
 	bool myActive;
+	bool myDrawing;
 	//Exists for design purposes(like getting an instance from the SuperList)
 	std::string myName;
 
 	static void DeleteInstanceMem(Entity* aEntity);
 	bool myMarkedForDelete;
+
+
 private:
 	sf::Text myText;
 	static GrowingArray<Entity*>* GrArrayPtr;
+	
 };
 #endif // !ENTITY_H

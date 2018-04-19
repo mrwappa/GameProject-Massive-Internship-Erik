@@ -9,6 +9,10 @@ InputHandler* Entity::Input;
 Camera* Entity::Camera;
 GSprite Entity::Pixel;
 sf::Font* Entity::MainFont;
+std::thread* Entity::SortDrawThread;
+bool Entity::SortInDrawThread = true;
+bool Entity::DrawListSorted = false;
+bool Entity::DrawListUnfinished = false;
 
 Entity::Entity()
 {
@@ -23,6 +27,7 @@ Entity::~Entity()
 
 void Entity::Init(std::string aName, float aX, float aY)
 {
+	SortInDrawThread = false;
 	myX = aX;
 	myY = aY;
 	myPreviousX = aX;
@@ -36,9 +41,11 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myColor = sf::Color::White;
 	myName = aName;
 	myActive = true;
+	myDrawing = true;
 	myMarkedForDelete = false;
 	AddInstance(this,aName);
 	DrawList.Add(this);
+	SortInDrawThread = true;
 }
 
 void Entity::AddInstance(Entity* aEntity, std::string aName)
@@ -103,6 +110,11 @@ std::string Entity::GetName() const
 	return myName;
 }
 
+GSprite * Entity::GetSprite()
+{
+	return &mySprite;
+}
+
 float Entity::GetAngle() const
 {
 	return myAngle;
@@ -163,6 +175,16 @@ void Entity::SetColor(sf::Color aColor)
 	myColor = aColor;
 }
 
+void Entity::SetActive(const bool aBool)
+{
+	myActive = aBool;
+}
+
+void Entity::SetDrawing(const bool aBool)
+{
+	myDrawing = aBool;
+}
+
 void Entity::BeginUpdate()
 {
 }
@@ -196,20 +218,20 @@ int Entity::Partition(int aLow, int aHigh)
 	{
 		while (DrawList[++i]->GetDepth() < DrawList[aLow]->GetDepth())
 		{
-			if (i == aHigh)
+			if (i == aHigh or !SortInDrawThread)
 			{
 				break;
 			}
 		}
 		while (DrawList[aLow]->GetDepth() < DrawList[--j]->GetDepth())
 		{
-			if (j == aLow)
+			if (j == aLow or !SortInDrawThread)
 			{
 				break;
 			}
 		}
 
-		if (i >= j) break;
+		if (i >= j or !SortInDrawThread) break;
 
 		DrawList.Swap(i, j);
 	}
@@ -228,12 +250,79 @@ void Entity::QuickSort(int aLow, int aHigh)
 	QuickSort(j + 1, aHigh);
 }
 
+void Entity::SortDrawList()
+{
+	while (true)
+	{
+		if (SortInDrawThread)
+		{
+			BubbleSortInDrawThread();	
+		}
+	}
+	
+	/*while (true)
+	{
+		if (SortInDrawThread)
+		{
+			QuickSort(0, DrawList.Size() - 1);
+		}
+	}*/
+}
+
+void Entity::BubbleSort()
+{
+	
+	bool swapped;
+	SortInDrawThread = false;
+	for (int i = 0; i < DrawList.Size(); i++)
+	{
+		swapped = false;
+		for (int j = 0; j < DrawList.Size() - i - 1; j++)
+		{
+			if (DrawList[j]->GetDepth() > DrawList[j + 1]->GetDepth())
+			{
+				DrawList.Swap(j, j + 1);
+				swapped = true;
+			}
+		}
+		if (swapped == false) { break; }
+		
+	}
+
+	SortInDrawThread = true;
+}
+
+void Entity::BubbleSortInDrawThread()
+{
+	bool swapped;
+
+	for (int i = 0; i < DrawList.Size(); i++)
+	{
+		swapped = false;
+		for (int j = 0; j < DrawList.Size() - i - 1; j++)
+		{
+			if (!SortInDrawThread) { return; }
+			if (DrawList[j]->GetDepth() > DrawList[j + 1]->GetDepth())
+			{
+				DrawList.Swap(j, j + 1);
+				DrawListSorted = false;
+				swapped = true;
+			}
+		}
+		if (swapped == false) { DrawListUnfinished = false; break; }
+
+	}
+	DrawListSorted = true;
+	
+}
+
 void Entity::DrawAll()
 {
-	if (DrawList.Size() > 1)
+	
+	/*if (DrawList.Size() > 1)
 	{
 		QuickSort(0, DrawList.Size() - 1);
-	}
+	}*/
 	for (int i = 0; i < DrawList.Size(); i++)
 	{
 		DrawList[i]->Draw();
@@ -243,6 +332,11 @@ void Entity::DrawAll()
 void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor)
 {
 	Pixel.Draw(aX, aY, aWidth, aHeight, aAngle, aAlpha, aColor,0);
+}
+
+void Entity::DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor)
+{
+	Pixel.Draw(aX + Camera->GetX() - Camera->GetViewWidth() / 2, aY + Camera->GetY() - Camera->GetViewHeight() / 2, aWidth, aHeight, aAngle, aAlpha, aColor, 0);
 }
 
 void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float aXScale ,float aYScale, sf::Color aColor)
@@ -269,17 +363,16 @@ void Entity::DrawFontGUI(std::string aText, float aX, float aY, float aSize, flo
 		myText.setFont(*MainFont);
 
 	}
-
-
+	
 	const_cast<sf::Texture&>(MainFont->getTexture(aSize)).setSmooth(false);
 	myText.setString(aText);
 	myText.setCharacterSize(aSize);
 	myText.setFillColor(aColor);
 
-	float posX = Camera->GetX() + round(aX / Camera->GetZoom() - Camera->GetViewWidth() / 2);
-	float posY = Camera->GetY() + round(aY / Camera->GetZoom() - Camera->GetViewHeight() / 2);
+	float posX = Camera->GetX() + (aX / Camera->GetZoom() - Camera->GetViewWidth() / 2);
+	float posY = Camera->GetY() + (aY / Camera->GetZoom() - Camera->GetViewHeight() / 2);
 	myText.setPosition(posX, posY);
-
+	
 	myText.setScale(aXScale / Camera->GetZoom(), aYScale / Camera->GetZoom());
 	myText.setStyle(sf::Text::Regular);
 	

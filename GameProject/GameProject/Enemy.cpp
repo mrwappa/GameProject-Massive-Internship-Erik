@@ -60,10 +60,14 @@ void Enemy::StateIdle()
 
 		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
 
-		if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)//yes, 550 is just a shitty constant, get over it
 		{
-			myState = Aggro;
+			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+			{
+				myState = Aggro;
+			}
 		}
+		
 	}
 }
 
@@ -105,6 +109,7 @@ void Enemy::StatePathFind()
 
 			if (myX == xTarget and myY == yTarget)
 			{
+
 				if (!LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
 					myPath.RemoveAll();
@@ -202,7 +207,6 @@ void Enemy::StateThrown()
 			Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
 			if (enemy != NULL and enemy->Alive())
 			{
-
 				enemy->IncrHP(-(4 + Target->GetDamage()));
 				
 				//myDirection = Math::PointDirection(enemy->GetX(), enemy->GetY(), myX, myY - myZ);

@@ -46,18 +46,21 @@ void TestEnemy::StateAggro()
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-
-			if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)//yes, 550 is just a shitty constant, get over it
 			{
-				myState = PathFind;
-				FindPath(Target->GetX(), Target->GetY());
+				if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+				{
+					myState = PathFind;
+					FindPath(Target->GetX(), Target->GetY());
+				}
 			}
+			
 		}
 
-		CollisionEntity* brick = ObjCollision(myX, myY, "Enemy");
-		if (brick != NULL)
+		Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
+		if (enemy != NULL and enemy->Alive())
 		{
-			myDirection = Math::PointDirection(myX, myY - myZ, brick->GetX(), brick->GetY());
+			myDirection = Math::PointDirection(myX, myY - myZ, enemy->GetX(), enemy->GetY());
 			myXSpeed += Math::LenDirX(-1.0f, myDirection);
 			myYSpeed += Math::LenDirY(-1.0f, myDirection);
 		}

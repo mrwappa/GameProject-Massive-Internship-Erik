@@ -22,6 +22,10 @@ public:
 	void BeginUpdate();
 	void Draw();
 
+	void DeactivateAllInstances();
+	void DrawLoadingScreen();
+	void ReturnFromLoadingScreen();
+
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
@@ -29,6 +33,8 @@ public:
 private:
 	int myWorldHeight;
 	int myWorldWidth;
+
+	Alarm myLoadScreenAlarm;
 };
 
 #endif // !WORLD_H

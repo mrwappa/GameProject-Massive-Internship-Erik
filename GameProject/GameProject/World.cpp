@@ -45,8 +45,11 @@ void World::Draw()
 	}*/
 }
 
+
+
 void World::CreateWorld()
 {
+
 	myWorldWidth++;
 	myWorldHeight++;
 	AStarNode::NodeSize = 32.0f;
@@ -67,12 +70,21 @@ void World::CreateWorld()
 	new Player(7 * 32 + 16, 7 * 32 + 16);
 	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
 	new ProjectileEnemy(300, 300);
-	new TestEnemy(300 , 350);
-	new TestEnemy(300 - 40, 350 - 40);
+	new TestEnemy(300 + 20, 350 + 20);
+	new TestEnemy(300 - 40 + 20, 350 - 40 + 20);
+	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
+	new ProjectileEnemy(300, 300);
+	new TestEnemy(300 + 20, 350 + 20);
+	new TestEnemy(300 - 40 + 20, 350 - 40 + 20);
 	/*new BoxTest(300, 300, true);
 	new BoxTest(300 + 42, 300, false);*/
-	
-	
+
+	/*SortInDrawThread = false;
+	if (DrawList.Size() > 1)
+	{
+		QuickSort(0, DrawList.Size() - 1);
+	}
+	SortInDrawThread = true;*/
 }
 
 void World::DestroyWorld()
@@ -100,6 +112,63 @@ void World::DrawGUI()
 	{
 		DestroyWorld();
 		CreateWorld();
+		DeactivateAllInstances();
+		DrawListUnfinished = true;
 		Camera->SetZoom(1);
+	}
+	
+	if (DrawListUnfinished)
+	{
+		DrawLoadingScreen();
+		myLoadScreenAlarm.SetTick(60);
+	}
+	else
+	{
+		if (myLoadScreenAlarm.GetTick() == -1)
+		{
+			ReturnFromLoadingScreen();
+		}
+		else
+		{
+			DrawLoadingScreen();
+		}
+	}
+
+
+
+}
+
+void World::DeactivateAllInstances()
+{
+	for (auto const &instance : Entity::SuperList)
+	{
+		for (int i = 0; i < instance.second->Size(); i++)
+		{
+			if (instance.second->FindAtIndex(i) != this)
+			{
+				instance.second->FindAtIndex(i)->SetActive(false);
+			}
+		}
+	}
+}
+
+void World::DrawLoadingScreen()
+{
+	DrawRectGUI(Camera->GetViewWidth() / 2, Camera->GetViewHeight() / 2, Camera->GetViewWidth(), Camera->GetViewHeight(), 0, 1, sf::Color::Black);
+	DrawFontGUI("Loading...", (Camera->GetViewWidth() / 2) * 0.8f, (Camera->GetViewHeight() / 2)* 0.9f, 32, 1, 1, sf::Color::White);
+}
+
+void World::ReturnFromLoadingScreen()
+{
+	Entity* player = GetObj("Player");
+	if (player != NULL and !player->GetActive())
+	{
+		for (auto const &instance : Entity::SuperList)
+		{
+			for (int i = 0; i < instance.second->Size(); i++)
+			{
+				instance.second->FindAtIndex(i)->SetActive(true);
+			}
+		}
 	}
 }

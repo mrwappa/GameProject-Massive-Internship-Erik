@@ -22,6 +22,7 @@ public:
 	LevelSection(float aX, float aY, std::string aSection);
 	~LevelSection();
 
+
 	static float SWidth;
 	static float SHeight;
 
@@ -31,12 +32,17 @@ public:
 	float SnapToSectionX(float aIndex);
 	float SnapToSectionY(float aIndex);
 
+	void AddSolid(Solid* aSolid);
+
+	GrowingArray<Solid*>* GetSolids();
+
 private:
 
 	std::string mySection;
-	bool myCheckAdjacent;
 
 	int myRows;
 	int myColumns;
+
+	GrowingArray<Solid*> mySolids;
 };
 #endif

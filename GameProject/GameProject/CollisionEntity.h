@@ -17,7 +17,7 @@ public:
 
 	void Init(std::string aName, float aX, float aY);
 	static std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionList;
-
+	
 	void OnRemoval();
 
 	static AStar* AStarGrid;

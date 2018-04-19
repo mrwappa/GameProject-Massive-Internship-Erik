@@ -73,6 +73,7 @@ GroundEdge::GroundEdge(float aX, float aY, int aBoxType)
 		mySprite.SetTexture(BRICKUL, 1);
 	}
 
+	myActive = false;
 }
 
 

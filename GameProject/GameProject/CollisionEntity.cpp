@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CollisionEntity.h"
+#include "LevelSection.h"
 
 std::map<std::string, GrowingArray<CollisionEntity*>*> CollisionEntity::CollisionList;
 GrowingArray<CollisionEntity*>* CollisionEntity::GrArrayPtr;
@@ -220,6 +221,28 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 	}
 	UpdateBBoxManually(aX, aY);
 	myAngle = fmod(myAngle, 360);
+	
+	//Culling for Solids to optimize collision checking for static objects
+	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
+	{
+		GrArrayPtr = CollisionList.at("LevelSection");
+		for (int i = 0; i < GrArrayPtr->Size(); i++)
+		{
+			if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
+			{
+				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
+				for (int j = 0; j < solids->Size(); j++)
+				{
+					if (InstanceCollision(aX, aY, solids->FindAtIndex(j),false))
+					{
+						return solids->FindAtIndex(j);
+					}
+				}
+			}
+		}
+		
+		return NULL;
+	}
 
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
@@ -244,8 +267,8 @@ GrowingArray<CollisionEntity*> CollisionEntity::ObjCollisionList(float aX, float
 	}
 	UpdateBBoxManually(aX, aY);
 	myAngle = fmod(myAngle, 360);
-	GrArrayPtr = CollisionList.at(aName);
 
+	GrArrayPtr = CollisionList.at(aName);
 	GrowingArray<CollisionEntity*> entities;
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
@@ -289,7 +312,7 @@ GrowingArray<CollisionEntity*>* CollisionEntity::ObjDistanceList(float aX, float
 }
 
 
-bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity * aObject, bool aUpdateBBox)
+bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox)
 {
 	if (aObject == NULL)
 	{
@@ -380,6 +403,31 @@ CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f a
 	{
 		return NULL;
 	}
+
+	//Culling for Solids to optimize collision checking for static objects
+	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
+	{
+		GrArrayPtr = CollisionList.at("LevelSection");
+		
+		for (int i = 0; i < GrArrayPtr->Size(); i++)
+		{
+			myBoundingBox = RektF(aStart.x,aStart.y,aEnd.x - aStart.x, aEnd.y - aStart.y);
+			if (InstanceCollision(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y + (aEnd.y - aStart.y) / 2, GrArrayPtr->FindAtIndex(i), false))
+			{
+				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
+				for (int j = 0; j < solids->Size(); j++)
+				{
+					if (LineToEdgeIntersection(aStart, aEnd, solids->FindAtIndex(j)))
+					{
+						return solids->FindAtIndex(j);
+					}
+				}
+			}
+		}
+
+		return NULL;
+	}
+
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{

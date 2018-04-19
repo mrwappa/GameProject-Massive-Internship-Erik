@@ -34,35 +34,48 @@ void GSprite::DeleteAllSprites()
 
 void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
+	float width = abs(myTextureWidth * aXScale);
+	float height = abs(myTextureHeight * aYScale);
+	float diameter = width >= height ? width : height;
 
-	myAnimationSpeed = aAnimationSpeed;
-	if (myAnimationSpeed > 0)
+	//real question here is if checking for the position and dimensions once but creating variables for them
+	//is faster than checking for them multiple times in the same if statement.
+	int cameraWidth = Camera->GetViewWidth();
+	int cameraHeight = Camera->GetViewHeight();
+	int cameraX = Camera->GetX();
+	int cameraY = Camera->GetY();
+
+	if ((aX - (diameter / 2)) < cameraX + (cameraWidth / 2) and (aX + (diameter / 2)) > cameraX - (cameraWidth / 2) and
+		(aY - (diameter / 2)) < cameraY + (cameraHeight / 2) and (aY + (diameter / 2)) > cameraY - (cameraHeight / 2))
 	{
-		myAnimationCounter += myAnimationSpeed;
-		if (myAnimationCounter >= 1)
+		myAnimationSpeed = aAnimationSpeed;
+		if (myAnimationSpeed > 0)
 		{
-			myAnimationIndex++;
-			myAnimationCounter--;
-			if (myAnimationIndex >= myNrOfFrames)
+			myAnimationCounter += myAnimationSpeed;
+			if (myAnimationCounter >= 1)
 			{
-				myAnimationIndex = 0;
+				myAnimationIndex++;
+				myAnimationCounter--;
+				if (myAnimationIndex >= myNrOfFrames)
+				{
+					myAnimationIndex = 0;
+				}
 			}
 		}
+
+		mySprite->setTextureRect(sf::IntRect(myAnimationIndex * myTextureWidth / myNrOfFrames, 0, myTextureWidth / myNrOfFrames, myTextureHeight));
+		mySprite->setPosition(aX, aY);
+		mySprite->setOrigin(myTextureWidth / myNrOfFrames / 2, myTextureHeight / 2);
+		mySprite->setRotation(aAngle);
+		mySprite->setScale(aXScale, aYScale);
+
+		mySprite->setColor(sf::Color(aColor.r, aColor.g, aColor.b, aAlpha * 255));
+
+		myWidth = myTextureWidth * aXScale;
+		myHeight = myTextureHeight * aYScale;
+
+		Window->draw(*mySprite);
 	}
-
-	mySprite->setTextureRect(sf::IntRect(myAnimationIndex * myTextureWidth / myNrOfFrames, 0, myTextureWidth / myNrOfFrames, myTextureHeight));
-	mySprite->setPosition(aX, aY);
-	mySprite->setOrigin(myTextureWidth / myNrOfFrames / 2, myTextureHeight / 2);
-	mySprite->setRotation(aAngle);
-	mySprite->setScale(aXScale, aYScale);
-
-	mySprite->setColor(sf::Color(aColor.r, aColor.g, aColor.b, aAlpha * 255));
-
-	myWidth = myTextureWidth * aXScale;
-	myHeight = myTextureHeight * aYScale;
-		
-	Window->draw(*mySprite);
-	
 }
 
 void GSprite::DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
