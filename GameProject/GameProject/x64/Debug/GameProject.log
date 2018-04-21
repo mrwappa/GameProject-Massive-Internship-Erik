@@ -1,13 +1,2 @@
-﻿  TestEnemy.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\testenemy.cpp(87): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\testenemy.cpp(101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
-  ProjectileEnemy.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\projectileenemy.cpp(86): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Enemy.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\enemy.cpp(35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\enemy.cpp(36): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\enemy.cpp(47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\enemy.cpp(48): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
+﻿  GroundEdge.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

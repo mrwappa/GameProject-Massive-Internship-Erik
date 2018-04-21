@@ -11,6 +11,8 @@
 #include "GroundEdge.h"
 #include "GroundPillar.h"
 #include "LevelSection.h"
+#include "MapSections.h"
+#include "MageSpawner.h"
 
 class World : public Entity
 {
@@ -20,21 +22,39 @@ public:
 
 	void Update();
 	void BeginUpdate();
+	void EndUpdate();
 	void Draw();
 
 	void DeactivateAllInstances();
-	void DrawLoadingScreen();
+	void ActivateAllInstances();
+	void DrawPauseScreen();
 	void ReturnFromLoadingScreen();
 
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
 
+	void PauseGame();
+	void ResumeGame();
+
+	enum WorldState {Active, Paused, MainMenu};
+	void StateActive();
+	void StatePaused();
+	void StateMainMenu();
+
 private:
-	int myWorldHeight;
-	int myWorldWidth;
+
+	int myCurrentLevel;
 
 	Alarm myLoadScreenAlarm;
+
+	std::string myCurrentMap;
+	GrowingArray<std::string> myMaps;
+
+	bool mySortDrawList;
+
+	int myState;
+	int myPrevState;
 };
 
 #endif // !WORLD_H

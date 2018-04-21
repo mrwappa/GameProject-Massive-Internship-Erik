@@ -5,7 +5,7 @@
 TestEnemy::TestEnemy(float aX, float aY)
 {
 	Init("TestEnemy", aX, aY);
-	mySprite.SetTexture("Sprites/Enemies/spr_fly_enemy.png", 4);
+	mySprite.SetTexture("Sprites/Enemies/spr_fly_enemy2.png", 4);
 
 	myAnimationSpeed = 0.2f;
 	

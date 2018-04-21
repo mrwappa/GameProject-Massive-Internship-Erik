@@ -36,6 +36,7 @@ public:
 	static Player* Target;
 
 	void SetState(int aState);
+	void SetPrevState(int aState);
 	void SetZ(float aZ);
 
 	int GetState() const;
@@ -59,5 +60,7 @@ protected:
 private:
 	Vector2f myWalkPoint;
 	Alarm myWalkAlarm;
+
+	bool myJustThrown;
 };
 #endif // !ENEMY_H

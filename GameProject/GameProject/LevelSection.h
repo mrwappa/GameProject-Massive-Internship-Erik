@@ -10,11 +10,14 @@
 #include "Ground.h"
 #include "GroundEdge.h"
 #include "GroundPillar.h"
+#include "MageSpawner.h"
+
 #include <fstream>
 #include <streambuf>
 
 #define BRICK '1'
 #define WALL '2'
+#define ENEMY '3'
 
 class LevelSection : public CollisionEntity
 {

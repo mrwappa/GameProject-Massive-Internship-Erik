@@ -12,6 +12,7 @@ Enemy::Enemy()
 	myState = Idle;
 	AddCollInstance("Enemy", this);
 	myShadow.SetTexture("Sprites/Player/spr_circle.png", 1);
+	myJustThrown = false;
 }
 
 
@@ -60,7 +61,7 @@ void Enemy::StateIdle()
 
 		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
 
-		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)//yes, 550 is just a shitty constant, get over it
+		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 200)
 		{
 			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 			{
@@ -129,7 +130,6 @@ void Enemy::StatePathFind()
 
 void Enemy::StateGrabbable()
 {
-	
 	if (myState == Grabbable)
 	{
 		if (InstanceCollision(myX, myY, Target))
@@ -175,9 +175,15 @@ void Enemy::StateThrown()
 {
 	if (myState == Thrown)
 	{
+		
 		//PreventCollision("Solid");
 		CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
 
+		if (brick != NULL and myJustThrown and myYSpeed > 0)
+		{
+			myThrowAlarm.SetTick(10);
+		}
+		myJustThrown = false;
 		if (brick != NULL and myThrowAlarm.GetTick() == -1 and brick->GetName() != "GroundEdge")
 		{
 			myXSpeed = -myXSpeed / 1.7f;
@@ -253,7 +259,15 @@ void Enemy::Update()
 
 	if (myState == FallInAbyss)
 	{
-		myDepth = myY - 100;
+		if (myYSpeed > 0)
+		{
+			myDepth = myY - 50;
+		}
+		else
+		{
+			myDepth = myY - 100;
+		}
+		
 	}
 	else
 	{
@@ -332,6 +346,7 @@ void Enemy::Throw(float aSpeed, float aDir)
 	myXSpeed = Math::LenDirX(aSpeed, aDir);
 	myYSpeed = Math::LenDirY(aSpeed, aDir);
 	myState = Thrown;
+	myJustThrown = true;
 }
 
 void Enemy::Fall()
@@ -378,6 +393,11 @@ void Enemy::DrawShadow(float aX, float aY, float aXScale, float aYScale)
 void Enemy::SetState(int aState)
 {
 	myState = aState;
+}
+
+void Enemy::SetPrevState(int aState)
+{
+	myPrevState = aState;
 }
 
 void Enemy::SetZ(float aZ)

@@ -7,7 +7,7 @@ Wall::Wall(float aX, float aY)
 	Init("Wall", aX, aY);
 
 	myBoxWidth = 14;
-	myBoxHeight = 16;
+	myBoxHeight = 18;
 	myXScale = 2;
 	myYScale = 2;
 	myDepth = myY - 20;
@@ -62,7 +62,13 @@ void Wall::Update()
 		mySprite.SetTexture(WALLRD, 1);
 	}
 
+	if (wallL and wallR)
+	{
+		myBoxWidth = 30;
+	}
+
 	myActive = false;
+	myOutOfLoop = true;
 }
 
 void Wall::Draw()

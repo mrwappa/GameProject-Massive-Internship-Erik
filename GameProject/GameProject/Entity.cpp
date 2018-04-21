@@ -5,6 +5,7 @@ std::map<std::string, GrowingArray<Entity*>*> Entity::SuperList;
 GrowingArray<Entity*>* Entity::GrArrayPtr;
 GrowingArray<Entity*> Entity::DeleteMarkedList;
 GrowingArray<Entity*> Entity::DrawList;
+GrowingArray<Entity*> Entity::NonDrawList;
 InputHandler* Entity::Input;
 Camera* Entity::Camera;
 GSprite Entity::Pixel;
@@ -13,7 +14,6 @@ std::thread* Entity::SortDrawThread;
 bool Entity::SortInDrawThread = true;
 bool Entity::DrawListSorted = false;
 bool Entity::DrawListUnfinished = false;
-
 Entity::Entity()
 {
 	
@@ -42,9 +42,11 @@ void Entity::Init(std::string aName, float aX, float aY)
 	myName = aName;
 	myActive = true;
 	myDrawing = true;
+	myOutOfLoop = false;
 	myMarkedForDelete = false;
 	AddInstance(this,aName);
 	DrawList.Add(this);
+	myInDrawList = false;
 	SortInDrawThread = true;
 }
 
@@ -84,6 +86,8 @@ void Entity::DeleteInstanceMem(Entity* aEntity)
 
 void Entity::DeleteMarkedInstances()
 {
+	SortInDrawThread = false;
+
 	if (DeleteMarkedList.Size() > 0)
 	{
 		for (int i = 0; i < DeleteMarkedList.Size(); i++)
@@ -93,7 +97,11 @@ void Entity::DeleteMarkedInstances()
 
 		DeleteMarkedList.RemoveAll();
 	}
+
+	SortInDrawThread = true;
 }
+
+
 
 Entity * Entity::GetObj(std::string aEntity)
 {
@@ -185,6 +193,11 @@ void Entity::SetDrawing(const bool aBool)
 	myDrawing = aBool;
 }
 
+void Entity::SetInDrawList(bool aBool)
+{
+	myInDrawList = aBool;
+}
+
 void Entity::BeginUpdate()
 {
 }
@@ -218,20 +231,20 @@ int Entity::Partition(int aLow, int aHigh)
 	{
 		while (DrawList[++i]->GetDepth() < DrawList[aLow]->GetDepth())
 		{
-			if (i == aHigh or !SortInDrawThread)
+			if (i == aHigh)
 			{
 				break;
 			}
 		}
 		while (DrawList[aLow]->GetDepth() < DrawList[--j]->GetDepth())
 		{
-			if (j == aLow or !SortInDrawThread)
+			if (j == aLow)
 			{
 				break;
 			}
 		}
 
-		if (i >= j or !SortInDrawThread) break;
+		if (i >= j) break;
 
 		DrawList.Swap(i, j);
 	}
@@ -285,7 +298,10 @@ void Entity::BubbleSort()
 				swapped = true;
 			}
 		}
-		if (swapped == false) { break; }
+		if (swapped == false)
+		{
+			break; 
+		}
 		
 	}
 
@@ -323,10 +339,121 @@ void Entity::DrawAll()
 	{
 		QuickSort(0, DrawList.Size() - 1);
 	}*/
+
+	
+	//SetDrawList();
+	SortInDrawThread = false;
 	for (int i = 0; i < DrawList.Size(); i++)
 	{
-		DrawList[i]->Draw();
+		if (DrawList[i]->GetDrawing())
+		{
+			DrawList[i]->Draw();
+		}
 	}
+	SortInDrawThread = true;
+	
+}
+
+void Entity::SetDrawList()
+{
+	
+	/*GrowingArray<std::pair<Entity*,int>> nonChangeList;
+	GrowingArray<std::pair<Entity*,int>> drawChangeList;
+
+	int cameraWidth = Camera->GetViewWidth();
+	int cameraHeight = Camera->GetViewHeight();
+	int cameraX = Camera->GetX();
+	int cameraY = Camera->GetY();
+	
+	for (int i = 0; i < NonDrawList.Size(); i++)
+	{
+		Entity* instance = NonDrawList[i];
+
+		//this is an extremely crude way of saying that some entities get drawn, but not others
+		float x = instance->GetX();
+		float y = instance->GetY();
+		float width = abs(instance->GetWidth()) * 3;
+		float height = abs(instance->GetHeight()) * 3;
+		float diameter = width >= height ? width : height;
+
+		if ((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
+			(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2))
+		{
+			nonChangeList.Add(std::pair<Entity*, int>(instance, i));
+		}
+	}
+
+	for (int i = 0; i < nonChangeList.Size(); i++)
+	{
+		DrawList.Add(nonChangeList[i].first);
+		NonDrawList.RemoveCyclicAtIndex(nonChangeList[i].second);
+	}
+
+
+	for (int i = 0; i < DrawList.Size(); i++)
+	{
+		Entity* instance = DrawList[i];
+		
+		float x = instance->GetX();
+		float y = instance->GetY();
+		float width = abs(instance->GetWidth()) * 3;
+		float height = abs(instance->GetHeight()) * 3;
+		float diameter = width >= height ? width : height;
+
+		if (!((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
+			(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2)))
+		{
+			nonChangeList.Add(std::pair<Entity*, int>(instance, i));
+		}
+	}
+
+	for (int i = 0; i < drawChangeList.Size(); i++)
+	{
+		NonDrawList.Add(drawChangeList[i].first);
+		DrawList.RemoveCyclicAtIndex(drawChangeList[i].second);
+	}*/
+	SortInDrawThread = false;
+	int cameraWidth = Camera->GetViewWidth();
+	int cameraHeight = Camera->GetViewHeight();
+	int cameraX = Camera->GetX();
+	int cameraY = Camera->GetY();
+
+	for (auto const &instance : Entity::SuperList)
+	{
+		for (int i = 0; i < instance.second->Size(); i++)
+		{
+			Entity* anInstance = instance.second->FindAtIndex(i);
+
+			float x = anInstance->GetX();
+			float y = anInstance->GetY();
+			float width = abs(anInstance->GetWidth()) * 3;
+			float height = abs(anInstance->GetHeight()) * 3;
+			float diameter = width >= height ? width : height;
+
+			if (!anInstance->GetInDrawList())
+			{
+				if ((x - (diameter)) < cameraX + (cameraWidth / 2) and (x + (diameter)) > cameraX - (cameraWidth / 2) and
+					(y - (diameter)) < cameraY + (cameraHeight / 2) and (y + (diameter)) > cameraY - (cameraHeight / 2))
+				{
+					DrawList.Add(anInstance);
+					NonDrawList.Remove(anInstance);
+					anInstance->SetInDrawList(true);
+				}
+			}
+			else
+			{
+				if (!((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
+					(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2)))
+				{
+					DrawList.Remove(anInstance);
+					NonDrawList.Add(anInstance);
+					anInstance->SetInDrawList(false);
+				}
+			}
+		}
+	}
+
+	SortInDrawThread = true;
 }
 
 void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor)
@@ -432,4 +559,19 @@ bool Entity::MouseWheelDown()
 bool Entity::GetActive() const
 {
 	return myActive;
+}
+
+bool Entity::GetDrawing() const
+{
+	return myDrawing;
+}
+
+bool Entity::GetOutOfLoop() const
+{
+	return myOutOfLoop;
+}
+
+bool Entity::GetInDrawList() const
+{
+	return myInDrawList;
 }

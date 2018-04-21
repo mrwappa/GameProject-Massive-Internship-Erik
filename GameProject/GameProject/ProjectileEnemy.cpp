@@ -5,7 +5,7 @@
 ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 {
 	Init("ProjectileEnemy", aX, aY);
-	mySprite.SetTexture("Sprites/Enemies/spr_floating_enemy.png", 1);
+	mySprite.SetTexture("Sprites/Enemies/spr_floating_enemy1.png", 1);
 
 	myBoxWidth = 12;
 	myBoxHeight = 12;
@@ -145,25 +145,58 @@ void ProjectileEnemy::StateGrabbed()
 
 void ProjectileEnemy::Update()
 {
-	if (myDeflate)
+	if(Alive() and myState != Idle)
 	{
-		myXScale = Math::Lerp(myXScale, 1.2f, 0.15f);
-		myYScale = Math::Lerp(myXScale, 1.5f, 0.1f);
-
-		if (myXScale = 1.2f)
+		int lookDir = (myX >= Target->GetX() ? -1 : 1);
+		if (myDeflate)
 		{
-			myDeflate = false;
+			myXScale = Math::Lerp(myXScale, 1.2f * lookDir, 0.15f);
+			myYScale = Math::Lerp(myYScale, 0.9f, 0.2f);
+
+			if (myXScale = 1.2f)
+			{
+				myDeflate = false;
+			}
+		}
+		else
+		{
+			if (myState != FallInAbyss)
+			{
+				myXScale = Math::Lerp(myXScale, 2.f * lookDir, 0.3f);
+				myYScale = Math::Lerp(myYScale, 2.f, 0.2f);
+			}
+		}
+		if (lookDir == -1 and myXScale >= 0)
+		{
+			myXScale = myXScale * -1;
+		}
+		else if (lookDir == 1 and myXScale < 0)
+		{
+			myXScale = myXScale * -1;
 		}
 	}
 	else
 	{
-		if (myState != FallInAbyss)
+		if (myDeflate)
 		{
-			myXScale = Math::Lerp(myXScale, 2.f, 0.3f);
-			myYScale = Math::Lerp(myXScale, 2.f, 0.2f);
+			myXScale = Math::Lerp(myXScale, 1.2f, 0.15f);
+			myYScale = Math::Lerp(myXScale, 1.5f, 0.1f);
+
+			if (myXScale = 1.2f)
+			{
+				myDeflate = false;
+			}
 		}
-		
+		else
+		{
+			if (myState != FallInAbyss)
+			{
+				myXScale = Math::Lerp(myXScale, 2.f, 0.3f);
+				myYScale = Math::Lerp(myXScale, 2.f, 0.2f);
+			}
+		}
 	}
+	
 
 	Enemy::Update();
 

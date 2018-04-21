@@ -23,7 +23,8 @@ public:
 	static std::map<std::string, GrowingArray<Entity*>*> SuperList;
 	static GrowingArray<Entity*> DeleteMarkedList;
 	static GrowingArray<Entity*> DrawList;
-	
+	static GrowingArray<Entity*> NonDrawList;
+
 	static Camera* Camera;
 	static std::thread* SortDrawThread;
 	static bool SortInDrawThread;
@@ -34,6 +35,7 @@ public:
 	virtual void OnRemoval();
 	static void DeleteMarkedInstances();
 	
+
 
 	Entity* GetObj(std::string aEntity);
 
@@ -51,6 +53,8 @@ public:
 	static void BubbleSort();
 	static void BubbleSortInDrawThread();
 	static void DrawAll();
+	static void SetDrawList();
+
 	static bool DrawListSorted;
 	static bool DrawListUnfinished;
 	
@@ -78,6 +82,9 @@ public:
 
 	//Accessors
 	bool GetActive() const;
+	bool GetDrawing() const;
+	bool GetOutOfLoop() const;
+	bool GetInDrawList() const;
 	std::string GetName() const;
 	GSprite* GetSprite();
 	float GetAngle() const;
@@ -96,6 +103,7 @@ public:
 	void SetColor(sf::Color aColor);
 	void SetActive(const bool aBool);
 	void SetDrawing(const bool aBool);
+	void SetInDrawList(bool aBool);
 
 protected:
 	float myX;
@@ -115,7 +123,8 @@ protected:
 	//If the entity is drawn and updated
 	bool myActive;
 	bool myDrawing;
-	//Exists for design purposes(like getting an instance from the SuperList)
+	bool myOutOfLoop;
+	//Exists for design and accessibility purposes(like getting an instance from the SuperList)
 	std::string myName;
 
 	static void DeleteInstanceMem(Entity* aEntity);
@@ -123,8 +132,10 @@ protected:
 
 
 private:
+	//should be static as well
 	sf::Text myText;
 	static GrowingArray<Entity*>* GrArrayPtr;
 	
+	bool myInDrawList;
 };
 #endif // !ENTITY_H

@@ -198,10 +198,15 @@ void LevelSection::Update()
 			{
 				AddSolid(new Wall(SnapToSectionX(column), SnapToSectionY(row)));
 			}
+			else if (level[i] == ENEMY)
+			{
+				new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
+			}
 		}
 	}
 	
 	myActive = false;
+	myOutOfLoop = true;
 }
 
 void LevelSection::Draw()

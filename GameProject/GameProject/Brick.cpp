@@ -119,6 +119,7 @@ void Brick::Update()
 	}
 
 	myActive = false;
+	myOutOfLoop = true;
 }
 
 void Brick::Draw()

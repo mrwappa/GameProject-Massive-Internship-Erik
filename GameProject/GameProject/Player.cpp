@@ -241,7 +241,6 @@ void Player::EndUpdate()
 
 	if (myHurtAlarm.GetTick() == -1)
 	{
-		
 		if (GrabbableEnemy == NULL)
 		{
 			if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
@@ -287,7 +286,7 @@ void Player::Draw()
 
 void Player::DrawGUI()
 {
-	DrawFontGUI(std::to_string(myX) +  " " + std::to_string(myY), 0, 0, 24, 1, 1, sf::Color::White);
+	//DrawFontGUI(std::to_string(myX) +  " " + std::to_string(myY), 0, 0, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
 	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
