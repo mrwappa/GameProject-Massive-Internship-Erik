@@ -13,6 +13,7 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 	myXScale = 2;
 	myYScale = myXScale;
 	myZ = 20;
+	myZTarget = 20;
 
 	myMoveSpeed = 0.8f;
 
@@ -47,12 +48,12 @@ void ProjectileEnemy::StateAggro()
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
 			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
-			if (distance <= 8)
+			if (distance <= 120)
 			{
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)//yes, 550 is just a shitty constant, get over it
+			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -60,7 +61,6 @@ void ProjectileEnemy::StateAggro()
 					FindPath(Target->GetX(), Target->GetY());
 				}
 			}
-			
 		}
 
 		Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
@@ -90,8 +90,6 @@ void ProjectileEnemy::StateAttack()
 			myAttackTimer = Math::FRand(2, 5);
 
 		}
-
-		
 
 		Move(myXKnockBack,myYKnockBack);
 	}
@@ -218,7 +216,7 @@ void ProjectileEnemy::Draw()
 
 	if (myState != Grabbed and myState != InUse)
 	{
-		if (Alive())
+		if (Alive() or myState == Spawned)
 		{
 			DrawShadow(myX, myY + myZ, 1.35f + myZ / 100.0f, 0.8f + myZ / 100.0f);
 		}

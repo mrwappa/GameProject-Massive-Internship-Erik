@@ -17,6 +17,44 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 	mySection = aSection;
 
 	myDepth = 1000;
+
+	//CREATE OBJECTS IN MAP/SECTION
+	std::ifstream textFile(mySection);
+	std::string level;
+
+	textFile.seekg(0, std::ios::end);
+	level.reserve(textFile.tellg());
+	textFile.seekg(0, std::ios::beg);
+
+	level.assign(std::istreambuf_iterator<char>(textFile), std::istreambuf_iterator<char>());
+
+	int row = 0;
+	int column = 0;
+
+	for (int i = 0; i < level.size(); i++)
+	{
+		if (level[i] == '\n')
+		{
+			row++;
+			column = 0;
+		}
+		else if (level[i] != ',' and level[i] != '\n')
+		{
+			column++;
+			if (level[i] == BRICK)
+			{
+				AddSolid(new Brick(SnapToSectionX(column), SnapToSectionY(row)));
+			}
+			else if (level[i] == WALL)
+			{
+				AddSolid(new Wall(SnapToSectionX(column), SnapToSectionY(row)));
+			}
+			else if (level[i] == ENEMY)
+			{
+				new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
+			}
+		}
+	}
 }
 
 
@@ -168,42 +206,7 @@ void LevelSection::Update()
 		}
 	}
 
-	std::ifstream textFile(mySection);
-	std::string level;
-
-	textFile.seekg(0, std::ios::end);
-	level.reserve(textFile.tellg());
-	textFile.seekg(0, std::ios::beg);
-
-	level.assign(std::istreambuf_iterator<char>(textFile), std::istreambuf_iterator<char>());
-
-	int row = 0;
-	int column = 0;
-
-	for (int i = 0; i < level.size(); i++)
-	{
-		if (level[i] == '\n')
-		{
-			row++;
-			column = 0;
-		}
-		else if(level[i] != ',' and level[i] != '\n')
-		{
-			column++;
-			if (level[i] == BRICK)
-			{
-				AddSolid(new Brick(SnapToSectionX(column), SnapToSectionY(row)));
-			}
-			else if (level[i] == WALL)
-			{
-				AddSolid(new Wall(SnapToSectionX(column), SnapToSectionY(row)));
-			}
-			else if (level[i] == ENEMY)
-			{
-				new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
-			}
-		}
-	}
+	
 	
 	myActive = false;
 	myOutOfLoop = true;

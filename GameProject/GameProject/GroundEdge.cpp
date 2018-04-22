@@ -84,5 +84,5 @@ GroundEdge::~GroundEdge()
 void GroundEdge::Draw()
 {
 	Entity::Draw();
-	DrawBBox();
+	//DrawBBox();
 }

@@ -11,9 +11,12 @@ class Enemy : public CollisionEntity
 public:
 	Enemy();
 	~Enemy();
+	void Init(std::string aName, float aX, float aY);
+
 	void OnRemoval();
 
 	virtual void StateIdle();
+	virtual void StateSpawned();
 	virtual void StateAggro();
 	virtual void StateAttack();
 	virtual void StatePathFind();
@@ -23,7 +26,9 @@ public:
 	virtual void StateThrown();
 	virtual void StateFallInAbyss();
 
+	void BeginUpdate();
 	void Update();
+	void EndUpdate();
 
 	void Throw(float aSpeed, float aDir);
 	void Fall();
@@ -40,7 +45,7 @@ public:
 	void SetZ(float aZ);
 
 	int GetState() const;
-	enum EnemyStates { Idle, Aggro, Attack, PathFind, Grabbable, Grabbed, InUse,Thrown, FallInAbyss};
+	enum EnemyStates { Spawned ,Idle, Aggro, Attack, PathFind, Grabbable, Grabbed, InUse, Thrown, FallInAbyss};
 	bool Alive() const;
 
 protected:
@@ -48,6 +53,8 @@ protected:
 	int myState;
 	int myPrevState;
 	float myZSpeed;
+	float myZTarget;
+	float myPrevHP;
 
 	Alarm myThrowAlarm;
 
@@ -61,6 +68,9 @@ private:
 	Vector2f myWalkPoint;
 	Alarm myWalkAlarm;
 
+	float mySpawnSpeed;
+
 	bool myJustThrown;
+	Alarm myHurtAlarm;
 };
 #endif // !ENEMY_H

@@ -211,9 +211,12 @@ void Player::EndUpdate()
 		//Drop
 		if (KeyboardCheckPressed(sf::Keyboard::LShift) and GrabbableEnemy != NULL and !grabbedThisFrame)
 		{
-			GrabbableEnemy->SetState(Enemy::Grabbable);
-			GrabbableEnemy->SetZ(15);
-			GrabbableEnemy = NULL;
+			if (GrabbableEnemy->GetState() != Enemy::InUse)
+			{
+				GrabbableEnemy->SetState(Enemy::Grabbable);
+				GrabbableEnemy->SetZ(15);
+				GrabbableEnemy = NULL;
+			}
 		}
 		//Attack
 		if (MouseCheckPressed(sf::Mouse::Left) and GrabbableEnemy != NULL and GrabbableEnemy->GetState() == Enemy::Grabbed)

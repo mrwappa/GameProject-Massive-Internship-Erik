@@ -12,6 +12,7 @@ TestEnemy::TestEnemy(float aX, float aY)
 	myXScale = 2;
 	myYScale = myXScale;
 	myZ = 20;
+	myZTarget = 20;
 
 	myBoxWidth = 16;
 	myBoxHeight = 8;
@@ -46,7 +47,7 @@ void TestEnemy::StateAggro()
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)//yes, 550 is just a shitty constant, get over it
+			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -135,7 +136,20 @@ void TestEnemy::StateInUse()
 
 void TestEnemy::Update()
 {
+
 	Enemy::Update();
+	//because depth is changed in Enemy Update, this is checked after
+	if (myState == InUse)
+	{
+		if (Math::RadToDeg(myDirection) < 360 and Math::RadToDeg(myDirection) > 180)
+		{
+			myDepth = Target->GetDepth() - 1;
+		}
+		else
+		{
+			myDepth = Target->GetDepth() + 1;
+		}
+	}
 }
 
 void TestEnemy::Draw()
@@ -154,7 +168,7 @@ void TestEnemy::Draw()
 	}
 	if (myState != Grabbed)
 	{
-		if (Alive())
+		if (Alive() or myState == Spawned)
 		{
 			DrawShadow(myX, myY + myZ, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
 		}
@@ -165,6 +179,8 @@ void TestEnemy::Draw()
 	}
 	
 	CollisionEntity::Draw();
+
+	
 	//DrawBBox();
 
 	/*for (int i = 0; i < myPath.Size(); i++)

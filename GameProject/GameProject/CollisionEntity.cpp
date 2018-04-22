@@ -22,8 +22,6 @@ CollisionEntity::CollisionEntity()
 	myBoxYOffset = 0;
 	myBoxWidth = 0;
 	myBoxHeight = 0;
-
-	myHP = 0;
 }
 
 

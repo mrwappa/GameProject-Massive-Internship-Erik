@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 #include "Player.h"
+#include "ProjectileEnemy.h"
+#include "TestEnemy.h"
 
 class MageSpawner : public Enemy
 {
@@ -12,8 +14,13 @@ public:
 
 	void StateAggro();
 	void StateGrabbed();
+	void StateGrabbable();
 	void StateFallInAbyss();
 	void StateAttack();
+	void StateInUse();
+	
+
+	void SpawnEnemy();
 
 	void Update();
 	void Draw();
@@ -21,5 +28,9 @@ public:
 private:
 	Alarm mySpawnAlarm;
 	Alarm myAttackAlarm;
+
+	float myShake;
+
+	enum Enemies{Projectile, Fly , ENEMIES_SIZE};
 };
 #endif // !MAGESPAWNER_H
