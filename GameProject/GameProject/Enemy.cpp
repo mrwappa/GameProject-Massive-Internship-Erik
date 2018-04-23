@@ -61,7 +61,7 @@ void Enemy::StateIdle()
 			myWalkAlarm.SetTick(Math::IRand(60, 120));
 		}
 
-		if (Math::PointDistance(myX, myY, myWalkPoint.x, myWalkPoint.y) <= Math::PointDistance(0, 0, myXSpeed, myYSpeed))
+		if (Math::PointDistance(myX, myY - myZ, myWalkPoint.x, myWalkPoint.y) <= Math::PointDistance(0, 0, myXSpeed, myYSpeed))
 		{
 			myXSpeed = 0;
 			myYSpeed = 0;
@@ -69,9 +69,14 @@ void Enemy::StateIdle()
 			myY = myWalkPoint.y;
 		}
 
+		/*if (ObjCollision(myX, myY, "LevelSection") == NULL )
+		{
+			myState = FallInAbyss;
+		}*/
+
 		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
 
-		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 340)
+		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
 		{
 			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 			{
@@ -303,7 +308,12 @@ void Enemy::StateFallInAbyss()
 
 void Enemy::BeginUpdate()
 {
+
 	myPrevHP = myHP;
+	if (myPrevHP != myHP)
+	{
+		myHurtAlarm.SetTick(15);
+	}
 }
 
 void Enemy::Update()
@@ -391,10 +401,10 @@ void Enemy::Update()
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
 	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
 
-	if (myPrevHP != myHP)
+	/*if (myPrevHP != myHP)
 	{
 		myHurtAlarm.SetTick(15);
-	}
+	}*/
 
 	myColor = sf::Color::White;
 	if (myHurtAlarm.GetTick() != -1)
@@ -405,7 +415,11 @@ void Enemy::Update()
 
 void Enemy::EndUpdate()
 {
-	
+	//Because of Update order, I have to check this twice
+	if (myPrevHP != myHP)
+	{
+		myHurtAlarm.SetTick(15);
+	}
 }
 
 void Enemy::Throw(float aSpeed, float aDir)

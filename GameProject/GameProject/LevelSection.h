@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <streambuf>
+#include <sstream>
 
 #define BRICK '1'
 #define WALL '2'
@@ -24,8 +25,11 @@ class LevelSection : public CollisionEntity
 public:
 	LevelSection(float aX, float aY, std::string aSection);
 	~LevelSection();
+	
+	static GrowingArray<std::string*> Sections;
 
-
+	static void InitSections();
+	static void LoadSection(std::string aPath);
 	static float SWidth;
 	static float SHeight;
 
@@ -41,11 +45,12 @@ public:
 
 private:
 
-	std::string mySection;
-
 	int myRows;
 	int myColumns;
 
 	GrowingArray<Solid*> mySolids;
+
+	static std::ifstream myFileStream;
+	static std::stringstream myStrStream;
 };
 #endif

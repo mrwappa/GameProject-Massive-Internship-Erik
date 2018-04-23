@@ -19,6 +19,7 @@ MageSpawner::MageSpawner(float aX, float aY)
 
 	myShake = 0;
 	myHP = 10;
+	myDamage = 2;
 
 	mySpawnAlarm.SetTick(Math::IRand(60, 200));
 	myAnimationSpeed = 0.2f;
@@ -180,6 +181,7 @@ void MageSpawner::SpawnEnemy()
 	Enemy* enemy;
 	switch (rand)
 	{
+
 	case Projectile:
 		enemy = new ProjectileEnemy(myX,myY);
 		enemy->SetState(Spawned);

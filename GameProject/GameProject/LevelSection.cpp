@@ -4,6 +4,10 @@
 float LevelSection::SWidth;
 float LevelSection::SHeight;
 
+std::ifstream LevelSection::myFileStream;
+std::stringstream LevelSection::myStrStream;
+GrowingArray<std::string*> LevelSection::Sections;
+
 LevelSection::LevelSection(float aX, float aY, std::string aSection)
 {
 	Init("LevelSection", aX, aY);
@@ -13,20 +17,19 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 
 	myBoxWidth = AStarNode::NodeSize * myRows;
 	myBoxHeight = AStarNode::NodeSize * myColumns;
-	
-	mySection = aSection;
 
 	myDepth = 1000;
 
 	//CREATE OBJECTS IN MAP/SECTION
-	std::ifstream textFile(mySection);
-	std::string level;
+	/*myFileStream.open(aSection);
+	myStrStream << myFileStream.rdbuf();
+	std::string level = myStrStream.str();
+	myFileStream.close();*/
+	int rand = Math::IRand(0, Sections.Size() - 1);
+	std::string level(*Sections[rand]);
+	int a = level.size();
 
-	textFile.seekg(0, std::ios::end);
-	level.reserve(textFile.tellg());
-	textFile.seekg(0, std::ios::beg);
-
-	level.assign(std::istreambuf_iterator<char>(textFile), std::istreambuf_iterator<char>());
+	//myStrStream.clear();
 
 	int row = 0;
 	int column = 0;
@@ -51,15 +54,61 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 			}
 			else if (level[i] == ENEMY)
 			{
-				new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
+				int rand = Math::IRand(1, 10);
+
+				if (rand > 9)
+				{
+					new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
+				}
+				else if (rand <= 9 and rand > 4)
+				{
+					new TestEnemy(SnapToSectionX(column), SnapToSectionY(row));;
+				}
+				else
+				{
+					new ProjectileEnemy(SnapToSectionX(column), SnapToSectionY(row));
+				}
 			}
 		}
 	}
 }
 
-
 LevelSection::~LevelSection()
 {
+}
+
+void LevelSection::InitSections()
+{
+	LoadSection("Maps/sect1.txt");
+	LoadSection("Maps/sect2.txt");
+	LoadSection("Maps/sect3.txt");
+	LoadSection("Maps/sect4.txt");
+	LoadSection("Maps/sect5.txt");
+	LoadSection("Maps/sect6.txt");
+}
+
+void LevelSection::LoadSection(std::string aPath)
+{
+	std::ifstream fileStream; 
+	fileStream.open(aPath);
+	std::stringstream strStream;
+	strStream << fileStream.rdbuf();
+	 
+	fileStream.close();
+	fileStream.clear();
+
+	Sections.Add(new std::string(strStream.str()));
+
+	/*std::ifstream textFile(aPath);
+	std::string* level = new std::string();
+
+	textFile.seekg(0, std::ios::end);
+	level->reserve(textFile.tellg());
+	textFile.seekg(0, std::ios::beg);
+
+	level->assign(std::istreambuf_iterator<char>(textFile), std::istreambuf_iterator<char>());
+	Sections.Add(level);*/
+	
 }
 
 void LevelSection::Update()

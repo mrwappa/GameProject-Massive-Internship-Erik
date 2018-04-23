@@ -41,13 +41,13 @@ void TestEnemy::StateAggro()
 			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
-			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed - myZ, Target->GetX(), Target->GetY());
+			float distance = Math::PointDistance(myX, myY - myZ, Target->GetX(), Target->GetY());
 			if (distance <= 5)
 			{
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)
+			if (distance < 540)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -89,9 +89,9 @@ void TestEnemy::StateInUse()
 				{
 					if (static_cast<Enemy*>(myEnemyTargets->FindAtIndex(i))->Alive())
 					{
-						float dir = Math::PointDirection(myX, myY - myZ, myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY() - myEnemyTargets->FindAtIndex(i)->GetZ());
-						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(15, dir));
-						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(15, dir));
+						float dir = Math::PointDirection(Target->GetX(), Target->GetY(), myEnemyTargets->FindAtIndex(i)->GetX(), myEnemyTargets->FindAtIndex(i)->GetY() - myEnemyTargets->FindAtIndex(i)->GetZ());
+						myEnemyTargets->FindAtIndex(i)->SetXKnock(Math::LenDirX(12, dir));
+						myEnemyTargets->FindAtIndex(i)->SetYKnock(Math::LenDirY(12, dir));
 						myEnemyTargets->FindAtIndex(i)->IncrHP(-(myDamage + Target->GetDamage()));
 					}
 					else
@@ -129,6 +129,7 @@ void TestEnemy::StateInUse()
 				myExtraY = 0;
 			}
 		}
+
 		myX = Target->GetX() + myExtraX;
 		myY = Target->GetY() + myExtraY - myZ;
 	}

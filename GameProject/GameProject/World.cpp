@@ -8,6 +8,7 @@ World::World()
 	myState = Active;
 
 	Entity::Init("World", 0, 0);
+	LevelSection::InitSections();
 	mySprite.SetTexture("Sprites/32x32Block.png", 1);
 	myCurrentLevel = 0;
 	CreateWorld();
@@ -19,6 +20,7 @@ World::World()
 
 World::~World()
 {
+	LevelSection::Sections.DeleteAll();
 }
 
 void World::Update()

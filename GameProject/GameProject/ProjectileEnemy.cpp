@@ -37,7 +37,7 @@ void ProjectileEnemy::StateAggro()
 		myAttackTimer -= 1.0f / 60.0f;
 		if (myAttackTimer <= 0)
 		{
-			myAttackTimer = 0.2f;
+			myAttackTimer = 1.f;
 			myState = Attack;
 		}
 
@@ -47,13 +47,13 @@ void ProjectileEnemy::StateAggro()
 			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
-			float distance = Math::PointDistance(myX + myXSpeed, myY + myYSpeed, Target->GetX(), Target->GetY());
+			float distance = Math::PointDistance(myX, myY - myZ, Target->GetX(), Target->GetY());
 			if (distance <= 120)
 			{
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 550)
+			if (distance < 540)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -80,16 +80,22 @@ void ProjectileEnemy::StateAttack()
 {
 	if (myState == Attack)
 	{
-		myAttackTimer -= 1.0f / 60.0f;
-		if (myAttackTimer <= 0)
+		myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
+		new Projectile(myX, myY - myZ, 7.0f, myDirection, false);
+		myDeflate = true;
+		myState = Aggro;
+		if (myAttackTimer > 1.f)
 		{
-			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5,5) * Math::IRand(0,1));
-			new Projectile(myX, myY - myZ, 7.0f, myDirection, false);
-			myDeflate = true;
-			myState = Aggro;
-			myAttackTimer = Math::FRand(2, 5);
-
+			if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) <= 140)
+			{
+				myAttackTimer = Math::FRand(1, 2);
+			}
+			else
+			{
+				myAttackTimer = Math::FRand(2, 4);
+			}
 		}
+		
 
 		Move(myXKnockBack,myYKnockBack);
 	}

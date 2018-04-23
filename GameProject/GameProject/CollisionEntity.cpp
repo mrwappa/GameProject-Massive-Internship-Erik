@@ -238,7 +238,6 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 				}
 			}
 		}
-		
 		return NULL;
 	}
 
@@ -515,8 +514,7 @@ void CollisionEntity::Draw()
 
 void CollisionEntity::Move(float aXSpeed, float aYSpeed)
 {
-	//add slowmotion
-	//change or add itself to some quadnode in the quadtree collision structure(if quadtree ever happens)
+
 	myPreviousX = myX;
 	myPreviousY = myY;
 

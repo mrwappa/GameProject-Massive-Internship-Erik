@@ -2,6 +2,7 @@
 #include "Math.h"
 
 
+std::mt19937 Math::Random = std::mt19937(std::random_device{}());
 
 Math::Math()
 {
@@ -75,18 +76,18 @@ float Math::Lerp(float aStart, float aEnd, float aPercent)
 
 float Math::FRand(float aLow, float aHigh)
 {
-	std::mt19937 g(std::random_device{}());
+	//std::mt19937 g(std::random_device{}());
 	std::uniform_real_distribution<float> dist(aLow, aHigh);
 
-	return dist(g);
+	return dist(Random);
 }
 
 int Math::IRand(int aLow, int aHigh)
 {
-	std::mt19937 g(std::random_device{}());
+	//std::mt19937 g(std::random_device{}());
 	std::uniform_int_distribution<int> dist(aLow, aHigh);
 
-	return dist(g);
+	return dist(Random);
 }
 
 float Math::Decimal(float aX)

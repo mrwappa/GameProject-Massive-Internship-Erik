@@ -16,6 +16,7 @@ public:
 	Math();
 	~Math();
 
+	static std::mt19937 Random;
 	
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);

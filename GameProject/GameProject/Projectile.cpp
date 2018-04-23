@@ -5,12 +5,12 @@
 Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool aEnemyThreat)
 {
 	Init("Projectile", aX, aY);
-	mySprite.SetTexture("Sprites/Player/spr_circle.png", 1);
+	mySprite.SetTexture("Sprites/8x8Block.png", 1);
 
-	myXScale = 0.5f;
+	myXScale = 1.5f;
 	myYScale = myXScale;
-	myBoxWidth = 32;
-	myBoxHeight = 32;
+	myBoxWidth = 6;
+	myBoxHeight = 6;
 
 	myAngle = Math::RadToDeg(aDirection);
 	myEnemyThreat = aEnemyThreat;
@@ -18,6 +18,8 @@ Projectile::Projectile(float aX, float aY, float aSpeed, float aDirection, bool 
 	myXSpeed = Math::LenDirX(aSpeed, aDirection);
 	myYSpeed = Math::LenDirY(aSpeed, aDirection);
 	myDamage = 4;
+
+	myColor = sf::Color(102, 0, 204);
 }
 
 
@@ -35,6 +37,7 @@ void Projectile::Update()
 		DeleteInstance(this);
 	}
 
+	//50 pixels outside of camera means delete
 	if (myX < Camera->GetX() - (Camera->GetViewWidth() / 2) - 50 or myX > Camera->GetX() + (Camera->GetViewWidth() / 2) + 50 or
 		myY < Camera->GetY() - (Camera->GetViewHeight() / 2) - 50 or myY > Camera->GetY() + (Camera->GetViewHeight() / 2) + 50)
 	{
