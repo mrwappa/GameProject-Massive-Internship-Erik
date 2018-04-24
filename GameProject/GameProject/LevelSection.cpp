@@ -4,11 +4,10 @@
 float LevelSection::SWidth;
 float LevelSection::SHeight;
 
-std::ifstream LevelSection::myFileStream;
-std::stringstream LevelSection::myStrStream;
-GrowingArray<std::string*> LevelSection::Sections;
+GrowingArray<std::string> LevelSection::Sections;
+GrowingArray<std::string> LevelSection::PlayerSections;
 
-LevelSection::LevelSection(float aX, float aY, std::string aSection)
+LevelSection::LevelSection(float aX, float aY, bool aSectionForPlayer)
 {
 	Init("LevelSection", aX, aY);
 
@@ -20,16 +19,21 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 
 	myDepth = 1000;
 
-	//CREATE OBJECTS IN MAP/SECTION
-	/*myFileStream.open(aSection);
-	myStrStream << myFileStream.rdbuf();
-	std::string level = myStrStream.str();
-	myFileStream.close();*/
-	int rand = Math::IRand(0, Sections.Size() - 1);
-	std::string level(*Sections[rand]);
-	int a = level.size();
+	myCreatePlayerSection = aSectionForPlayer;
 
-	//myStrStream.clear();
+	//CREATE OBJECTS IN MAP/SECTION
+	int rand;
+	std::string level;
+	if (myCreatePlayerSection)
+	{
+		rand = Math::IRand(0, PlayerSections.Size() - 1);
+		level = std::string(PlayerSections[rand]);
+	}
+	else
+	{
+		rand = Math::IRand(0, Sections.Size() - 1);
+		level = std::string(Sections[rand]);
+	}
 
 	int row = 0;
 	int column = 0;
@@ -43,7 +47,7 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 		}
 		else if (level[i] != ',' and level[i] != '\n')
 		{
-			column++;
+			
 			if (level[i] == BRICK)
 			{
 				AddSolid(new Brick(SnapToSectionX(column), SnapToSectionY(row)));
@@ -69,6 +73,19 @@ LevelSection::LevelSection(float aX, float aY, std::string aSection)
 					new ProjectileEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}
 			}
+			else if (level[i] == PLAYER)
+			{
+				if (Enemy::Target == NULL)
+				{
+					new Player(SnapToSectionX(column), SnapToSectionY(row));
+				}
+				else if (Enemy::Target != NULL)
+				{
+					Enemy::Target->SetX(SnapToSectionX(column));
+					Enemy::Target->SetY(SnapToSectionY(row));
+				}
+			}
+			column++;
 		}
 	}
 }
@@ -79,15 +96,22 @@ LevelSection::~LevelSection()
 
 void LevelSection::InitSections()
 {
-	LoadSection("Maps/sect1.txt");
-	LoadSection("Maps/sect2.txt");
-	LoadSection("Maps/sect3.txt");
-	LoadSection("Maps/sect4.txt");
-	LoadSection("Maps/sect5.txt");
-	LoadSection("Maps/sect6.txt");
+	//Regular
+	LoadSection("Maps/sect1.txt",&Sections);
+	LoadSection("Maps/sect2.txt",&Sections);
+	LoadSection("Maps/sect3.txt",&Sections);
+	LoadSection("Maps/sect4.txt",&Sections);
+	LoadSection("Maps/sect5.txt",&Sections);
+	LoadSection("Maps/sect6.txt",&Sections);
+
+	//Player
+	LoadSection("Maps/player_sect1.txt", &PlayerSections);
+	LoadSection("Maps/player_sect2.txt", &PlayerSections);
+	LoadSection("Maps/player_sect3.txt", &PlayerSections);
+
 }
 
-void LevelSection::LoadSection(std::string aPath)
+void LevelSection::LoadSection(std::string aPath, GrowingArray<std::string>* aSectionList)
 {
 	std::ifstream fileStream; 
 	fileStream.open(aPath);
@@ -95,20 +119,7 @@ void LevelSection::LoadSection(std::string aPath)
 	strStream << fileStream.rdbuf();
 	 
 	fileStream.close();
-	fileStream.clear();
-
-	Sections.Add(new std::string(strStream.str()));
-
-	/*std::ifstream textFile(aPath);
-	std::string* level = new std::string();
-
-	textFile.seekg(0, std::ios::end);
-	level->reserve(textFile.tellg());
-	textFile.seekg(0, std::ios::beg);
-
-	level->assign(std::istreambuf_iterator<char>(textFile), std::istreambuf_iterator<char>());
-	Sections.Add(level);*/
-	
+	aSectionList->Add(std::string(strStream.str()));
 }
 
 void LevelSection::Update()
@@ -254,9 +265,6 @@ void LevelSection::Update()
 			}
 		}
 	}
-
-	
-	
 	myActive = false;
 	myOutOfLoop = true;
 }

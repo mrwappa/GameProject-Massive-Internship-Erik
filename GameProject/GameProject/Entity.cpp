@@ -466,6 +466,17 @@ void Entity::DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float 
 	Pixel.Draw(aX + Camera->GetX() - Camera->GetViewWidth() / 2, aY + Camera->GetY() - Camera->GetViewHeight() / 2, aWidth, aHeight, aAngle, aAlpha, aColor, 0);
 }
 
+void Entity::DrawLinePos(float aX1, float aY1, float aX2, float aY2, sf::Color aColor)
+{
+
+	float deltax = aX2 - aX1;
+	float deltay = aY2 - aY1;
+
+	float deltalength = Math::SQRT2((deltax * deltax) + (deltay * deltay));
+
+	Pixel.DrawOrigin(aX1, aY1, 0, 0, 1, deltalength, Math::RadToDeg(atan2f(deltay, deltax)) - 90, 1, aColor, 0);
+}
+
 void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float aXScale ,float aYScale, sf::Color aColor)
 {
 	if (myText.getFont() == NULL) 

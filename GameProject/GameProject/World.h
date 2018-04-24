@@ -28,16 +28,13 @@ public:
 	void DeactivateAllInstances();
 	void ActivateAllInstances();
 	void DrawPauseScreen();
-	void ReturnFromLoadingScreen();
 
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
 
-	void PauseGame();
-	void ResumeGame();
-
-	enum WorldState {Active, Paused, MainMenu};
+	enum GameState {Active, Paused, MainMenu};
+	enum WorldState {InAction, Transitioning};
 	void StateActive();
 	void StatePaused();
 	void StateMainMenu();
@@ -46,15 +43,15 @@ private:
 
 	int myCurrentLevel;
 
-	Alarm myLoadScreenAlarm;
-
 	std::string myCurrentMap;
 	GrowingArray<std::string> myMaps;
 
 	bool mySortDrawList;
 
-	int myState;
-	int myPrevState;
+	int myWorldState;
+
+	int myGameState;
+	int myPrevGameState;
 };
 
 #endif // !WORLD_H

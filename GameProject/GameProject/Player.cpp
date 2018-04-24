@@ -291,6 +291,7 @@ void Player::DrawGUI()
 {
 	//DrawFontGUI(std::to_string(myX) +  " " + std::to_string(myY), 0, 0, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
+	
 	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("TestEnemy:" + std::to_string(SuperList.at("TestEnemy")->Size()), 0, 120, 24, 1, 1, sf::Color::White);

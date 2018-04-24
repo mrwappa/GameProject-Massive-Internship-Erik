@@ -156,17 +156,25 @@ void TestEnemy::Update()
 void TestEnemy::Draw()
 {
 	
-	if (Target != NULL)
+	/*if (Target != NULL)
 	{
-		/*if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+		float width = -(Target->GetX() - myX);
+		float height = -(Target->GetY() - myY - myZ);
+		float x = myX - width / 2;
+		float y = myY - height / 2;
+
+		DrawRect(x, y, width, height, 0, 0.6f, sf::Color::Black);
+
+		if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 		{
-			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
+			DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), sf::Color::Red);
 		}
 		else
 		{
-			myLine.DrawLinePos(myX , myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
-		}*/
-	}
+			DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), sf::Color::White);
+		}
+	}*/
+
 	if (myState != Grabbed)
 	{
 		if (Alive() or myState == Spawned)
@@ -179,6 +187,7 @@ void TestEnemy::Draw()
 		}
 	}
 	
+
 	CollisionEntity::Draw();
 
 	

@@ -221,7 +221,7 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 	myAngle = fmod(myAngle, 360);
 	
 	//Culling for Solids to optimize collision checking for static objects
-	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
+	if (aName == "Solid" or aName == "GroundEdge" and CollisionList.count("LevelSection") != 0)
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
@@ -322,7 +322,7 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity* aOb
 		myAngle = fmod(myAngle, 360);
 	}
 
-	float oAngle = fmod(aObject->GetAngle(), 360);;
+	float oAngle = fmod(aObject->GetAngle(), 360);
 
 	if ((oAngle == 0 or oAngle == 180) and (myAngle == 0 or myAngle == 180))
 	{
@@ -405,11 +405,10 @@ CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f a
 	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
-		
+		myBoundingBox = RektF(0, 0, (aEnd.x - aStart.x), (aEnd.y - aStart.y));
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
 		{
-			myBoundingBox = RektF(aStart.x,aStart.y,aEnd.x - aStart.x, aEnd.y - aStart.y);
-			if (InstanceCollision(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y + (aEnd.y - aStart.y) / 2, GrArrayPtr->FindAtIndex(i), false))
+			if (InstanceCollision(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y - myZ + (aEnd.y - aStart.y) / 2, GrArrayPtr->FindAtIndex(i), true))
 			{
 				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
 				for (int j = 0; j < solids->Size(); j++)
@@ -419,6 +418,7 @@ CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f a
 						return solids->FindAtIndex(j);
 					}
 				}
+				
 			}
 		}
 

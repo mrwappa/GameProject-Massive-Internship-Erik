@@ -19,17 +19,19 @@
 #define BRICK '1'
 #define WALL '2'
 #define ENEMY '3'
+#define PLAYER '4'
 
 class LevelSection : public CollisionEntity
 {
 public:
-	LevelSection(float aX, float aY, std::string aSection);
+	LevelSection(float aX, float aY, bool aSectionForPlayer);
 	~LevelSection();
 	
-	static GrowingArray<std::string*> Sections;
+	static GrowingArray<std::string> Sections;
+	static GrowingArray<std::string> PlayerSections;
 
 	static void InitSections();
-	static void LoadSection(std::string aPath);
+	static void LoadSection(std::string aPath, GrowingArray<std::string>* aSectionList);
 	static float SWidth;
 	static float SHeight;
 
@@ -48,9 +50,8 @@ private:
 	int myRows;
 	int myColumns;
 
-	GrowingArray<Solid*> mySolids;
+	bool myCreatePlayerSection;
 
-	static std::ifstream myFileStream;
-	static std::stringstream myStrStream;
+	GrowingArray<Solid*> mySolids;
 };
 #endif

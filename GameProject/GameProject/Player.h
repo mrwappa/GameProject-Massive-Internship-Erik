@@ -27,6 +27,7 @@ public:
 	Enemy* NearestGrabbable();
 
 	PlayerAttack* PAttack;
+	Enemy* GrabbableEnemy;
 
 private:
 	bool W;
@@ -50,7 +51,7 @@ private:
 	float myXSub;
 	float myYSub;
 
-	Enemy* GrabbableEnemy;
+	
 	Alarm myHurtAlarm;
 	
 	float myLookAngle;

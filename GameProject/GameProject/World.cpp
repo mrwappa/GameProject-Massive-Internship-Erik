@@ -4,8 +4,11 @@
 
 World::World()
 {
-	myPrevState = -1;
-	myState = Active;
+	myPrevGameState = -1;//not necessary?
+	myGameState = Active;
+
+	myWorldState = InAction;
+	Camera->SetZoom(0.0005f);
 
 	Entity::Init("World", 0, 0);
 	LevelSection::InitSections();
@@ -17,24 +20,22 @@ World::World()
 	mySortDrawList = false;
 }
 
-
 World::~World()
 {
-	LevelSection::Sections.DeleteAll();
-}
-
-void World::Update()
-{
-	/*CollisionEntity::SlowMo = Math::Lerp(CollisionEntity::SlowMo, 1, 0.3f);
-	if(KeyboardCheck(sf::Keyboard::X))
-	{
-		CollisionEntity::SlowMo = 4;
-	}*/
+	//LevelSection::Sections.DeleteAll();
 }
 
 void World::BeginUpdate()
 {
-	myPrevState = myState;
+}
+
+void World::Update()
+{
+
+	
+	StatePaused();
+	StateMainMenu();
+	StateActive();
 }
 
 void World::EndUpdate()
@@ -49,33 +50,21 @@ void World::EndUpdate()
 		//BubbleSort();
 		SortInDrawThread = true;
 		mySortDrawList = false;
+
+		myWorldState = InAction;
 	}
-
-
 }
 
 void World::Draw()
 {
-	/*mySprite.Draw(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y, 1, 1, 0, 1, sf::Color::Black, 0);
-
-	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::Space))
-	{
-		new Brick(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
-	}
-	if (MouseCheckPressed(sf::Mouse::Left) and KeyboardCheck(sf::Keyboard::LShift))
-	{
-		new Wall(CollisionEntity::GridSnapMouse().x, CollisionEntity::GridSnapMouse().y);
-	}*/
 
 }
-
-
 
 void World::CreateWorld()
 {
 	AStarNode::NodeSize = 32.0f;
-	LevelSection::SWidth = 16;
-	LevelSection::SHeight = 12;
+	LevelSection::SWidth = 17;
+	LevelSection::SHeight = 13;
 
 	myCurrentLevel++;
 
@@ -119,8 +108,35 @@ void World::CreateWorld()
 		myMaps.RemoveAll();
 	}
 
+	int nrOfCells = 0;
+	switch (myCurrentMap.size())
+	{
+	case SECTST_SIZE:
+		nrOfCells = SECTST_CELLS;
+		break;
+
+	case SECT1_SIZE:
+		nrOfCells = SECT1_CELLS;
+		break;
+
+	case SECT2_SIZE:
+		nrOfCells = SECT2_CELLS;
+		break;
+
+	case SECT3_SIZE:
+		nrOfCells = SECT3_CELLS;
+		break;
+
+	default:
+		break;
+	}
+
+
+	int currentCell = 0;
+	int playerSection = 1;
 	int row = 0;
 	int column = 0;
+	int rand = 0;
 
 	for (int i = 0; i < myCurrentMap.size(); i++)
 	{
@@ -131,29 +147,31 @@ void World::CreateWorld()
 		}
 		else if (myCurrentMap[i] == '0' or myCurrentMap[i] == '1')
 		{
-			if (myCurrentMap[i] == '1')
+			if (currentCell == nrOfCells - 1 and playerSection == 1 and myCurrentMap[i] == '1')
 			{
 				new LevelSection((LevelSection::SWidth * AStarNode::NodeSize / 2) + LevelSection::SWidth * AStarNode::NodeSize * column,
-					(LevelSection::SHeight * AStarNode::NodeSize / 2) + LevelSection::SHeight * AStarNode::NodeSize * row, "Maps/Test2.txt");
+					(LevelSection::SHeight * AStarNode::NodeSize / 2) + LevelSection::SHeight * AStarNode::NodeSize * row, true);
+				currentCell++;
+			}
+			else if (myCurrentMap[i] == '1')
+			{
+				rand = Math::IRand(0, 2);
+				if (rand == 2 and playerSection == 1)
+				{
+					playerSection = 0;
+					new LevelSection((LevelSection::SWidth * AStarNode::NodeSize / 2) + LevelSection::SWidth * AStarNode::NodeSize * column,
+						(LevelSection::SHeight * AStarNode::NodeSize / 2) + LevelSection::SHeight * AStarNode::NodeSize * row, true);
+				}
+				else
+				{
+					new LevelSection((LevelSection::SWidth * AStarNode::NodeSize / 2) + LevelSection::SWidth * AStarNode::NodeSize * column,
+						(LevelSection::SHeight * AStarNode::NodeSize / 2) + LevelSection::SHeight * AStarNode::NodeSize * row,false);
+				}
+				currentCell++;
 			}
 			column++;
 		}
 	}
-
-	new Player(7 * 32 + 16, 7 * 32 + 16);
-	/*new TestEnemy(3 * 32 + 16, 4 * 32 + 16);
-	new ProjectileEnemy(300, 300);
-	new TestEnemy(300 + 20, 350 + 20);
-	new TestEnemy(300 - 40 + 20, 350 - 40 + 20);
-	new TestEnemy(3 * 32 + 16, 4 * 32 + 16);	
-	new TestEnemy(300 + 20, 350 + 20);
-	new ProjectileEnemy(300, 300);
-	new TestEnemy(300 - 40 + 20, 350 - 40 + 20);
-	new MageSpawner(7 * 32 + 32, 7 * 32 + 32);*/
-
-	//SetDrawList();
-	/*new BoxTest(300, 300, true);
-	new BoxTest(300 + 42, 300, false);*/
 	
 	mySortDrawList = true;
 }
@@ -164,7 +182,9 @@ void World::DestroyWorld()
 	{
 		for (int i = 0; i < instance.second->Size(); i++)
 		{
-			if (instance.second->FindAtIndex(i) != this)
+			if (instance.second->FindAtIndex(i) != this and 
+				instance.second->FindAtIndex(i) != Enemy::Target and 
+				instance.second->FindAtIndex(i) != Enemy::Target->GrabbableEnemy)
 			{
 				DeleteInstance(instance.second->FindAtIndex(i));
 			}
@@ -178,60 +198,64 @@ void World::DestroyWorld()
 
 void World::DrawGUI()
 {
-	if (KeyboardCheckPressed(sf::Keyboard::R))
+	DrawFontGUI("Zoom:" + std::to_string(Camera->GetZoom()), 700, 250, 24, 1, 1, sf::Color::White);
+	if (myGameState == Paused)
 	{
-		DestroyWorld();
-		CreateWorld();
-		//DeactivateAllInstances();
-		//DrawListUnfinished = true;
-		Camera->SetZoom(1);
+		DrawPauseScreen();
 	}
-
-	StatePaused();
-	StateMainMenu();
-	StateActive();
-
-}
-
-void World::PauseGame()
-{
-	myState = Paused;
-}
-
-void World::ResumeGame()
-{
-	myState = Active;
 }
 
 void World::StateActive()
 {
-	if (myState == Active)
+	if (myGameState == Active)
 	{
-		if (myPrevState != Paused)
-		{
-			if (KeyboardCheckPressed(sf::Keyboard::Return))
-			{
-				myState = Paused;
-			}
-		}
-		else
+		if (myPrevGameState == Paused)
 		{
 			ActivateAllInstances();
 		}
+		if (KeyboardCheckPressed(sf::Keyboard::Return) and myPrevGameState != Paused)
+		{
+			myGameState = Paused;
+		}
+		myPrevGameState = Active;
 	}
 }
 
 void World::StatePaused()
 {
-	if (myState == Paused)
+	if (myGameState == Paused)
 	{
 		DeactivateAllInstances();
-		DrawPauseScreen();
-		myPrevState = Paused;
+		
 		if (KeyboardCheckPressed(sf::Keyboard::Return))
 		{
-			myState = Active;
+			myPrevGameState = Paused;
+			myGameState = Active;
 		}
+	}
+	else
+	{
+		if (myWorldState == Transitioning)
+		{
+			Camera->SetZoom(Math::Lerp(Camera->GetZoom(), 0.0005f, 0.3f));
+			if (Camera->GetZoom() < 0.00051f and !mySortDrawList)
+			{
+				DestroyWorld();
+				CreateWorld();
+			}
+		}
+		else if (myWorldState == InAction)
+		{
+			Camera->SetZoom(Math::Lerp(Camera->GetZoom(), 1.0f, 0.15f));
+		}
+
+
+		if (KeyboardCheckPressed(sf::Keyboard::R))
+		{
+			
+			myWorldState = Transitioning;
+		}
+
 	}
 }
 
@@ -278,20 +302,5 @@ void World::ActivateAllInstances()
 void World::DrawPauseScreen()
 {
 	DrawRectGUI(Camera->GetViewWidth() / 2, Camera->GetViewHeight() / 2, Camera->GetViewWidth(), Camera->GetViewHeight(), 0, 1, sf::Color::Black);
-	DrawFontGUI("Paused", (Camera->GetViewWidth() / 2) * 0.8f, (Camera->GetViewHeight() / 2)* 0.9f, 32, 1, 1, sf::Color::White);
-}
-
-void World::ReturnFromLoadingScreen()
-{
-	Entity* player = GetObj("Player");
-	if (player != NULL and !player->GetActive())
-	{
-		for (auto const &instance : Entity::SuperList)
-		{
-			for (int i = 0; i < instance.second->Size(); i++)
-			{
-				instance.second->FindAtIndex(i)->SetActive(true);
-			}
-		}
-	}
+	DrawFontGUI("Paused", (Camera->GetInitialWidth() / 2) * 0.8f, (Camera->GetInitialHeight() / 2)* 0.9f, 32, 1, 1, sf::Color::White);
 }

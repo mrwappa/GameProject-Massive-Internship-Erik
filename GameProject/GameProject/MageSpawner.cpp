@@ -18,7 +18,7 @@ MageSpawner::MageSpawner(float aX, float aY)
 	myZTarget = 10;
 
 	myShake = 0;
-	myHP = 10;
+	myHP = 7.5f;
 	myDamage = 2;
 
 	mySpawnAlarm.SetTick(Math::IRand(60, 200));
@@ -35,7 +35,7 @@ void MageSpawner::StateAggro()
 {
 	if (myState == Aggro)
 	{
-		if (myPrevState == Idle or myPrevState == Attack)
+		if (myPrevState == Idle)
 		{
 			mySpawnAlarm.SetTick(Math::IRand(5, 40));
 		}
@@ -65,6 +65,17 @@ void MageSpawner::StateAggro()
 			myDirection = Math::PointDirection(myX, myY - myZ, enemy->GetX(), enemy->GetY());
 			myXSpeed += Math::LenDirX(-1.0f, myDirection);
 			myYSpeed += Math::LenDirY(-1.0f, myDirection);
+		}
+
+		CollisionEntity* gEdge = ObjCollision(myX + Math::Sign(myXSpeed) * 20, myY, "GroundEdge");
+		if (gEdge != NULL)
+		{
+			myXSpeed = 0;
+		}
+		gEdge = ObjCollision(myX, myY + Math::Sign(myYSpeed) * 20, "GroundEdge");
+		if (gEdge != NULL)
+		{
+			myYSpeed = 0;
 		}
 
 		PreventCollision("Solid");
@@ -248,5 +259,7 @@ void MageSpawner::Draw()
 		mySprite.Draw(myX + myShake * Math::IRand(-2, 2), myY - myZ + myShake * Math::IRand(-2, 2), myXScale, myYScale, myAngle, myAlpha, myColor, myAnimationSpeed);
 	}
 
-	DrawBBox();
+	
+
+	//DrawBBox();
 }

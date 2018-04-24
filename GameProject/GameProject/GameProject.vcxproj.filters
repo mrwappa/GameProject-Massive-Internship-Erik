@@ -43,9 +43,6 @@
     <Filter Include="Tools/Core\Math">
       <UniqueIdentifier>{fc46dce5-146c-47a8-b71c-9f736829e2b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\World">
-      <UniqueIdentifier>{b94ae476-1aeb-441a-9454-5847d30907e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tools/Core\Draw Stuff">
       <UniqueIdentifier>{daefe2e4-9c4e-4420-a6c6-c2a246d22a6d}</UniqueIdentifier>
     </Filter>
@@ -57,9 +54,6 @@
     </Filter>
     <Filter Include="Game\Solids\Brick">
       <UniqueIdentifier>{950ddf83-bbb4-4095-aa47-38f70d2ad8f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Solids\Solid">
-      <UniqueIdentifier>{b56fcbb2-f637-499e-9413-e43a3438b9d5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\Dust">
       <UniqueIdentifier>{a23424c3-aebe-4965-98b5-08e2ed6288be}</UniqueIdentifier>
@@ -115,11 +109,17 @@
     <Filter Include="Game\Solids\Appearance%28only for visuals%29\GroundPillar">
       <UniqueIdentifier>{66919917-3a15-4113-a115-77ccc391ed61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemies\MageSpawner">
+      <UniqueIdentifier>{ccc13fd1-a0c1-474d-8270-a5f4cc285f9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World">
+      <UniqueIdentifier>{b94ae476-1aeb-441a-9454-5847d30907e1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\World\LevelSection">
       <UniqueIdentifier>{8ac70792-4315-46bf-971d-d7beef491488}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemies\MageSpawner">
-      <UniqueIdentifier>{ccc13fd1-a0c1-474d-8270-a5f4cc285f9e}</UniqueIdentifier>
+    <Filter Include="Game\Solids\Solid">
+      <UniqueIdentifier>{b56fcbb2-f637-499e-9413-e43a3438b9d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

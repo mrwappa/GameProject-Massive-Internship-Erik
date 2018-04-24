@@ -34,7 +34,7 @@ void GSprite::DeleteAllSprites()
 
 void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
-	float width = abs(myTextureWidth * aXScale);
+	/*float width = abs(myTextureWidth * aXScale);
 	float height = abs(myTextureHeight * aYScale);
 	float diameter = width >= height ? width : height;
 
@@ -47,7 +47,7 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 
 	if ((aX - (diameter / 2)) < cameraX + (cameraWidth / 2) and (aX + (diameter / 2)) > cameraX - (cameraWidth / 2) and
 		(aY - (diameter / 2)) < cameraY + (cameraHeight / 2) and (aY + (diameter / 2)) > cameraY - (cameraHeight / 2))
-	{
+	{*/
 		myAnimationSpeed = aAnimationSpeed;
 		if (myAnimationSpeed > 0)
 		{
@@ -75,7 +75,7 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 		myHeight = myTextureHeight * aYScale;
 
 		Window->draw(*mySprite);
-	}
+	//}
 }
 
 void GSprite::DrawOrigin(float aX, float aY, float aOriginX, float aOriginY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
