@@ -53,7 +53,6 @@ public:
 	static void BubbleSort();
 	static void BubbleSortInDrawThread();
 	static void DrawAll();
-	static void SetDrawList();
 
 	static bool DrawListSorted;
 	static bool DrawListUnfinished;
@@ -61,6 +60,7 @@ public:
 	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle , float aAlpha, sf::Color aColor);
 	void DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor);
 	void DrawLinePos(float aX1, float aY1, float aX2, float aY, sf::Color aColor);
+	void DrawLine(float aX, float aY, float aLength, float aAngle, sf::Color aColor);
 	static GSprite Pixel;
 
 	//Font
@@ -130,8 +130,7 @@ protected:
 
 	static void DeleteInstanceMem(Entity* aEntity);
 	bool myMarkedForDelete;
-
-
+	
 private:
 	//should be static as well
 	sf::Text myText;

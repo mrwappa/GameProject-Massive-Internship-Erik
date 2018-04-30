@@ -29,12 +29,22 @@ Projectile::~Projectile()
 
 void Projectile::Update()
 {
-	myDepth = myY;
+	myDepth = -myY;
 
-	CollisionEntity* brick = ObjCollision(myX, myY, "Solid");
+	CollisionEntity* brick = ObjCollision(myX, myY, "Solid",false);
 	if (brick != NULL and brick->GetName() != "GroundEdge")
 	{
 		DeleteInstance(this);
+		int dustParticles = Math::IRand(5, 7);
+		for (int i = 0; i < dustParticles; i++)
+		{
+			new DustParticle(myX, myY, sf::Color(87, 113, 156));
+		}
+		int dustParticles1 = Math::IRand(3, 6);
+		for (int i = 0; i < dustParticles1; i++)
+		{
+			new DustParticle(myX, myY, sf::Color(102, 0, 204));
+		}
 	}
 
 	//50 pixels outside of camera means delete

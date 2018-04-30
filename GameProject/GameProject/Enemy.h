@@ -2,7 +2,7 @@
 #define ENEMY_H
 
 #include "CollisionEntity.h"
-
+#include "DustParticle.h"
 class PlayerAttack;
 class Player;
 
@@ -63,6 +63,8 @@ protected:
 	PlayerAttack* myAttackPtr;
 
 	GSprite myShadow;
+
+	sf::Color myBloodColor;
 
 private:
 	Vector2f myWalkPoint;

@@ -20,7 +20,7 @@ BoxTest::~BoxTest()
 
 void BoxTest::Update()
 {
-	myDepth = myY;
+	myDepth = -myY;
 	CollisionEntity* box = ObjCollision(myX, myY, "BoxTest");
 
 	myColor = sf::Color::Green;

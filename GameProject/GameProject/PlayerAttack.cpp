@@ -25,7 +25,7 @@ PlayerAttack::~PlayerAttack()
 
 void PlayerAttack::Update()
 {
-	myDepth = myY;
+	myDepth = -myY;
 
 	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myTarget != NULL)
 	{

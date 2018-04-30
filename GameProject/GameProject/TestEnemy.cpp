@@ -22,6 +22,8 @@ TestEnemy::TestEnemy(float aX, float aY)
 	myHP = 10;
 
 	myDamage = 3;
+
+	myBloodColor = sf::Color(181, 50, 72);
 }
 
 
@@ -47,7 +49,7 @@ void TestEnemy::StateAggro()
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (distance < 540)
+			if (distance < 400)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -55,7 +57,6 @@ void TestEnemy::StateAggro()
 					FindPath(Target->GetX(), Target->GetY());
 				}
 			}
-			
 		}
 
 		Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
@@ -107,7 +108,11 @@ void TestEnemy::StateInUse()
 			delete myEnemyTargets;
 			myEnemyTargets = NULL;
 			
-			
+			int dustParticles = Math::IRand(7, 10);
+			for (int i = 0; i < dustParticles; i++)
+			{
+				new DustParticle(myX, myY, sf::Color(87, 194, 97));
+			}
 		}
 		if (!myRetract)
 		{
@@ -142,20 +147,12 @@ void TestEnemy::Update()
 	//because depth is changed in Enemy Update, this is checked after
 	if (myState == InUse)
 	{
-		if (Math::RadToDeg(myDirection) < 360 and Math::RadToDeg(myDirection) > 180)
-		{
-			myDepth = Target->GetDepth() - 1;
-		}
-		else
-		{
-			myDepth = Target->GetDepth() + 1;
-		}
+		myDepth = -myY -myZ - myExtraY;
 	}
 }
 
 void TestEnemy::Draw()
 {
-	
 	/*if (Target != NULL)
 	{
 		float width = -(Target->GetX() - myX);
@@ -183,10 +180,34 @@ void TestEnemy::Draw()
 		}
 		else
 		{
-			DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+			
+			if (Alive() or myState == Spawned)
+			{
+				DrawShadow(myX, myY + myZ, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+			}
+			else
+			{
+				if (myState == InUse)
+				{
+					if (myPrevState != Grabbed)
+					{
+						DrawShadow(myX, myY + myZ + GetHeight() / 2 + 5, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+					}
+				}
+				else if (myState ==+ Grabbed)
+				{
+					if (myPrevState != InUse)
+					{
+						DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+					}
+				}
+				else
+				{
+					DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+				}
+			}
 		}
 	}
-	
 
 	CollisionEntity::Draw();
 

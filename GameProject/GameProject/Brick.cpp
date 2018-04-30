@@ -10,7 +10,7 @@ Brick::Brick(float aX, float aY)
 	myBoxHeight = 16;
 	myXScale = 2;
 	myYScale = 2;
-	myDepth = myY;
+	myDepth = -myY;
 }
 
 
@@ -126,4 +126,5 @@ void Brick::Draw()
 {
 	Entity::Draw();
 	//DrawBBox();
+	//myColor = sf::Color::White;
 }

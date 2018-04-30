@@ -23,6 +23,8 @@ ProjectileEnemy::ProjectileEnemy(float aX, float aY)
 	myDeflate = false;
 
 	myDamage = 3;
+
+	myBloodColor = sf::Color(54, 36, 117);
 }
 
 
@@ -55,7 +57,7 @@ void ProjectileEnemy::StateAggro()
 				myXSpeed = 0;
 				myYSpeed = 0;
 			}
-			if (distance < 540)
+			if (distance < 400)
 			{
 				if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 				{
@@ -86,7 +88,7 @@ void ProjectileEnemy::StateAttack()
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5, 5) * Math::IRand(0, 1));
-			new Projectile(myX, myY - myZ, 7.0f, myDirection, false);
+			new Projectile(myX, myY - myZ, 5.5f, myDirection, false);
 			myDeflate = true;
 			myState = Aggro;
 			myAttackTimer = Math::FRand(1, 2);
@@ -108,12 +110,12 @@ void ProjectileEnemy::StateInUse()
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
-			myDepth = Target->GetDepth() + 3;
+			myDepth = Target->GetDepth() - 3;
 		}
 		if (myAttackTimer <= 0)
 		{
 			myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
-			new Projectile(myX, myY - myZ, 7.0f, myDirection, true);
+			new Projectile(myX, myY - myZ, 5.5f, myDirection, true);
 			myAttackTimer = 0.2f;
 			myState = Grabbed;
 			myDeflate = true;
@@ -137,7 +139,7 @@ void ProjectileEnemy::StateGrabbed()
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
-			myDepth = Target->GetDepth() + 3;
+			myDepth = Target->GetDepth() - 3;
 		}
 	}
 	
@@ -197,9 +199,7 @@ void ProjectileEnemy::Update()
 		}
 	}
 	
-
 	Enemy::Update();
-
 }
 
 void ProjectileEnemy::Draw()

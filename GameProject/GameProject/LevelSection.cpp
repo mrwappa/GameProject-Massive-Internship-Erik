@@ -58,15 +58,19 @@ LevelSection::LevelSection(float aX, float aY, bool aSectionForPlayer)
 			}
 			else if (level[i] == ENEMY)
 			{
-				int rand = Math::IRand(1, 10);
+				int rand = Math::IRand(1, 15);
 
-				if (rand > 9)
+				if (rand > 13)
 				{
 					new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
 				}
+				else if (rand <= 13 and rand > 9)
+				{
+					new LaserEnemy(SnapToSectionX(column), SnapToSectionY(row));
+				}
 				else if (rand <= 9 and rand > 4)
 				{
-					new TestEnemy(SnapToSectionX(column), SnapToSectionY(row));;
+					new TestEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}
 				else
 				{
@@ -104,7 +108,7 @@ void LevelSection::InitSections()
 	LoadSection("Maps/sect5.txt",&Sections);
 	LoadSection("Maps/sect6.txt",&Sections);
 
-	//Player
+	//Player Spawn
 	LoadSection("Maps/player_sect1.txt", &PlayerSections);
 	LoadSection("Maps/player_sect2.txt", &PlayerSections);
 	LoadSection("Maps/player_sect3.txt", &PlayerSections);

@@ -23,7 +23,7 @@ MageSpawner::MageSpawner(float aX, float aY)
 
 	mySpawnAlarm.SetTick(Math::IRand(60, 200));
 	myAnimationSpeed = 0.2f;
-
+	myBloodColor = sf::Color(181, 50, 72);
 	
 }
 
@@ -166,7 +166,6 @@ void MageSpawner::StateInUse()
 {
 	if (myState == InUse)
 	{
-
 		myZ = 0;
 		if (Target != NULL)
 		{
@@ -221,7 +220,7 @@ void MageSpawner::Update()
 			mySpawnAlarm.SetTick(Math::IRand(140,200));
 		}
 	}
-	myDepth = myY;
+	myDepth = -myY;
 	
 	if (Alive() and myState != Idle)
 	{
@@ -243,6 +242,8 @@ void MageSpawner::Update()
 
 void MageSpawner::Draw()
 {
+
+
 	if (Alive())
 	{
 		DrawShadow(myX, myY + 8 + myZ, 2.2f, 1.1f);

@@ -11,6 +11,7 @@
 #include "GroundEdge.h"
 #include "GroundPillar.h"
 #include "MageSpawner.h"
+#include "LaserEnemy.h"
 
 #include <fstream>
 #include <streambuf>

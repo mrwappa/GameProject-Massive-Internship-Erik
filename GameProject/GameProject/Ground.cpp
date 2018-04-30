@@ -10,7 +10,7 @@ Ground::Ground(float aX, float aY)
 	myXScale = 2;
 	myYScale = myXScale;
 
-	myDepth = myY - 100;
+	myDepth = -myY + 100;
 
 	myActive = false;
 }

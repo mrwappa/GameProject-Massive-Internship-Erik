@@ -121,6 +121,15 @@
     <Filter Include="Game\Solids\Solid">
       <UniqueIdentifier>{b56fcbb2-f637-499e-9413-e43a3438b9d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemies\LaserEnemy">
+      <UniqueIdentifier>{45200228-36f9-4afc-a6b1-dac86fd38f3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemies\LaserEnemy\LaserProjectile">
+      <UniqueIdentifier>{bea9d90d-6a1a-4ae9-a1f9-cacca50621ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DustParticle">
+      <UniqueIdentifier>{ec6f6873-4e6e-4f81-9ec2-ae1bf5b075d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -228,6 +237,15 @@
     <ClInclude Include="MageSpawner.h">
       <Filter>Game\Enemies\MageSpawner</Filter>
     </ClInclude>
+    <ClInclude Include="LaserEnemy.h">
+      <Filter>Game\Enemies\LaserEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserProjectile.h">
+      <Filter>Game\Enemies\LaserEnemy\LaserProjectile</Filter>
+    </ClInclude>
+    <ClInclude Include="DustParticle.h">
+      <Filter>Game\DustParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -317,6 +335,15 @@
     </ClCompile>
     <ClCompile Include="MageSpawner.cpp">
       <Filter>Game\Enemies\MageSpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserEnemy.cpp">
+      <Filter>Game\Enemies\LaserEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserProjectile.cpp">
+      <Filter>Game\Enemies\LaserEnemy\LaserProjectile</Filter>
+    </ClCompile>
+    <ClCompile Include="DustParticle.cpp">
+      <Filter>Game\DustParticle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -65,7 +65,7 @@ void Player::BeginUpdate()
 	}
 	myLookAngle = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 	TextureDirection(myLookAngle);
-	myDepth = myY;
+	myDepth = -myY;
 
 	//Check keys
 	W = KeyboardCheck(sf::Keyboard::W);
@@ -112,6 +112,11 @@ void Player::BeginUpdate()
 			myHurtAlarm.SetTick(20);
 
 			DeleteInstance(projectile);
+			int dustParticles = Math::IRand(5, 7);
+			for (int i = 0; i < dustParticles; i++)
+			{
+				new DustParticle(myX, myY, sf::Color(87, 113, 156));
+			}
 		}
 		if (enemy != NULL and enemy->Alive() and enemy->GetDamage() > 0)
 		{
@@ -241,7 +246,10 @@ void Player::EndUpdate()
 	{
 		myAttackTimer = 0;
 	}
-
+	if (MouseCheckPressed(sf::Mouse::Left))
+	{
+		new LaserProjectile(myX, myY, Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()),true);
+	}
 	if (myHurtAlarm.GetTick() == -1)
 	{
 		if (GrabbableEnemy == NULL)
@@ -290,7 +298,7 @@ void Player::Draw()
 void Player::DrawGUI()
 {
 	//DrawFontGUI(std::to_string(myX) +  " " + std::to_string(myY), 0, 0, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
+	//DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
 	
 	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
 	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
@@ -397,4 +405,3 @@ void Player::TextureDirection(float aAngle)
 		myXScale = -2;
 	}
 }
-

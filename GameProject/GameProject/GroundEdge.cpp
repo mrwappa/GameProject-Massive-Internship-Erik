@@ -6,7 +6,7 @@ GroundEdge::GroundEdge(float aX, float aY, int aBoxType)
 {
 	Init("GroundEdge", aX, aY);
 
-	myDepth = myY - 100;
+	myDepth = -myY + 100;
 
 	myXScale = 2;
 	myYScale = myXScale;
@@ -85,4 +85,5 @@ void GroundEdge::Draw()
 {
 	Entity::Draw();
 	//DrawBBox();
+	//myColor = sf::Color::White;
 }

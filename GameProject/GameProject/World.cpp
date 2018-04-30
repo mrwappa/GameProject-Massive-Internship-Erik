@@ -31,8 +31,6 @@ void World::BeginUpdate()
 
 void World::Update()
 {
-
-	
 	StatePaused();
 	StateMainMenu();
 	StateActive();
@@ -198,7 +196,7 @@ void World::DestroyWorld()
 
 void World::DrawGUI()
 {
-	DrawFontGUI("Zoom:" + std::to_string(Camera->GetZoom()), 700, 250, 24, 1, 1, sf::Color::White);
+	//DrawFontGUI("Zoom:" + std::to_string(Camera->GetZoom()), 700, 250, 24, 1, 1, sf::Color::White);
 	if (myGameState == Paused)
 	{
 		DrawPauseScreen();

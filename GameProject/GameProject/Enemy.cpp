@@ -61,7 +61,7 @@ void Enemy::StateIdle()
 			myWalkAlarm.SetTick(Math::IRand(60, 120));
 		}
 
-		if (Math::PointDistance(myX, myY - myZ, myWalkPoint.x, myWalkPoint.y) <= Math::PointDistance(0, 0, myXSpeed, myYSpeed))
+		if (Math::PointDistance(myX, myY, myWalkPoint.x, myWalkPoint.y) <= Math::PointDistance(0, 0, myXSpeed, myYSpeed))
 		{
 			myXSpeed = 0;
 			myYSpeed = 0;
@@ -216,7 +216,7 @@ void Enemy::StateGrabbed()
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
-			myDepth = Target->GetDepth() + 3;
+			myDepth = Target->GetDepth() - 3;
 		}
 	}
 }
@@ -246,6 +246,12 @@ void Enemy::StateThrown()
 
 			myThrowAlarm.SetTick(5);
 			Camera->ShakeScreen(5.0f);
+
+			int dustParticles = Math::IRand(7, 10);
+			for (int i = 0; i < dustParticles; i++)
+			{
+				new DustParticle(myX, myY, sf::Color(87, 113, 156));
+			}
 		}
 
 		Move(myXSpeed, myYSpeed);
@@ -318,16 +324,16 @@ void Enemy::BeginUpdate()
 
 void Enemy::Update()
 {
-	myDepth = myY - myZ;
+	myDepth = -myY + myZ;
 	if (myState == FallInAbyss)
 	{
 		if (myYSpeed > 0)
 		{
-			myDepth = myY - 80;
+			myDepth = -myY + 80;
 		}
 		else
 		{
-			myDepth = myY - 100;
+			myDepth = -myY + 100;
 		}
 		
 	}
@@ -358,6 +364,11 @@ void Enemy::Update()
 			myHP -= projectile->GetDamage();
 
 			DeleteInstance(projectile);
+			int dustParticles = Math::IRand(5, 7);
+			for (int i = 0; i < dustParticles; i++)
+			{
+				new DustParticle(myX, myY, sf::Color(87, 113, 156));
+			}
 		}
 
 		//Hit by PlayerAttack
@@ -401,11 +412,6 @@ void Enemy::Update()
 	myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.25f);
 	myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.25f);
 
-	/*if (myPrevHP != myHP)
-	{
-		myHurtAlarm.SetTick(15);
-	}*/
-
 	myColor = sf::Color::White;
 	if (myHurtAlarm.GetTick() != -1)
 	{
@@ -419,6 +425,11 @@ void Enemy::EndUpdate()
 	if (myPrevHP != myHP)
 	{
 		myHurtAlarm.SetTick(15);
+		int dustParticles = Math::IRand(6, 9);
+		for (int i = 0; i < dustParticles; i++)
+		{
+			new DustParticle(myX, myY, myBloodColor);
+		}
 	}
 }
 

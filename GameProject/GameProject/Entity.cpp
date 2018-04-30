@@ -64,6 +64,8 @@ void Entity::DeleteInstance(Entity* aEntity)
 {
 	//This bool check is here so that two of the same instances do not get
 	//put in the same list, leading to it trying delete something empty
+	//It is possible to search through the list to find same instance, but that
+	//would take up more performance
 	if (!aEntity->GetMarkedForDelete())
 	{
 		aEntity->SetMarkedForDelete(true);
@@ -229,14 +231,14 @@ int Entity::Partition(int aLow, int aHigh)
 	int j = aHigh + 1;
 	while (true)
 	{
-		while (DrawList[++i]->GetDepth() < DrawList[aLow]->GetDepth())
+		while (DrawList[++i]->GetDepth() > DrawList[aLow]->GetDepth())
 		{
 			if (i == aHigh)
 			{
 				break;
 			}
 		}
-		while (DrawList[aLow]->GetDepth() < DrawList[--j]->GetDepth())
+		while (DrawList[aLow]->GetDepth() > DrawList[--j]->GetDepth())
 		{
 			if (j == aLow)
 			{
@@ -318,7 +320,7 @@ void Entity::BubbleSortInDrawThread()
 		for (int j = 0; j < DrawList.Size() - i - 1; j++)
 		{
 			if (!SortInDrawThread) { return; }
-			if (DrawList[j]->GetDepth() > DrawList[j + 1]->GetDepth())
+			if (DrawList[j]->GetDepth() < DrawList[j + 1]->GetDepth())
 			{
 				DrawList.Swap(j, j + 1);
 				DrawListSorted = false;
@@ -334,15 +336,8 @@ void Entity::BubbleSortInDrawThread()
 
 void Entity::DrawAll()
 {
-	
-	/*if (DrawList.Size() > 1)
-	{
-		QuickSort(0, DrawList.Size() - 1);
-	}*/
-
-	
-	//SetDrawList();
 	SortInDrawThread = false;
+	
 	for (int i = 0; i < DrawList.Size(); i++)
 	{
 		if (DrawList[i]->GetDrawing())
@@ -352,108 +347,6 @@ void Entity::DrawAll()
 	}
 	SortInDrawThread = true;
 	
-}
-
-void Entity::SetDrawList()
-{
-	
-	/*GrowingArray<std::pair<Entity*,int>> nonChangeList;
-	GrowingArray<std::pair<Entity*,int>> drawChangeList;
-
-	int cameraWidth = Camera->GetViewWidth();
-	int cameraHeight = Camera->GetViewHeight();
-	int cameraX = Camera->GetX();
-	int cameraY = Camera->GetY();
-	
-	for (int i = 0; i < NonDrawList.Size(); i++)
-	{
-		Entity* instance = NonDrawList[i];
-
-		//this is an extremely crude way of saying that some entities get drawn, but not others
-		float x = instance->GetX();
-		float y = instance->GetY();
-		float width = abs(instance->GetWidth()) * 3;
-		float height = abs(instance->GetHeight()) * 3;
-		float diameter = width >= height ? width : height;
-
-		if ((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
-			(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2))
-		{
-			nonChangeList.Add(std::pair<Entity*, int>(instance, i));
-		}
-	}
-
-	for (int i = 0; i < nonChangeList.Size(); i++)
-	{
-		DrawList.Add(nonChangeList[i].first);
-		NonDrawList.RemoveCyclicAtIndex(nonChangeList[i].second);
-	}
-
-
-	for (int i = 0; i < DrawList.Size(); i++)
-	{
-		Entity* instance = DrawList[i];
-		
-		float x = instance->GetX();
-		float y = instance->GetY();
-		float width = abs(instance->GetWidth()) * 3;
-		float height = abs(instance->GetHeight()) * 3;
-		float diameter = width >= height ? width : height;
-
-		if (!((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
-			(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2)))
-		{
-			nonChangeList.Add(std::pair<Entity*, int>(instance, i));
-		}
-	}
-
-	for (int i = 0; i < drawChangeList.Size(); i++)
-	{
-		NonDrawList.Add(drawChangeList[i].first);
-		DrawList.RemoveCyclicAtIndex(drawChangeList[i].second);
-	}*/
-	SortInDrawThread = false;
-	int cameraWidth = Camera->GetViewWidth();
-	int cameraHeight = Camera->GetViewHeight();
-	int cameraX = Camera->GetX();
-	int cameraY = Camera->GetY();
-
-	for (auto const &instance : Entity::SuperList)
-	{
-		for (int i = 0; i < instance.second->Size(); i++)
-		{
-			Entity* anInstance = instance.second->FindAtIndex(i);
-
-			float x = anInstance->GetX();
-			float y = anInstance->GetY();
-			float width = abs(anInstance->GetWidth()) * 3;
-			float height = abs(anInstance->GetHeight()) * 3;
-			float diameter = width >= height ? width : height;
-
-			if (!anInstance->GetInDrawList())
-			{
-				if ((x - (diameter)) < cameraX + (cameraWidth / 2) and (x + (diameter)) > cameraX - (cameraWidth / 2) and
-					(y - (diameter)) < cameraY + (cameraHeight / 2) and (y + (diameter)) > cameraY - (cameraHeight / 2))
-				{
-					DrawList.Add(anInstance);
-					NonDrawList.Remove(anInstance);
-					anInstance->SetInDrawList(true);
-				}
-			}
-			else
-			{
-				if (!((x - (diameter / 2)) < cameraX + (cameraWidth / 2) and (x + (diameter / 2)) > cameraX - (cameraWidth / 2) and
-					(y - (diameter / 2)) < cameraY + (cameraHeight / 2) and (y + (diameter / 2)) > cameraY - (cameraHeight / 2)))
-				{
-					DrawList.Remove(anInstance);
-					NonDrawList.Add(anInstance);
-					anInstance->SetInDrawList(false);
-				}
-			}
-		}
-	}
-
-	SortInDrawThread = true;
 }
 
 void Entity::DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor)
@@ -468,13 +361,17 @@ void Entity::DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float 
 
 void Entity::DrawLinePos(float aX1, float aY1, float aX2, float aY2, sf::Color aColor)
 {
-
 	float deltax = aX2 - aX1;
 	float deltay = aY2 - aY1;
 
 	float deltalength = Math::SQRT2((deltax * deltax) + (deltay * deltay));
 
 	Pixel.DrawOrigin(aX1, aY1, 0, 0, 1, deltalength, Math::RadToDeg(atan2f(deltay, deltax)) - 90, 1, aColor, 0);
+}
+
+void Entity::DrawLine(float aX, float aY, float aLength, float aAngle, sf::Color aColor)
+{
+	Pixel.DrawOrigin(aX, aY, 0, 0, 1, aLength, aAngle - 90, 1, aColor, 0);
 }
 
 void Entity::DrawFont(std::string aText, float aX, float aY, float aSize, float aXScale ,float aYScale, sf::Color aColor)

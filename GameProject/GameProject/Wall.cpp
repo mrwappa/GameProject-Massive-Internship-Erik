@@ -10,7 +10,7 @@ Wall::Wall(float aX, float aY)
 	myBoxHeight = 18;
 	myXScale = 2;
 	myYScale = 2;
-	myDepth = myY - 20;
+	myDepth = -myY + 20;
 }
 
 
@@ -75,4 +75,5 @@ void Wall::Draw()
 {
 	Entity::Draw();
 	//DrawBBox();
+	//myColor = sf::Color::White;
 }

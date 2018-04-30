@@ -6,6 +6,7 @@
 #include "Dust.h"
 #include "Enemy.h"
 #include "Projectile.h"
+#include "LaserProjectile.h"
 
 class PlayerAttack;
 
