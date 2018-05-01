@@ -116,7 +116,7 @@ void ProjectileEnemy::StateInUse()
 		{
 			myDirection = Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 			new Projectile(myX, myY - myZ, 5.5f, myDirection, true);
-			myAttackTimer = 0.2f;
+			myAttackTimer = 0.3f;
 			myState = Grabbed;
 			myDeflate = true;
 		}

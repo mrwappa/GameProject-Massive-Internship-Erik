@@ -36,6 +36,7 @@ public:
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true, bool aIncludeAngle = true);
 	bool PreventCollision(std::string aName);
 	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName);
+	GrowingArray<CollisionEntity*>* LineEdgeCollisionList(Vector2f aStart, Vector2f aEnd, std::string aName);
 	CollisionEntity* NearestInstance(float aX, float aY, std::string aName);
 	bool ObjPosition(float aX, float aY, std::string aName);
 

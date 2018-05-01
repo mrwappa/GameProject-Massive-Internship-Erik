@@ -17,6 +17,8 @@ DustParticle::DustParticle(float aX, float aY, sf::Color aColor)
 	myYSpeed = Math::FRand(-2.8f, 2.8f);
 	myZSpeed = Math::FRand(0.7,2);
 	myZ = Math::IRand(10, 25);
+
+	myCheckInsideBounds = true;
 }
 
 
@@ -38,6 +40,13 @@ void DustParticle::Update()
 	{
 		DeleteInstance(this);
 	}
+	if (myZ <= 1.5f)
+	{
+		if (myCheckInsideBounds and ObjCollision(myX + myXSpeed * 2, myY + myYSpeed * 2, "LevelSection") == NULL)
+		{
+			DeleteInstance(this);
+		}
+	}
 }
 
 void DustParticle::Fall()
@@ -56,6 +65,7 @@ void DustParticle::Fall()
 		else
 		{
 			myZSpeed = 0;
+			myCheckInsideBounds = false;
 		}
 	}
 	else

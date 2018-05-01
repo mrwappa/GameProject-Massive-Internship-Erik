@@ -24,6 +24,7 @@ public:
 	void DrawGUI();
 
 	void OnRemoval();
+	void Hurt(float aDamage);
 
 	Enemy* NearestGrabbable();
 

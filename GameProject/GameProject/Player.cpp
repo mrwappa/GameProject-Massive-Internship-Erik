@@ -97,7 +97,7 @@ void Player::BeginUpdate()
 		myYSpeed = (myYSpeed / dist) * mdist;
 	}
 
-
+	//Hurt by Enemies
 	Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
 	Projectile* projectile = (Projectile*)ObjCollision(myX, myY, "Projectile");
 	if (myHurtAlarm.GetTick() == -1)
@@ -219,7 +219,7 @@ void Player::EndUpdate()
 			if (GrabbableEnemy->GetState() != Enemy::InUse)
 			{
 				GrabbableEnemy->SetState(Enemy::Grabbable);
-				GrabbableEnemy->SetZ(15);
+				GrabbableEnemy->SetZ(22);
 				GrabbableEnemy = NULL;
 			}
 		}
@@ -318,6 +318,18 @@ void Player::OnRemoval()
 {
 	Enemy::Target = NULL;
 	CollisionEntity::OnRemoval();
+}
+
+void Player::Hurt(float aDamage)
+{
+	myHP -= aDamage;
+	myHurtAlarm.SetTick(20);
+	
+	int dustParticles = Math::IRand(5, 7);
+	for (int i = 0; i < dustParticles; i++)
+	{
+		new DustParticle(myX, myY, sf::Color(87, 113, 156));
+	}
 }
 
 Enemy * Player::NearestGrabbable()

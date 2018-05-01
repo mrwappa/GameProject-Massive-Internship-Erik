@@ -15,5 +15,7 @@ public:
 private:
 	float myZSpeed;
 	Alarm myDestroyAlarm;
+
+	bool myCheckInsideBounds;
 };
 #endif // !DUSTPARICLE_H

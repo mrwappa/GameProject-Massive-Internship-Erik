@@ -221,7 +221,7 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 	myAngle = fmod(myAngle, 360);
 	
 	//Culling for Solids to optimize collision checking for static objects
-	if (aName == "Solid" or aName == "GroundEdge" and CollisionList.count("LevelSection") != 0)
+	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
@@ -394,7 +394,7 @@ bool CollisionEntity::PreventCollision(std::string aName)
 	return collision;
 }
 
-CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName)
+CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -436,6 +436,49 @@ CollisionEntity * CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f a
 		}
 	}
 	return NULL;
+}
+
+GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f aStart, Vector2f aEnd, std::string aName)
+{
+	if (CollisionList.count(aName) == 0)
+	{
+		return NULL;
+	}
+
+	GrowingArray<CollisionEntity*>* entities = new GrowingArray<CollisionEntity*>;
+
+	//Culling for Solids to optimize collision checking for static objects
+	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
+	{
+		GrArrayPtr = CollisionList.at("LevelSection");
+		myBoundingBox = RektF(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y - myZ + (aEnd.y - aStart.y) / 2, abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
+		for (int i = 0; i < GrArrayPtr->Size(); i++)
+		{
+			if (myBoundingBox.Intersect(GrArrayPtr->FindAtIndex(i)->GetBounds()))
+			{
+				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
+				for (int j = 0; j < solids->Size(); j++)
+				{
+					//solids->FindAtIndex(j)->SetColor(sf::Color::Red);
+					if (LineToEdgeIntersection(aStart, aEnd, solids->FindAtIndex(j)))
+					{
+						entities->Add(solids->FindAtIndex(i));
+					}
+				}
+			}
+		}
+		return entities;
+	}
+	
+	GrArrayPtr = CollisionList.at(aName);
+	for (int i = 0; i < GrArrayPtr->Size(); i++)
+	{
+		if (LineToEdgeIntersection(aStart, aEnd, GrArrayPtr->FindAtIndex(i)))
+		{
+			entities->Add(GrArrayPtr->FindAtIndex(i));
+		}
+	}
+	return entities;
 }
 
 CollisionEntity * CollisionEntity::NearestInstance(float aX, float aY, std::string aName)

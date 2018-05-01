@@ -125,6 +125,6 @@ void Brick::Update()
 void Brick::Draw()
 {
 	Entity::Draw();
-	//DrawBBox();
+	DrawBBox();
 	//myColor = sf::Color::White;
 }

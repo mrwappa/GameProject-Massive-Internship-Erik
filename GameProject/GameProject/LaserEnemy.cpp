@@ -26,6 +26,14 @@ LaserEnemy::~LaserEnemy()
 
 }
 
+void LaserEnemy::StateAttack()
+{
+	if (myState == Attack)
+	{
+
+	}
+}
+
 void LaserEnemy::Update()
 {
 	Enemy::Update();

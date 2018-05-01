@@ -78,6 +78,7 @@ void Enemy::StateIdle()
 
 		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
 		{
+			//There's design reasons to exclude GroundEdge here
 			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
 			{
 				myState = Aggro;

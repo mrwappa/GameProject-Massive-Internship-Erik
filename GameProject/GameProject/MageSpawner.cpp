@@ -93,7 +93,7 @@ void MageSpawner::StateGrabbed()
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - 30, 0.6f);
-			myDepth = Target->GetDepth() + 3;
+			myDepth = Target->GetDepth() - 3;
 		}
 	}
 }
@@ -171,7 +171,7 @@ void MageSpawner::StateInUse()
 		{
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - 30, 0.6f);
-			myDepth = Target->GetDepth() + 3;
+			myDepth = Target->GetDepth() - 3;
 		}
 
 		myShake += 0.08f;

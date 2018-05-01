@@ -180,32 +180,25 @@ void TestEnemy::Draw()
 		}
 		else
 		{
-			
-			if (Alive() or myState == Spawned)
+			if (myState == InUse)
 			{
-				DrawShadow(myX, myY + myZ, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+				if (myPrevState != Grabbed)
+				{
+					DrawShadow(myX, myY + myZ + GetHeight() / 2 + 5, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+				}
 			}
-			else
+			else if (myState ==+ Grabbed)
 			{
-				if (myState == InUse)
-				{
-					if (myPrevState != Grabbed)
-					{
-						DrawShadow(myX, myY + myZ + GetHeight() / 2 + 5, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
-					}
-				}
-				else if (myState ==+ Grabbed)
-				{
-					if (myPrevState != InUse)
-					{
-						DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
-					}
-				}
-				else
+				if (myPrevState != InUse)
 				{
 					DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
 				}
 			}
+			else
+			{
+				DrawShadow(myX, myY + myZ + GetHeight() / 2, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
+			}
+			
 		}
 	}
 

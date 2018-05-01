@@ -10,6 +10,7 @@ public:
 	LaserEnemy(float aX, float aY);
 	~LaserEnemy();
 
+	void StateAttack();
 	void Update();
 };
 #endif // !LASERENEMY_H

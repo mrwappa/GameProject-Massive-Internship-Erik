@@ -31,13 +31,15 @@ void World::BeginUpdate()
 
 void World::Update()
 {
-	StatePaused();
-	StateMainMenu();
-	StateActive();
+
 }
 
 void World::EndUpdate()
 {
+
+	StatePaused();
+	StateMainMenu();
+	StateActive();
 	if (mySortDrawList)
 	{
 		SortInDrawThread = false;
