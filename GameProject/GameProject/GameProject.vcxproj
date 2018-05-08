@@ -170,10 +170,11 @@
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="LaserEffect.h" />
     <ClInclude Include="LaserEnemy.h" />
     <ClInclude Include="LaserProjectile.h" />
     <ClInclude Include="LevelSection.h" />
-    <ClInclude Include="Line.h" />
+    <ClInclude Include="LineEffect.h" />
     <ClInclude Include="MageSpawner.h" />
     <ClInclude Include="MapSections.h" />
     <ClInclude Include="Math.h" />
@@ -209,10 +210,11 @@
     <ClCompile Include="GroundPillar.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="LaserEffect.cpp" />
     <ClCompile Include="LaserEnemy.cpp" />
     <ClCompile Include="LaserProjectile.cpp" />
     <ClCompile Include="LevelSection.cpp" />
-    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="LineEffect.cpp" />
     <ClCompile Include="MageSpawner.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />

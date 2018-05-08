@@ -319,6 +319,10 @@ void Enemy::BeginUpdate()
 	myPrevHP = myHP;
 	if (myPrevHP != myHP)
 	{
+		if (myState == Idle)
+		{
+			myState = Aggro;
+		}
 		myHurtAlarm.SetTick(15);
 	}
 }
@@ -425,6 +429,10 @@ void Enemy::EndUpdate()
 	//Because of Update order, I have to check this twice
 	if (myPrevHP != myHP)
 	{
+		if (myState == Idle)
+		{
+			myState = Aggro;
+		}
 		myHurtAlarm.SetTick(15);
 		int dustParticles = Math::IRand(6, 9);
 		for (int i = 0; i < dustParticles; i++)

@@ -57,6 +57,7 @@ public:
 	static bool DrawListSorted;
 	static bool DrawListUnfinished;
 	
+	//Drawing Figures
 	void DrawRect(float aX, float aY, float aWidth, float aHeight, float aAngle , float aAlpha, sf::Color aColor);
 	void DrawRectGUI(float aX, float aY, float aWidth, float aHeight, float aAngle, float aAlpha, sf::Color aColor);
 	void DrawLinePos(float aX1, float aY1, float aX2, float aY, sf::Color aColor);

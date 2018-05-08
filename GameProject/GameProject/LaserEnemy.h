@@ -11,6 +11,16 @@ public:
 	~LaserEnemy();
 
 	void StateAttack();
+	void StateAggro();
+	void StateInUse();
+	void StateGrabbed();
+
 	void Update();
+	void Draw();
+
+private:
+	Alarm myAttackAlarm;
+
+	
 };
 #endif // !LASERENEMY_H

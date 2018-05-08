@@ -133,10 +133,7 @@ void MageSpawner::StateFallInAbyss()
 		myXSpeed = Math::Lerp(myXSpeed, 0, 0.2f);
 		myYSpeed = Math::Lerp(myYSpeed, 0, 0.2f);
 
-		if (myXScale >= 0.2f)
-		{
-			myZ -= 4;
-		}
+		myZ -= 4.5f;
 		myXScale = Math::Lerp(myXScale, 0, 0.2f);
 		myYScale = Math::Lerp(myYScale, 0, 0.2f);
 
@@ -183,32 +180,33 @@ void MageSpawner::StateInUse()
 			SpawnEnemy();
 		}
 	}
-
 }
 void MageSpawner::SpawnEnemy()
 {
 	int rand = Math::IRand(0, ENEMIES_SIZE-1);
-	Enemy* enemy;
+	Enemy* enemy = NULL;
+
 	switch (rand)
 	{
 
 	case Projectile:
 		enemy = new ProjectileEnemy(myX,myY);
-		enemy->SetState(Spawned);
-		enemy->SetDirection(Math::DegToRad(Math::IRand(0, 360)));
-		enemy->SetZ(30);
 		break;
 
 	case Fly:
 		enemy = new TestEnemy(myX, myY);
-		enemy->SetState(Spawned);
-		enemy->SetDirection(Math::DegToRad(Math::IRand(0, 360)));
-		enemy->SetZ(30);
+		break;
+
+	case Laser:
+		enemy = new LaserEnemy(myX, myY);
 		break;
 
 	default:
 		break;
 	}
+	enemy->SetState(Spawned);
+	enemy->SetDirection(Math::DegToRad(Math::IRand(0, 360)));
+	enemy->SetZ(30);
 }
 void MageSpawner::Update()
 {
@@ -220,7 +218,7 @@ void MageSpawner::Update()
 			mySpawnAlarm.SetTick(Math::IRand(140,200));
 		}
 	}
-	myDepth = -myY;
+	myDepth = -myY - myZ;
 	
 	if (Alive() and myState != Idle)
 	{
@@ -253,14 +251,9 @@ void MageSpawner::Draw()
 		if(myState != Grabbed and myState != InUse)
 		DrawShadow(myX, myY + 18 + myZ, 2.2f, 1.1f);
 	}
-
-	//DrawRect(myX + 2, myY + 18, 30, 10, 0, 0.6f, sf::Color::Black);
 	if (mySprite.GetTextureWidth() > 0)
 	{
 		mySprite.Draw(myX + myShake * Math::IRand(-2, 2), myY - myZ + myShake * Math::IRand(-2, 2), myXScale, myYScale, myAngle, myAlpha, myColor, myAnimationSpeed);
 	}
-
-	
-
 	//DrawBBox();
 }

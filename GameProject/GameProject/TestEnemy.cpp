@@ -187,7 +187,7 @@ void TestEnemy::Draw()
 					DrawShadow(myX, myY + myZ + GetHeight() / 2 + 5, 1.5f + myZ / 100.0f, 0.8f + myZ / 100.0f);
 				}
 			}
-			else if (myState ==+ Grabbed)
+			else if (myState == Grabbed)
 			{
 				if (myPrevState != InUse)
 				{
@@ -203,10 +203,7 @@ void TestEnemy::Draw()
 	}
 
 	CollisionEntity::Draw();
-
-	
 	//DrawBBox();
-
 	/*for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,

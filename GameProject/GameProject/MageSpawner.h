@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "ProjectileEnemy.h"
 #include "TestEnemy.h"
+#include "LaserEnemy.h"
 
 class MageSpawner : public Enemy
 {
@@ -31,6 +32,6 @@ private:
 
 	float myShake;
 
-	enum Enemies{Projectile, Fly , ENEMIES_SIZE};
+	enum Enemies{Projectile, Fly, Laser, ENEMIES_SIZE};
 };
 #endif // !MAGESPAWNER_H

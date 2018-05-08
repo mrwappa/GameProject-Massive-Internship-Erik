@@ -82,7 +82,6 @@ inline Vector2<TType>::Vector2(TType aX, TType aY)
 {
 	myX = aX;
 	myY = aY;
-
 }
 
 //DESTRUCTOR 

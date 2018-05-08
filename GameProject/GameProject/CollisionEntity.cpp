@@ -119,6 +119,8 @@ bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3,
 
 bool CollisionEntity::LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity * aObject)
 {
+	aObject->UpdateBBox();
+	UpdateBBox();
 	//Bounding Points Object
 	Vector2f OBottomRight = aObject->GetBoxPosition() + Vector2f(aObject->GetBounds().GetWidth(), aObject->GetBounds().GetHeight());
 	Vector2f OBottomLeft = aObject->GetBoxPosition() + Vector2f(0, aObject->GetBounds().GetHeight());
@@ -394,7 +396,7 @@ bool CollisionEntity::PreventCollision(std::string aName)
 	return collision;
 }
 
-CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName)
+CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName, std::string aIgnore)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -406,17 +408,21 @@ CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aE
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
 		myBoundingBox = RektF(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y - myZ + (aEnd.y - aStart.y) / 2, abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
+
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
 		{
+			
 			if (myBoundingBox.Intersect(GrArrayPtr->FindAtIndex(i)->GetBounds()))
 			{
 				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
 				for (int j = 0; j < solids->Size(); j++)
 				{
-					//solids->FindAtIndex(j)->SetColor(sf::Color::Red);
+					if (solids->FindAtIndex(j)->GetName() == aIgnore)
+					{
+						continue;
+					}
 					if (LineToEdgeIntersection(aStart, aEnd, solids->FindAtIndex(j)))
 					{
-						
 						return solids->FindAtIndex(j);
 					}
 				}
@@ -430,6 +436,10 @@ CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aE
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
+		if (GrArrayPtr->FindAtIndex(i)->GetName() == aIgnore)
+		{
+			continue;
+		}
 		if (LineToEdgeIntersection(aStart, aEnd, GrArrayPtr->FindAtIndex(i)))
 		{
 			return GrArrayPtr->FindAtIndex(i);
@@ -438,7 +448,7 @@ CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aE
 	return NULL;
 }
 
-GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f aStart, Vector2f aEnd, std::string aName)
+GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f aStart, Vector2f aEnd, std::string aName, std::string aIgnore)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -459,10 +469,13 @@ GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f 
 				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
 				for (int j = 0; j < solids->Size(); j++)
 				{
-					//solids->FindAtIndex(j)->SetColor(sf::Color::Red);
+					if (solids->FindAtIndex(j)->GetName() == aIgnore)
+					{
+						continue;
+					}
 					if (LineToEdgeIntersection(aStart, aEnd, solids->FindAtIndex(j)))
 					{
-						entities->Add(solids->FindAtIndex(i));
+						entities->Add(solids->FindAtIndex(j));
 					}
 				}
 			}
@@ -473,6 +486,10 @@ GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f 
 	GrArrayPtr = CollisionList.at(aName);
 	for (int i = 0; i < GrArrayPtr->Size(); i++)
 	{
+		if (GrArrayPtr->FindAtIndex(i)->GetName() == aIgnore)
+		{
+			continue;
+		}
 		if (LineToEdgeIntersection(aStart, aEnd, GrArrayPtr->FindAtIndex(i)))
 		{
 			entities->Add(GrArrayPtr->FindAtIndex(i));

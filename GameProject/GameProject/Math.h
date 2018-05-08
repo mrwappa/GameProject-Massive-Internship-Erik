@@ -16,7 +16,7 @@ public:
 	Math();
 	~Math();
 
-	static std::mt19937 Random;
+	
 	
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);
@@ -38,6 +38,8 @@ public:
 	//if I want to have unlimited parameters/arguments
 	static float Choose(float aX, float aY);
 
+private:
+	static std::mt19937 Random;
 };
 
 #endif // !MATH_H

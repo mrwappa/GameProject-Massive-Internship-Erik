@@ -3,6 +3,7 @@
 
 #include "PlayerAttack.h"
 
+
 Player::Player(float aX, float aY)
 {
 	Init("Player",aX,aY);
@@ -115,7 +116,7 @@ void Player::BeginUpdate()
 			int dustParticles = Math::IRand(5, 7);
 			for (int i = 0; i < dustParticles; i++)
 			{
-				new DustParticle(myX, myY, sf::Color(87, 113, 156));
+				new DustParticle(myX, myY, sf::Color::Red);
 			}
 		}
 		if (enemy != NULL and enemy->Alive() and enemy->GetDamage() > 0)
@@ -125,6 +126,11 @@ void Player::BeginUpdate()
 			myYKnockBack = Math::LenDirY(15, myDirection);
 
 			myHP -= enemy->GetDamage();
+			int dustParticles = Math::IRand(5, 7);
+			for (int i = 0; i < dustParticles; i++)
+			{
+				new DustParticle(myX, myY, sf::Color::Red);
+			}
 			myHurtAlarm.SetTick(25);
 		}
 	}
@@ -167,17 +173,8 @@ void Player::BeginUpdate()
 	{
 		myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
 	}
-	
-	//Camera Stuff
-	if (MouseWheelDown())
-	{
-		Camera->IncrZoom(-0.095f * Camera->GetZoom());
-	}
-	if (MouseWheelUp())
-	{
-		Camera->IncrZoom(0.095f * Camera->GetZoom());
-	}
 
+	//Camera Position
 	Camera->SetX(myX);
 	Camera->SetY(myY);
 }
@@ -246,10 +243,7 @@ void Player::EndUpdate()
 	{
 		myAttackTimer = 0;
 	}
-	if (MouseCheckPressed(sf::Mouse::Left))
-	{
-		new LaserProjectile(myX, myY, Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()),true);
-	}
+
 	if (myHurtAlarm.GetTick() == -1)
 	{
 		if (GrabbableEnemy == NULL)
@@ -320,15 +314,18 @@ void Player::OnRemoval()
 	CollisionEntity::OnRemoval();
 }
 
-void Player::Hurt(float aDamage)
+void Player::Hurt(float aDamage, float aDirection)
 {
+
+	myXKnockBack = Math::LenDirX(10, aDirection);
+	myYKnockBack = Math::LenDirY(10, aDirection);
 	myHP -= aDamage;
 	myHurtAlarm.SetTick(20);
 	
 	int dustParticles = Math::IRand(5, 7);
 	for (int i = 0; i < dustParticles; i++)
 	{
-		new DustParticle(myX, myY, sf::Color(87, 113, 156));
+		new DustParticle(myX, myY, sf::Color::Red);
 	}
 }
 

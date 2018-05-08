@@ -47,7 +47,7 @@ void ProjectileEnemy::StateAggro()
 
 		if (Target != NULL)
 		{
-			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
+			myDirection = Math::PointDirection(myX, myY - myZ, Target->GetX(), Target->GetY());
 			myXSpeed = Math::LenDirX(myMoveSpeed, myDirection);
 			myYSpeed = Math::LenDirY(myMoveSpeed, myDirection);
 
@@ -230,7 +230,6 @@ void ProjectileEnemy::Draw()
 
 	CollisionEntity::Draw();
 	//DrawBBox();
-	
 	/*for (int i = 0; i < myPath.Size(); i++)
 	{
 		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,

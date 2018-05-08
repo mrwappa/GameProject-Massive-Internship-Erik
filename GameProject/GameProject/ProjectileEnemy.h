@@ -2,7 +2,6 @@
 #define PROJECTILEENEMY_H
 
 #include "Enemy.h"
-#include "Line.h"
 #include "Player.h"
 #include "PlayerAttack.h"
 #include "Projectile.h"
@@ -24,8 +23,6 @@ public:
 	void DrawGUI();
 
 private:
-
-	Line myLine;
 
 	float myAttackTimer;
 

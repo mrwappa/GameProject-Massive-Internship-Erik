@@ -29,7 +29,7 @@ DustParticle::~DustParticle()
 void DustParticle::Update()
 {
 
-	myDepth = -myY + myZ + 25;
+	myDepth = -myY - myZ + 25;
 	Fall();
 
 	Move(myXSpeed, myYSpeed);
@@ -42,9 +42,12 @@ void DustParticle::Update()
 	}
 	if (myZ <= 1.5f)
 	{
-		if (myCheckInsideBounds and ObjCollision(myX + myXSpeed * 2, myY + myYSpeed * 2, "LevelSection") == NULL)
+		if (myCheckInsideBounds)
 		{
-			DeleteInstance(this);
+			if (ObjCollision(myX + myXSpeed * 2, myY + myYSpeed * 2, "LevelSection") == NULL)
+			{
+				DeleteInstance(this);
+			}
 		}
 	}
 }

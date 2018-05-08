@@ -22,7 +22,7 @@ GroundPillar::GroundPillar(float aX, float aY, int aPillar)
 	myXScale = 2;
 	myYScale = myXScale;
 
-	myDepth = -myY + 100;
+	myDepth = -myY + 9999;
 
 	myActive = false;
 }

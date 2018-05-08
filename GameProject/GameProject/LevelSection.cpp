@@ -58,17 +58,17 @@ LevelSection::LevelSection(float aX, float aY, bool aSectionForPlayer)
 			}
 			else if (level[i] == ENEMY)
 			{
-				int rand = Math::IRand(1, 15);
+				int rand = Math::IRand(0, 100);
 
-				if (rand > 13)
+				if (rand > 90)
 				{
 					new MageSpawner(SnapToSectionX(column), SnapToSectionY(row));
 				}
-				else if (rand <= 13 and rand > 9)
+				else if (rand <= 90 and rand > 70)
 				{
 					new LaserEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}
-				else if (rand <= 9 and rand > 4)
+				else if (rand <= 70 and rand > 30)
 				{
 					new TestEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}

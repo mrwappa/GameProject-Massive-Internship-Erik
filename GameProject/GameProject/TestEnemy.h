@@ -3,7 +3,6 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "Line.h"
 #include "PlayerAttack.h"
 
 class TestEnemy : public Enemy
@@ -28,7 +27,5 @@ private:
 	bool myRetract;
 
 	GrowingArray<CollisionEntity*>* myEnemyTargets;
-
-	Line myLine;
 };
 #endif // !TESTENEMY_H

@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Projectile.h"
 #include "LaserProjectile.h"
+#include "LaserEffect.h"
 
 class PlayerAttack;
 
@@ -24,7 +25,7 @@ public:
 	void DrawGUI();
 
 	void OnRemoval();
-	void Hurt(float aDamage);
+	void Hurt(float aDamage,float aDirection);
 
 	Enemy* NearestGrabbable();
 
