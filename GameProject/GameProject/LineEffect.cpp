@@ -42,7 +42,7 @@ void LineEffect::Update()
 	else
 	{
 		myLength = Math::Lerp(myLength, 0, myRetractSpeed);
-		if (myLength == 0)
+		if (myLength < 0.3f)
 		{
 			DeleteInstance(this);
 		}

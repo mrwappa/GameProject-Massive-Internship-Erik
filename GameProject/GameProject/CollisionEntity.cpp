@@ -120,7 +120,6 @@ bool CollisionEntity::LineIntersection(Vector2f aP1, Vector2f aP2, Vector2f aP3,
 bool CollisionEntity::LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity * aObject)
 {
 	aObject->UpdateBBox();
-	UpdateBBox();
 	//Bounding Points Object
 	Vector2f OBottomRight = aObject->GetBoxPosition() + Vector2f(aObject->GetBounds().GetWidth(), aObject->GetBounds().GetHeight());
 	Vector2f OBottomLeft = aObject->GetBoxPosition() + Vector2f(0, aObject->GetBounds().GetHeight());
@@ -275,7 +274,7 @@ GrowingArray<CollisionEntity*> CollisionEntity::ObjCollisionList(float aX, float
 		{
 			if (InstanceCollision(aX, aY, GrArrayPtr->FindAtIndex(i), false))
 			{
-				//I do not understand why the regular [] index operator is failing here
+				//I don't understand why the regular [] index operator is failing here
 				entities.Add(GrArrayPtr->FindAtIndex(i));
 			}
 		}
@@ -407,8 +406,11 @@ CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aE
 	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
-		myBoundingBox = RektF(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y - myZ + (aEnd.y - aStart.y) / 2, abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
 
+		myBoundingBox = RektF(aStart.x - (abs(aEnd.x - aStart.x) * (aEnd.x - aStart.x < 0)),
+			aStart.y - myZ - (abs(aEnd.y - aStart.y) * (aEnd.y - aStart.y < 0)),
+			abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
+		
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
 		{
 			
@@ -461,7 +463,11 @@ GrowingArray<CollisionEntity*>* CollisionEntity::LineEdgeCollisionList(Vector2f 
 	if (aName == "Solid" and CollisionList.count("LevelSection") != 0)
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
-		myBoundingBox = RektF(aStart.x + (aEnd.x - aStart.x) / 2, aStart.y - myZ + (aEnd.y - aStart.y) / 2, abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
+
+		myBoundingBox = RektF(aStart.x - (abs(aEnd.x - aStart.x) * (aEnd.x - aStart.x < 0)),
+			aStart.y - myZ - (abs(aEnd.y - aStart.y) * (aEnd.y - aStart.y < 0)),
+			abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
+
 		for (int i = 0; i < GrArrayPtr->Size(); i++)
 		{
 			if (myBoundingBox.Intersect(GrArrayPtr->FindAtIndex(i)->GetBounds()))
@@ -572,6 +578,12 @@ void CollisionEntity::Draw()
 	{
 		mySprite.Draw(myX, myY - myZ, myXScale, myYScale, myAngle, myAlpha, myColor, myAnimationSpeed);
 	}
+}
+
+void CollisionEntity::DrawRekt(RektF aRectangle, float aAlpha, sf::Color aColor)
+{
+	Pixel.Draw(aRectangle.GetX() + aRectangle.GetWidth() / 2, aRectangle.GetY() + aRectangle.GetHeight() /2
+			   ,aRectangle.GetWidth(), aRectangle.GetHeight(), 0, aAlpha, aColor, 0);
 }
 
 void CollisionEntity::Move(float aXSpeed, float aYSpeed)

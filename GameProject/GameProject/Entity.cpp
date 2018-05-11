@@ -320,9 +320,13 @@ void Entity::BubbleSortInDrawThread()
 		for (int j = 0; j < DrawList.Size() - i - 1; j++)
 		{
 			if (!SortInDrawThread) { return; }
+
 			if (DrawList[j]->GetDepth() < DrawList[j + 1]->GetDepth())
 			{
-				DrawList.Swap(j, j + 1);
+				if (SortInDrawThread)
+				{
+					DrawList.Swap(j, j + 1);
+				}
 				DrawListSorted = false;
 				swapped = true;
 			}

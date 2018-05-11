@@ -11,6 +11,9 @@ DustParticle::DustParticle(float aX, float aY, sf::Color aColor)
 
 	myDestroyAlarm.SetTick(Math::IRand(120, 240));
 
+	myBoxWidth = 1;
+	myBoxHeight = 1;
+
 	myXScale = Math::FRand(1.8f,2.5f);
 	myYScale = myXScale;
 	myXSpeed = Math::FRand(-2.8f, 2.8f);
@@ -29,7 +32,7 @@ DustParticle::~DustParticle()
 void DustParticle::Update()
 {
 
-	myDepth = -myY - myZ + 25;
+	myDepth = -myY + myZ + 25;
 	Fall();
 
 	Move(myXSpeed, myYSpeed);

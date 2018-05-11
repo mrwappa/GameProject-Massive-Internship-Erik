@@ -45,6 +45,8 @@ public:
 	void DrawBBox();
 
 	void Draw();
+
+	void DrawRekt(RektF aRectangle, float aAlpha, sf::Color aColor);
 	
 	//Rotate() is broken, so is the Rotate() in the Vector2 class
 	Vector2f Rotate(float aX, float aY, float aAngle, Vector2f Point);

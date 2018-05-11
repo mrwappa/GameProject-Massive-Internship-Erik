@@ -204,17 +204,6 @@ void ProjectileEnemy::Update()
 
 void ProjectileEnemy::Draw()
 {	
-	if (Target != NULL)
-	{
-		/*if (LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
-		{
-			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::Red);
-		}
-		else
-		{
-			myLine.DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), myDepth - 3, sf::Color::White);
-		}*/
-	}
 
 	if (myState != Grabbed and myState != InUse)
 	{
@@ -237,8 +226,3 @@ void ProjectileEnemy::Draw()
 	}*/
 }
 
-void ProjectileEnemy::DrawGUI()
-{
-	//DrawFont(std::to_string((int)myHP), myX, myY - 20, 24, 1, 1, sf::Color::White);
-	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
-}

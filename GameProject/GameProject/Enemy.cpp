@@ -79,7 +79,7 @@ void Enemy::StateIdle()
 		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
 		{
 			//There's design reasons to exclude GroundEdge here
-			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
+			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid", "GroundEdge"))
 			{
 				myState = Aggro;
 			}
@@ -332,15 +332,7 @@ void Enemy::Update()
 	myDepth = -myY + myZ;
 	if (myState == FallInAbyss)
 	{
-		if (myYSpeed > 0)
-		{
-			myDepth = -myY + 80;
-		}
-		else
-		{
-			myDepth = -myY + 100;
-		}
-		
+		myDepth = -myY + myZ + 200;
 	}
 	
 	StatePathFind();

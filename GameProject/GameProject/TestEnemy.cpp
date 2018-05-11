@@ -147,31 +147,12 @@ void TestEnemy::Update()
 	//because depth is changed in Enemy Update, this is checked after
 	if (myState == InUse)
 	{
-		myDepth = -myY -myZ - myExtraY;
+		myDepth = -myY + myZ - myExtraY;
 	}
 }
 
 void TestEnemy::Draw()
 {
-	/*if (Target != NULL)
-	{
-		float width = -(Target->GetX() - myX);
-		float height = -(Target->GetY() - myY - myZ);
-		float x = myX - width / 2;
-		float y = myY - height / 2;
-
-		DrawRect(x, y, width, height, 0, 0.6f, sf::Color::Black);
-
-		if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Target->GetX(), Target->GetY()), "Solid"))
-		{
-			DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), sf::Color::Red);
-		}
-		else
-		{
-			DrawLinePos(myX, myY - myZ, Target->GetX(), Target->GetY(), sf::Color::White);
-		}
-	}*/
-
 	if (myState != Grabbed)
 	{
 		if (Alive() or myState == Spawned)
@@ -204,16 +185,4 @@ void TestEnemy::Draw()
 
 	CollisionEntity::Draw();
 	//DrawBBox();
-	/*for (int i = 0; i < myPath.Size(); i++)
-	{
-		myLine.DrawLinePos(myPath[i]->GetCenter().x, myPath[i]->GetCenter().y, myPath[i]->GetParent()->GetCenter().x, myPath[i]->GetParent()->GetCenter().y,
-							myDepth, sf::Color::White);
-	}*/
 }
-
-void TestEnemy::DrawGUI()
-{
-	//DrawFont(std::to_string((int)myHP), myX, myY , 24, 1, 1, sf::Color::White);
-	//DrawFont(std::to_string(myZ), myX, myY - 40, 24, 1, 1, sf::Color::White);
-}
-

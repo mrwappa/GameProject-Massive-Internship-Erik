@@ -12,6 +12,8 @@
 #include "Alarm.h"
 #include <thread>
 
+#include "Rekt.h"
+
 class Entity
 {
 public:
@@ -34,8 +36,6 @@ public:
 	void DeleteInstance(Entity* aEntity);
 	virtual void OnRemoval();
 	static void DeleteMarkedInstances();
-	
-
 
 	Entity* GetObj(std::string aEntity);
 

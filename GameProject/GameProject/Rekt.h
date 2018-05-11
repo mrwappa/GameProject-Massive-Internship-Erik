@@ -22,6 +22,8 @@ public:
 	bool Contains(Rekt<T> aRect);
 	bool Intersect(Rekt<T> aRect);
 
+	void UpdateEndCoords();
+
 private:
 	float myX;
 	float myX2;
@@ -65,8 +67,8 @@ inline Rekt<T>& Rekt<T>::operator=(const Rekt<T>& aRekt)
 	myY = aRekt.GetY();
 	myWidth = aRekt.GetWidth();
 	myHeight = aRekt.GetHeight();
-	myX2 = aRekt.GetX2();
-	myY2 = aRekt.GetY2();
+	myX2 = myX + aRekt.GetWidth();
+	myY2 = myY + aRekt.GetHeight();
 
 	return *this;
 }
@@ -116,6 +118,8 @@ inline T Rekt<T>::GetHeight() const
 template<typename T>
 inline bool Rekt<T>::Contains(Rekt<T> aRect)
 {
+	UpdateEndCoords();
+	aRect.UpdateEndCoords();
 	return (aRect.GetX() >= myX and aRect.GetY() >= myY and
 		aRect.GetX2() <= myX2 and aRect.GetY2() <= myY2);
 }
@@ -124,7 +128,14 @@ template<typename T>
 inline bool Rekt<T>::Intersect(Rekt<T> aRect)
 {
 	return (myX + myWidth > aRect.GetX() and myY + myHeight > aRect.GetY() and
-		myX < aRect.GetX() + aRect.GetWidth() and myY < aRect.GetY() + aRect.GetHeight());
+	myX < aRect.GetX() + aRect.GetWidth() and myY < aRect.GetY() + aRect.GetHeight());
+}
+
+template<typename T>
+inline void Rekt<T>::UpdateEndCoords()
+{
+	myX2 = myX + myWidth;
+	myY2 = myY + myHeight;
 }
 
 typedef Rekt<float> RektF;

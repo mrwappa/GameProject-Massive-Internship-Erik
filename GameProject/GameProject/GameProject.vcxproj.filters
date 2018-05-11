@@ -130,6 +130,9 @@
     <Filter Include="Game\Enemies\LaserEnemy\LaserEffect">
       <UniqueIdentifier>{d1f094ab-44be-42de-9238-a84dec464ffc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Tutorial">
+      <UniqueIdentifier>{f35767e0-5627-41ee-837a-7ae74d488386}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -249,6 +252,9 @@
     <ClInclude Include="LineEffect.h">
       <Filter>Game\Enemies\LaserEnemy\LineEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>Game\Tutorial</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -350,6 +356,9 @@
     </ClCompile>
     <ClCompile Include="LineEffect.cpp">
       <Filter>Game\Enemies\LaserEnemy\LineEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>Game\Tutorial</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

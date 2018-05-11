@@ -39,6 +39,9 @@ void LaserEnemy::StateAttack()
 			myState = Aggro;
 		}
 
+
+		myXSpeed = 0;
+		myYSpeed = 0;
 		PreventCollision("Solid");
 		Move(myXKnockBack, myYKnockBack);
 	}

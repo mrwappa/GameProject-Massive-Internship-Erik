@@ -273,6 +273,14 @@ void Player::EndUpdate()
 
 void Player::Draw()
 {
+	/*if (LineEdgeCollision(Vector2f(myX, myY - myZ), Vector2f(Camera->GetMouseX(), Camera->GetMouseY()), "Solid","GroundEdge"))
+	{
+		DrawLinePos(myX, myY - myZ, Camera->GetMouseX(), Camera->GetMouseY(), sf::Color::Red);
+	}
+	else
+	{
+		DrawLinePos(myX, myY - myZ, Camera->GetMouseX(), Camera->GetMouseY(), sf::Color::White);
+	}*/
 	myPreviousAIndex = mySprite.GetAnimationIndex();
 	if (mySprite.GetAnimationIndex() == 2)
 	{
@@ -291,21 +299,7 @@ void Player::Draw()
 
 void Player::DrawGUI()
 {
-	//DrawFontGUI(std::to_string(myX) +  " " + std::to_string(myY), 0, 0, 24, 1, 1, sf::Color::White);
-	//DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
-	
-	/*DrawFontGUI("Brick:" + std::to_string(SuperList.at("Brick")->Size()), 0, 40, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("Player:" + std::to_string(SuperList.at("Player")->Size()), 0, 80, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("TestEnemy:" + std::to_string(SuperList.at("TestEnemy")->Size()), 0, 120, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("World:" + std::to_string(SuperList.at("World")->Size()), 0, 160, 24, 1, 1, sf::Color::White);
 
-	DrawFontGUI("Brick:" + std::to_string(CollisionList.at("Brick")->Size()), 700, 40, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("Player:" + std::to_string(CollisionList.at("Player")->Size()), 700, 80, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("TestEnemy:" + std::to_string(CollisionList.at("TestEnemy")->Size()), 700, 120, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("Enemy:" + std::to_string(CollisionList.at("Enemy")->Size()), 700, 160, 24, 1, 1, sf::Color::White);
-	DrawFontGUI("Solid:" + std::to_string(CollisionList.at("Solid")->Size()), 700, 200, 24, 1, 1, sf::Color::White);
-
-	DrawFontGUI("DeleteMarkedList:" + std::to_string(DeleteMarkedList.Size()), 540, 280, 24, 1, 1, sf::Color::White);*/
 }
 
 void Player::OnRemoval()

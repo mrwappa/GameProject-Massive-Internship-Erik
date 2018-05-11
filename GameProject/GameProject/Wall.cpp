@@ -75,5 +75,4 @@ void Wall::Draw()
 {
 	Entity::Draw();
 	//DrawBBox();
-	//myColor = sf::Color::White;
 }

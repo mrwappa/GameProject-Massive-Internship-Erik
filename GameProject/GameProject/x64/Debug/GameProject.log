@@ -1,5 +1,24 @@
-﻿  GroundPillar.cpp
-  Ground.cpp
+﻿  Tutorial.cpp
   Skipping... (no relevant changes detected)
+  main.cpp
+  World.cpp
+  Wall.cpp
+  TestEnemy.cpp
+  Solid.cpp
+  ProjectileEnemy.cpp
+  Projectile.cpp
   PlayerAttack.cpp
+  Player.cpp
+  MageSpawner.cpp
+  LevelSection.cpp
+  LaserProjectile.cpp
+  LaserEnemy.cpp
+  GroundEdge.cpp
+  Enemy.cpp
+  DustParticle.cpp
+  CollisionEntity.cpp
+  Brick.cpp
+  BoxTest.cpp
+  AStarNode.cpp
+  AStar.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

@@ -13,6 +13,7 @@
 #include "LevelSection.h"
 #include "MapSections.h"
 #include "MageSpawner.h"
+#include "Tutorial.h"
 
 class World : public Entity
 {
@@ -52,6 +53,8 @@ private:
 
 	int myGameState;
 	int myPrevGameState;
+
+	Tutorial* myTutorial;
 };
 
 #endif // !WORLD_H

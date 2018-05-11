@@ -85,5 +85,4 @@ void GroundEdge::Draw()
 {
 	Entity::Draw();
 	//DrawBBox();
-	//myColor = sf::Color::White;
 }

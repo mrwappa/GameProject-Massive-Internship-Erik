@@ -17,7 +17,6 @@ public:
 
 	void Update();
 	void Draw();
-	void DrawGUI();
 
 private:
 

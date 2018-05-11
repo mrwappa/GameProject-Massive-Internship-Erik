@@ -18,11 +18,12 @@ World::World()
 
 	myDepth = 99999;
 	mySortDrawList = false;
+
+	myTutorial = new Tutorial();
 }
 
 World::~World()
 {
-	//LevelSection::Sections.DeleteAll();
 }
 
 void World::BeginUpdate()
@@ -62,6 +63,12 @@ void World::Draw()
 
 void World::CreateWorld()
 {
+	if (myTutorial != NULL)
+	{
+		DeleteInstance(myTutorial);
+		myTutorial = NULL;
+	}
+
 	AStarNode::NodeSize = 32.0f;
 	LevelSection::SWidth = 17;
 	LevelSection::SHeight = 13;
@@ -198,7 +205,6 @@ void World::DestroyWorld()
 
 void World::DrawGUI()
 {
-	//DrawFontGUI("Zoom:" + std::to_string(Camera->GetZoom()), 700, 250, 24, 1, 1, sf::Color::White);
 	if (myGameState == Paused)
 	{
 		DrawPauseScreen();

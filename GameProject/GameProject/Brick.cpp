@@ -4,7 +4,6 @@
 Brick::Brick(float aX, float aY)
 {
 	Init("Brick",aX,aY);
-	//mySprite.SetTexture("Sprites/32x32Block.png", 1);
 
 	myBoxWidth = 14;
 	myBoxHeight = 16;
@@ -102,11 +101,6 @@ void Brick::Update()
 		mySprite.SetTexture(BRICKUL, 1);
 		myXScale = -2;
 	}
-	/*if (brickU and !brickD and !brickL and !brickR)
-	{
-		mySprite.SetTexture(BRICKUL, 1);
-		myXScale = -2;
-	}*/
 	if (brickU and !brickD and !brickL and !brickR)
 	{
 		mySprite.SetTexture(BRICKDLR, 1);

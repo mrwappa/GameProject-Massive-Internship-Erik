@@ -10,7 +10,7 @@ LaserEffect::LaserEffect(float aX, float aY, float aLength, float aDirection)
 	
 	for (int i = 0; i < aLength / 4; i++)
 	{
-		float lineLength = Math::IRand(20, 40);
+		float lineLength = Math::IRand(30,60 );
 		length += lineLength;
 		
 		if (length > aLength)
