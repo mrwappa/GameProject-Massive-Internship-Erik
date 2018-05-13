@@ -32,6 +32,9 @@ public:
 	PlayerAttack* PAttack;
 	Enemy* GrabbableEnemy;
 
+	enum PlayerStates { Normal, Dash };
+	int GetState() const;
+
 private:
 	bool W;
 	bool A;
@@ -54,17 +57,21 @@ private:
 	float myXSub;
 	float myYSub;
 
+	float myDirection;
+
 	
+	int myState;
+	bool myAccelerate;
+
+	void StateNormal();
+	void StateDash();
+
 	Alarm myHurtAlarm;
-	
-	float myLookAngle;
-	
+	Alarm myInvisAlarm;
 	float myAttackTimer;
 
 	void TextureDirection(float aAngle);
-
 	std::string myCharTextures[5];
-	
 	enum CharTexture {Back, BackLeft, Front, FrontLeft ,Left, T_SIZE};
 
 	GSprite myShadow;

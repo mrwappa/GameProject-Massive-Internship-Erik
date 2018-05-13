@@ -1,24 +1,21 @@
-﻿  Tutorial.cpp
+﻿  Player.cpp
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\player.cpp(168): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\player.cpp(172): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\player.cpp(432): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\player.cpp(437): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
   Skipping... (no relevant changes detected)
   main.cpp
   World.cpp
-  Wall.cpp
+  Tutorial.cpp
   TestEnemy.cpp
-  Solid.cpp
   ProjectileEnemy.cpp
-  Projectile.cpp
   PlayerAttack.cpp
-  Player.cpp
   MageSpawner.cpp
   LevelSection.cpp
   LaserProjectile.cpp
   LaserEnemy.cpp
-  GroundEdge.cpp
   Enemy.cpp
-  DustParticle.cpp
+  DashEnemy.cpp
   CollisionEntity.cpp
-  Brick.cpp
-  BoxTest.cpp
-  AStarNode.cpp
-  AStar.cpp
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

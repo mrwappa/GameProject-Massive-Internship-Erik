@@ -32,7 +32,7 @@ DustParticle::~DustParticle()
 void DustParticle::Update()
 {
 
-	myDepth = -myY + myZ + 25;
+	myDepth = -myY - myZ + 25;
 	Fall();
 
 	Move(myXSpeed, myYSpeed);

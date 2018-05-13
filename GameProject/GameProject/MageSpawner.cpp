@@ -218,7 +218,7 @@ void MageSpawner::Update()
 			mySpawnAlarm.SetTick(Math::IRand(140,200));
 		}
 	}
-	myDepth = -myY + myZ;
+	myDepth = -myY - myZ;
 	
 	if (Alive() and myState != Idle)
 	{

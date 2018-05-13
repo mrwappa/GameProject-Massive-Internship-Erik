@@ -31,7 +31,7 @@ void Projectile::Update()
 {
 	myDepth = -myY;
 
-	CollisionEntity* brick = ObjCollision(myX, myY, "Solid",false);
+	CollisionEntity* brick = ObjCollision(myX, myY, "Solid","",false);
 	if (brick != NULL and brick->GetName() != "GroundEdge")
 	{
 		DeleteInstance(this);

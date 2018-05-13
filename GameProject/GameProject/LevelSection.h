@@ -12,6 +12,7 @@
 #include "GroundPillar.h"
 #include "MageSpawner.h"
 #include "LaserEnemy.h"
+#include "DashEnemy.h"
 
 #include <fstream>
 #include <streambuf>

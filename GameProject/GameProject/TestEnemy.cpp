@@ -34,7 +34,6 @@ TestEnemy::~TestEnemy()
 
 void TestEnemy::StateAggro()
 {
-	myPrevState = myState;
 	if (myState == Aggro)
 	{
 		if (Target != NULL)
@@ -147,7 +146,7 @@ void TestEnemy::Update()
 	//because depth is changed in Enemy Update, this is checked after
 	if (myState == InUse)
 	{
-		myDepth = -myY + myZ - myExtraY;
+		myDepth = -myY - myZ - myExtraY;
 	}
 }
 

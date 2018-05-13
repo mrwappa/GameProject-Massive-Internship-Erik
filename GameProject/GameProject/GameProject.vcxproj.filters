@@ -133,6 +133,9 @@
     <Filter Include="Game\Tutorial">
       <UniqueIdentifier>{f35767e0-5627-41ee-837a-7ae74d488386}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemies\DashEnemy">
+      <UniqueIdentifier>{c2a42318-ed09-4ee1-848a-70e3c195e366}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -255,6 +258,9 @@
     <ClInclude Include="Tutorial.h">
       <Filter>Game\Tutorial</Filter>
     </ClInclude>
+    <ClInclude Include="DashEnemy.h">
+      <Filter>Game\Enemies\DashEnemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -359,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="Tutorial.cpp">
       <Filter>Game\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="DashEnemy.cpp">
+      <Filter>Game\Enemies\DashEnemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

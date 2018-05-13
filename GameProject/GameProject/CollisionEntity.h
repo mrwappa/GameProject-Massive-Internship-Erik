@@ -13,6 +13,7 @@ public:
 	CollisionEntity();
 	~CollisionEntity();
 	
+	//Unused Variable
 	static float SlowMo;
 
 	void Init(std::string aName, float aX, float aY);
@@ -30,11 +31,12 @@ public:
 	bool LineToEdgeIntersection(Vector2f aStart, Vector2f aEnd, CollisionEntity* aObject);
 	bool CheckBoxEdges(CollisionEntity* t, CollisionEntity* o);
 
-	CollisionEntity* ObjCollision(float aX, float aY, std::string aName, bool aIncludeAngle = true);
+	//Checking collision for Objects and Instances
+	CollisionEntity* ObjCollision(float aX, float aY, std::string aName, std::string aIgnore = "", bool aIncludeAngle = true);
 	GrowingArray<CollisionEntity*> ObjCollisionList(float aX, float aY, std::string aName);
 	GrowingArray<CollisionEntity*>* ObjDistanceList(float aX, float aY, float aDistance, std::string aName);
 	bool InstanceCollision(float aX, float aY, CollisionEntity* aObject, bool aUpdateBBox = true, bool aIncludeAngle = true);
-	bool PreventCollision(std::string aName);
+	bool PreventCollision(std::string aName, std::string aIgnore = "");
 	CollisionEntity* LineEdgeCollision(Vector2f aStart, Vector2f aEnd, std::string aName, std::string aIgnore = "");
 	GrowingArray<CollisionEntity*>* LineEdgeCollisionList(Vector2f aStart, Vector2f aEnd, std::string aName, std::string aIgnore = "");
 	CollisionEntity* NearestInstance(float aX, float aY, std::string aName);

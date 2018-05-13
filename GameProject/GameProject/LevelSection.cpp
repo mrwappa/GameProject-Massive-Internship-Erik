@@ -68,9 +68,13 @@ LevelSection::LevelSection(float aX, float aY, bool aSectionForPlayer)
 				{
 					new LaserEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}
-				else if (rand <= 70 and rand > 30)
+				else if (rand <= 70 and rand > 45)
 				{
 					new TestEnemy(SnapToSectionX(column), SnapToSectionY(row));
+				}
+				else if (rand <= 45 and rand > 35)
+				{
+					new DashEnemy(SnapToSectionX(column), SnapToSectionY(row));
 				}
 				else
 				{

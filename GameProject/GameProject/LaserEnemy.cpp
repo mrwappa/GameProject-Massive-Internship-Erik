@@ -119,6 +119,10 @@ void LaserEnemy::StateGrabbed()
 {
 	if (myState == Grabbed)
 	{
+		if (myPrevState == Grabbable)
+		{
+			myAttackAlarm.SetTick(0);
+		}
 		myZ = 0;
 		if (Target != NULL)
 		{
@@ -131,6 +135,7 @@ void LaserEnemy::StateGrabbed()
 
 void LaserEnemy::Update()
 {
+	
 	Enemy::Update();
 	if (myState == Idle)
 	{

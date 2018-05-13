@@ -212,7 +212,7 @@ bool CollisionEntity::CheckBoxEdges(CollisionEntity* t, CollisionEntity* o)
 	return false;
 }
 
-CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aName, bool aIncludeAngle)
+CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string aName, std::string aIgnore, bool aIncludeAngle)
 {
 	if (CollisionList.count(aName) == 0)
 	{
@@ -232,6 +232,10 @@ CollisionEntity* CollisionEntity::ObjCollision(float aX, float aY, std::string a
 				GrowingArray<Solid*>* solids = static_cast<LevelSection*>(GrArrayPtr->FindAtIndex(i))->GetSolids();
 				for (int j = 0; j < solids->Size(); j++)
 				{
+					if (solids->FindAtIndex(j)->GetName() == aIgnore)
+					{
+						continue;
+					}
 					if (InstanceCollision(aX, aY, solids->FindAtIndex(j),false, aIncludeAngle))
 					{
 						return solids->FindAtIndex(j);
@@ -342,11 +346,11 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity* aOb
 	
 }
 
-bool CollisionEntity::PreventCollision(std::string aName)
+bool CollisionEntity::PreventCollision(std::string aName, std::string aIgnore)
 {
 	bool collision = false;
 
-	CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, aName);
+	CollisionEntity* brick = ObjCollision(myX + myXSpeed + myXKnockBack, myY, aName, aIgnore);
 
 	float prevXSpeed = myXSpeed;
 	float prevYSpeed = myYSpeed;
@@ -365,7 +369,7 @@ bool CollisionEntity::PreventCollision(std::string aName)
 		collision = true;
 	}
 
-	brick = ObjCollision(myX, myY + myYSpeed + myYKnockBack, aName);
+	brick = ObjCollision(myX, myY + myYSpeed + myYKnockBack, aName, aIgnore);
 
 	if (brick != NULL)
 	{

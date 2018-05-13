@@ -69,7 +69,7 @@ void LaserProjectile::Update()
 		}
 		else
 		{
-			if (LineToEdgeIntersection(Vector2f(myX, myY),
+			if (Enemy::Target->GetState() == Player::Normal and LineToEdgeIntersection(Vector2f(myX, myY),
 				Vector2f(myX + Math::LenDirX(myLength, Math::DegToRad(myAngle)), myY + Math::LenDirY(myLength, Math::DegToRad(myAngle))),Enemy::Target))
 			{
 				Enemy::Target->Hurt(myDamage,Math::PointDirection(myX, myY, Enemy::Target->GetX(),Enemy::Target->GetY()));

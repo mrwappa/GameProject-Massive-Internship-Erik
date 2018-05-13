@@ -69,16 +69,10 @@ void Enemy::StateIdle()
 			myY = myWalkPoint.y;
 		}
 
-		/*if (ObjCollision(myX, myY, "LevelSection") == NULL )
-		{
-			myState = FallInAbyss;
-		}*/
-
 		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
 
 		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
 		{
-			//There's design reasons to exclude GroundEdge here
 			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid", "GroundEdge"))
 			{
 				myState = Aggro;
@@ -91,7 +85,6 @@ void Enemy::StateSpawned()
 {
 	if (myState == Spawned)
 	{
-
 		CollisionEntity* groundEdge = ObjCollision(myX, myY, "GroundEdge");
 		Fall();
 		if (myZ <= 12 and mySpawnSpeed <= 0.5)
@@ -317,22 +310,15 @@ void Enemy::BeginUpdate()
 {
 
 	myPrevHP = myHP;
-	if (myPrevHP != myHP)
-	{
-		if (myState == Idle)
-		{
-			myState = Aggro;
-		}
-		myHurtAlarm.SetTick(15);
-	}
+
 }
 
 void Enemy::Update()
 {
-	myDepth = -myY + myZ;
+	myDepth = -myY - myZ;
 	if (myState == FallInAbyss)
 	{
-		myDepth = -myY + myZ + 200;
+		myDepth = -myY - myZ + 200;
 	}
 	
 	StatePathFind();
