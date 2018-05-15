@@ -37,7 +37,7 @@ void MageSpawner::StateAggro()
 	{
 		if (myPrevState == Idle)
 		{
-			mySpawnAlarm.SetTick(Math::IRand(5, 40));
+			mySpawnAlarm.SetTick(Math::IRand(30, 60));
 		}
 		if (mySpawnAlarm.GetTick() == -1)
 		{
@@ -80,6 +80,12 @@ void MageSpawner::StateAggro()
 
 		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
+
+		if (!mySprite.GetInCamera())
+		{
+			myState = Idle;
+		}
+
 	}
 }
 

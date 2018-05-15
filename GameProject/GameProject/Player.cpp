@@ -190,7 +190,7 @@ void Player::StateDash()
 			{
 				myMoveSpeed = 4.5f;
 				myState = Normal;
-				static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(50);
+				static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 			}
 		}
 		if (myMoveSpeed >= 19.0f)
@@ -218,13 +218,13 @@ void Player::StateDash()
 			myXKnockBack = Math::LenDirX(-15.0f, dir);
 			myYKnockBack = Math::LenDirY(-15.0f, dir);
 
-			static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(50);
+			static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 		}
 		if (PreventCollision("GroundEdge"))
 		{
 			myMoveSpeed = 4.5f;
 			myState = Normal;
-			static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(50);
+			static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 		}
 		else
 		{
@@ -233,7 +233,7 @@ void Player::StateDash()
 				myMoveSpeed = 4.5f;
 				myState = Normal;
 				Camera->ShakeScreen(6);
-				static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(50);
+				static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 			}
 		}
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
@@ -290,7 +290,7 @@ void Player::EndUpdate()
 			//Throw
 			if (KeyboardCheckPressed(sf::Keyboard::Space))
 			{
-				GrabbableEnemy->Throw(28, Math::PointDirection(myX, myY, Camera->GetMouseX(), Camera->GetMouseY()));
+				GrabbableEnemy->Throw(28, Math::PointDirection(GrabbableEnemy->GetX(), GrabbableEnemy->GetY() - GrabbableEnemy->GetZ(), Camera->GetMouseX(), Camera->GetMouseY()));
 				GrabbableEnemy = NULL;
 			}
 			//Drop

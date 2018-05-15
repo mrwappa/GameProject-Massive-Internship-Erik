@@ -228,7 +228,7 @@ void Enemy::StateThrown()
 
 		if (brick != NULL and myJustThrown and myYSpeed > 0)
 		{
-			myThrowAlarm.SetTick(10);
+			myThrowAlarm.SetTick(5);
 		}
 		myJustThrown = false;
 		if (brick != NULL and myThrowAlarm.GetTick() == -1 and brick->GetName() != "GroundEdge")

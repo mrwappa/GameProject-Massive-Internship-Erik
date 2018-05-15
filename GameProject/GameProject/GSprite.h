@@ -30,6 +30,7 @@ public:
 	int GetAnimationIndex() const;
 	int GetNrOfFrames() const;
 	int GetAnimationCounter() const;
+	bool GetInCamera() const;
 
 	//Modifiers
 	void SetTexture(std::string aFileName, int aNrOfFrames);
@@ -49,5 +50,7 @@ private:
 	float myAnimationIndex;
 	float myAnimationSpeed;
 	float myAnimationCounter;
+
+	bool myInCamera;
 };
 #endif // !GSPRITE_H

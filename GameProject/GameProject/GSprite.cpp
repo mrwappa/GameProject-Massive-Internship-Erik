@@ -34,6 +34,8 @@ void GSprite::DeleteAllSprites()
 
 void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngle, float aAlpha, sf::Color aColor, float aAnimationSpeed)
 {
+
+	myInCamera = false;
 	float width = abs(myTextureWidth * aXScale);
 	float height = abs(myTextureHeight * aYScale);
 	float diameter = width >= height ? width : height;
@@ -48,6 +50,8 @@ void GSprite::Draw(float aX, float aY, float aXScale, float aYScale, float aAngl
 	if ((aX - (diameter / 2)) < cameraX + (cameraWidth / 2) and (aX + (diameter / 2)) > cameraX - (cameraWidth / 2) and
 		(aY - (diameter / 2)) < cameraY + (cameraHeight / 2) and (aY + (diameter / 2)) > cameraY - (cameraHeight / 2))
 	{
+		myInCamera = true;
+
 		myAnimationSpeed = aAnimationSpeed;
 		if (myAnimationSpeed > 0)
 		{
@@ -163,6 +167,11 @@ int GSprite::GetNrOfFrames() const
 int GSprite::GetAnimationCounter() const
 {
 	return myAnimationCounter;
+}
+
+bool GSprite::GetInCamera() const
+{
+	return myInCamera;
 }
 
 //Modifiers
