@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "World.h"
 
+int World::EnemyCount;
+unsigned long int World::Score;
 
 World::World()
 {
+	Score = 0;
+	EnemyCount = 0;
 	myPrevGameState = -1;//not necessary?
 	myGameState = Active;
 
@@ -32,7 +36,7 @@ void World::BeginUpdate()
 
 void World::Update()
 {
-
+	
 }
 
 void World::EndUpdate()
@@ -189,12 +193,23 @@ void World::DestroyWorld()
 	{
 		for (int i = 0; i < instance.second->Size(); i++)
 		{
-			if (instance.second->FindAtIndex(i) != this and 
-				instance.second->FindAtIndex(i) != Enemy::Target and 
-				instance.second->FindAtIndex(i) != Enemy::Target->GrabbableEnemy)
+			if (Enemy::Target != NULL)
 			{
-				DeleteInstance(instance.second->FindAtIndex(i));
+				if (instance.second->FindAtIndex(i) != this and
+					instance.second->FindAtIndex(i) != Enemy::Target and
+					instance.second->FindAtIndex(i) != Enemy::Target->GrabbableEnemy)
+				{
+					DeleteInstance(instance.second->FindAtIndex(i));
+				}
 			}
+			else
+			{
+				if (instance.second->FindAtIndex(i) != this)
+				{
+					DeleteInstance(instance.second->FindAtIndex(i));
+				}
+			}
+			
 		}
 	}
 
@@ -209,6 +224,40 @@ void World::DrawGUI()
 	{
 		DrawPauseScreen();
 	}
+	else if(myGameState == Active and myWorldState == InAction)
+	{
+		if (EnemyCount == 0)
+		{
+			if (Enemy::Target != NULL and Enemy::Target->GetState() != Player::Dead)
+			{
+				DrawFontGUI("Press R for next level", (Camera->GetInitialWidth() / 2) * 0.6f, (Camera->GetInitialHeight() / 2)* 1.4f, 24, 1, 1, sf::Color::White);
+			}
+
+			if (KeyboardCheckPressed(sf::Keyboard::R))
+			{
+				myWorldState = Transitioning;
+			}
+		}
+		else
+		{
+			if (Score == 0)
+			{
+				Score = 1;
+			}
+
+			if(Enemy::Target != NULL and Enemy::Target->GetState() != Player::Dead)
+			Score--;
+		}
+		DrawFontGUI(std::to_string(Score), 50, 50, 24, 1, 1, sf::Color::White);
+	}
+}
+
+void World::RestartWorld()
+{
+	Score = 0;
+	EnemyCount = 0;
+	myCurrentLevel = 0;
+	myWorldState = Transitioning;
 }
 
 void World::StateActive()
@@ -254,14 +303,6 @@ void World::StatePaused()
 		{
 			Camera->SetZoom(Math::Lerp(Camera->GetZoom(), 1.0f, 0.15f));
 		}
-
-
-		if (KeyboardCheckPressed(sf::Keyboard::R))
-		{
-			
-			myWorldState = Transitioning;
-		}
-
 	}
 }
 

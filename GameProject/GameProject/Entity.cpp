@@ -14,6 +14,7 @@ std::thread* Entity::SortDrawThread;
 bool Entity::SortInDrawThread = true;
 bool Entity::DrawListSorted = false;
 bool Entity::DrawListUnfinished = false;
+
 Entity::Entity()
 {
 	

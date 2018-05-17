@@ -337,7 +337,7 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity* aOb
 		}
 		return false;
 	}
-
+	
 	if (CheckBoxEdges(this, aObject))
 	{
 		return true;
@@ -361,7 +361,7 @@ bool CollisionEntity::PreventCollision(std::string aName, std::string aIgnore)
 		myX = floor(myX) + Math::Decimal(brickBoxX);
 		for (int i = 0; i < abs(myXSpeed + myXKnockBack); i++)
 		{
-			if (InstanceCollision(myX + Math::Sign(myXSpeed + myXKnockBack), myY, brick)) { break; }
+			if (InstanceCollision(myX + Math::Sign(myXSpeed + myXKnockBack), myY, brick,true,false)) { break; }
 			myX += Math::Sign(myXSpeed + myXKnockBack);
 		}
 		myXSpeed = 0;
@@ -377,7 +377,7 @@ bool CollisionEntity::PreventCollision(std::string aName, std::string aIgnore)
 		myY = floor(myY) + Math::Decimal(brickBoxY);
 		for (int i = 0; i < abs(myYSpeed + myYKnockBack); i++)
 		{
-			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed + myYKnockBack), brick)) { break; }
+			if (InstanceCollision(myX, myY + Math::Sign(myYSpeed + myYKnockBack), brick,true,false)) { break; }
 			myY += Math::Sign(myYSpeed + myYKnockBack);
 		}
 		myYSpeed = 0;

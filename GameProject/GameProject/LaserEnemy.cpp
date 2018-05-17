@@ -126,6 +126,10 @@ void LaserEnemy::StateGrabbed()
 		myZ = 0;
 		if (Target != NULL)
 		{
+			if (Target->GetState() == Player::Dead)
+			{
+				myState = Grabbable;
+			}
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
 			myDepth = Target->GetDepth() - 3;

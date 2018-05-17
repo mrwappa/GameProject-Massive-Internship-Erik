@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "PlayerAttack.h"
 #include "DashEnemy.h"
-
+#include "World.h"
 
 Player::Player(float aX, float aY)
 {
@@ -43,7 +43,7 @@ Player::Player(float aX, float aY)
 
 	myPreviousAIndex = 0;
 
-	myHP = 10;
+	myHP = 5;
 	myAttackTimer = 0.f;
 	myDamage = 4;
 }
@@ -51,13 +51,17 @@ Player::Player(float aX, float aY)
 
 Player::~Player()
 {
-
 }
 
 void Player::StateNormal()
 {
 	if (myState == Normal)
 	{
+		if (Enemy::Target == NULL)
+		{
+			Enemy::Target = this;
+		}
+
 		myDirection = Math::PointDirDeg(myX, myY, Camera->GetMouseX(), Camera->GetMouseY());
 		TextureDirection(myDirection);
 		myDepth = -myY;
@@ -105,7 +109,7 @@ void Player::StateNormal()
 					myXKnockBack = Math::LenDirX(10, myDirection);
 					myYKnockBack = Math::LenDirY(10, myDirection);
 
-					myHP -= projectile->GetDamage();
+					myHP -= 1;
 					myHurtAlarm.SetTick(20);
 
 					DeleteInstance(projectile);
@@ -121,7 +125,7 @@ void Player::StateNormal()
 					myXKnockBack = Math::LenDirX(15, myDirection);
 					myYKnockBack = Math::LenDirY(15, myDirection);
 
-					myHP -= enemy->GetDamage();
+					myHP -= 1;
 					int dustParticles = Math::IRand(5, 7);
 					for (int i = 0; i < dustParticles; i++)
 					{
@@ -132,8 +136,6 @@ void Player::StateNormal()
 			}
 		}
 		
-
-
 		myXKnockBack = Math::Lerp(myXKnockBack, 0, 0.3f);
 		myYKnockBack = Math::Lerp(myYKnockBack, 0, 0.3f);
 
@@ -161,8 +163,7 @@ void Player::StateNormal()
 		{
 			new Dust(myX, myY + 20, Math::PointDirDeg(0, 0, myXSpeed, myYSpeed) - 270);
 		}
-
-
+		
 		if (myHurtAlarm.GetTick() != -1)
 		{
 			myColor = sf::Color::Color(Math::IRand(0, 255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255), Math::IRand(0, 255 - myAttackTimer * 255));
@@ -170,6 +171,11 @@ void Player::StateNormal()
 		else
 		{
 			myColor = sf::Color::Color(255 - myAttackTimer * 255, 255 - myAttackTimer * 255, 255 - myAttackTimer * 255);
+		}
+
+		if (myHP <= 0)
+		{
+			myState = Dead;
 		}
 	}
 }
@@ -220,7 +226,8 @@ void Player::StateDash()
 
 			static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 		}
-		if (PreventCollision("GroundEdge"))
+
+		/*if (PreventCollision("GroundEdge"))
 		{
 			myMoveSpeed = 4.5f;
 			myState = Normal;
@@ -235,8 +242,19 @@ void Player::StateDash()
 				Camera->ShakeScreen(6);
 				static_cast<DashEnemy*>(GrabbableEnemy)->AttackAlarm.SetTick(33);
 			}
-		}
+		}*/
+
+		PreventCollision("Solid");
 		Move(myXSpeed + myXKnockBack, myYSpeed + myYKnockBack);
+	}
+}
+
+void Player::StateDead()
+{
+	if (myState == Dead)
+	{
+		myXScale = Math::Lerp(myXScale, 0, 0.25f);
+		myYScale = Math::Lerp(myYScale, 0, 0.25f);
 	}
 }
 
@@ -249,11 +267,10 @@ void Player::Update()
 
 void Player::BeginUpdate()
 {
-	if (Enemy::Target == NULL)
-	{
-		Enemy::Target = this;
-	}
+	
+
 	StateNormal();
+	StateDead();
 
 	//Camera Position
 	Camera->SetX(myX);
@@ -375,25 +392,37 @@ void Player::Draw()
 	{
 		DrawLinePos(myX, myY - myZ, Camera->GetMouseX(), Camera->GetMouseY(), sf::Color::White);
 	}*/
+	DrawFont(std::to_string(myHP), myX + 25, myY - 20, 16, 1, 1, sf::Color::Red);
 	myPreviousAIndex = mySprite.GetAnimationIndex();
-	if (mySprite.GetAnimationIndex() == 2)
+	if (myState != Dead)
 	{
-		myShadow.Draw(myX, myY + 16, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
-	}
-	else
-	{
-		myShadow.Draw(myX, myY + 18, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
+		if (mySprite.GetAnimationIndex() == 2)
+		{
+			myShadow.Draw(myX, myY + 16, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
+		}
+		else
+		{
+			myShadow.Draw(myX, myY + 18, 1.5f, 1.2f, 0, 0.6f, sf::Color::Black, 0);
+		}
+
 	}
 	
 	CollisionEntity::Draw();
 	//DrawBBox();
-
-	
 }
 
 void Player::DrawGUI()
 {
-
+	if (myState == Dead)
+	{
+		Enemy::Target = NULL;
+		DrawFontGUI("u ded...press R to restart", (Camera->GetInitialWidth() / 2) * 0.6f, (Camera->GetInitialHeight() / 2)* 1.2f, 24, 1, 1, sf::Color::White);
+		if (KeyboardCheckPressed(sf::Keyboard::R))
+		{
+			DeleteInstance(this);
+			static_cast<World*>(GetObj("World"))->RestartWorld();
+		}
+	}
 }
 
 void Player::OnRemoval()
@@ -404,7 +433,6 @@ void Player::OnRemoval()
 
 void Player::Hurt(float aDamage, float aDirection)
 {
-
 	myXKnockBack = Math::LenDirX(10, aDirection);
 	myYKnockBack = Math::LenDirY(10, aDirection);
 	myHP -= aDamage;

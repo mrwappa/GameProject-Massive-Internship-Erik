@@ -143,6 +143,8 @@ void DashEnemy::StateAttack()
 				myDash = true;
 				myAccelerate = true;
 				myShake = 0;
+
+				if(Target != NULL)
 				myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
 			}
 		}
@@ -164,6 +166,7 @@ void DashEnemy::Update()
 	Enemy::Update();
 	if (myHP <= 0 and (myPrevState == Attack or myPrevState == Aggro))
 	{
+		AttackAlarm.SetTick(0);
 		myShake = 0;
 	}
 }

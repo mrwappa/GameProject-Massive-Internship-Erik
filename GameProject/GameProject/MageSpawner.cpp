@@ -37,7 +37,7 @@ void MageSpawner::StateAggro()
 	{
 		if (myPrevState == Idle)
 		{
-			mySpawnAlarm.SetTick(Math::IRand(30, 60));
+			mySpawnAlarm.SetTick(Math::IRand(50, 80));
 		}
 		if (mySpawnAlarm.GetTick() == -1)
 		{
@@ -101,6 +101,10 @@ void MageSpawner::StateGrabbed()
 			myY = Math::Lerp(myY, Target->GetY() - 30, 0.6f);
 			myDepth = Target->GetDepth() - 3;
 		}
+		else
+		{
+			myState = Grabbable;
+		}
 	}
 }
 
@@ -159,7 +163,7 @@ void MageSpawner::StateAttack()
 		if (myShake >= 3)
 		{
 			myState = Aggro;
-			mySpawnAlarm.SetTick(Math::IRand(100, 300));
+			mySpawnAlarm.SetTick(Math::IRand(160, 340));
 			myShake = 0;
 			SpawnEnemy();
 		}
@@ -181,7 +185,7 @@ void MageSpawner::StateInUse()
 		if (myShake >= 3)
 		{
 			myState = Grabbed;
-			mySpawnAlarm.SetTick(Math::IRand(100, 300));
+			mySpawnAlarm.SetTick(Math::IRand(160, 340));
 			myShake = 0;
 			SpawnEnemy();
 		}
@@ -221,12 +225,12 @@ void MageSpawner::Update()
 	{
 		if (mySpawnAlarm.GetTick() == -1)
 		{
-			mySpawnAlarm.SetTick(Math::IRand(140,200));
+			mySpawnAlarm.SetTick(Math::IRand(140,300));
 		}
 	}
 	myDepth = -myY - myZ;
 	
-	if (Alive() and myState != Idle)
+	if (Alive() and myState != Idle and Target != NULL)
 	{
 		myXScale = 0.58f;
 		if (myX <= Target->GetX())

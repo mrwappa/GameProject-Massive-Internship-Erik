@@ -58,10 +58,13 @@ void LaserProjectile::Update()
 				{
 					if (static_cast<Enemy*>(enemies->FindAtIndex(i))->Alive())
 					{
-						float dir = Math::PointDirection(Enemy::Target->GetX(), Enemy::Target->GetY(), enemies->FindAtIndex(i)->GetX(), enemies->FindAtIndex(i)->GetY() - enemies->FindAtIndex(i)->GetZ());
-						enemies->FindAtIndex(i)->SetXKnock(Math::LenDirX(12, dir));
-						enemies->FindAtIndex(i)->SetYKnock(Math::LenDirY(12, dir));
-						enemies->FindAtIndex(i)->IncrHP(-myDamage);
+						if (Enemy::Target != NULL)
+						{
+							float dir = Math::PointDirection(Enemy::Target->GetX(), Enemy::Target->GetY(), enemies->FindAtIndex(i)->GetX(), enemies->FindAtIndex(i)->GetY() - enemies->FindAtIndex(i)->GetZ());
+							enemies->FindAtIndex(i)->SetXKnock(Math::LenDirX(12, dir));
+							enemies->FindAtIndex(i)->SetYKnock(Math::LenDirY(12, dir));
+							enemies->FindAtIndex(i)->IncrHP(-myDamage);
+						}
 					}
 				}
 			}
@@ -69,10 +72,10 @@ void LaserProjectile::Update()
 		}
 		else
 		{
-			if (Enemy::Target->GetState() == Player::Normal and LineToEdgeIntersection(Vector2f(myX, myY),
+			if (Enemy::Target != NULL and Enemy::Target->GetState() == Player::Normal and LineToEdgeIntersection(Vector2f(myX, myY),
 				Vector2f(myX + Math::LenDirX(myLength, Math::DegToRad(myAngle)), myY + Math::LenDirY(myLength, Math::DegToRad(myAngle))),Enemy::Target))
 			{
-				Enemy::Target->Hurt(myDamage,Math::PointDirection(myX, myY, Enemy::Target->GetX(),Enemy::Target->GetY()));
+				Enemy::Target->Hurt(1,Math::PointDirection(myX, myY, Enemy::Target->GetX(),Enemy::Target->GetY()));
 			}
 		}
 		

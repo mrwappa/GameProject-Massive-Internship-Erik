@@ -133,9 +133,12 @@ void TestEnemy::StateInUse()
 				myExtraY = 0;
 			}
 		}
-
-		myX = Target->GetX() + myExtraX;
-		myY = Target->GetY() + myExtraY - myZ;
+		if (Target != NULL)
+		{
+			myX = Target->GetX() + myExtraX;
+			myY = Target->GetY() + myExtraY - myZ;
+		}
+		
 	}
 }
 

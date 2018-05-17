@@ -87,7 +87,9 @@ void ProjectileEnemy::StateAttack()
 		myAttackTimer -= 1.0f / 60.0f;
 		if (myAttackTimer <= 0)
 		{
+			if(Target != NULL)
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY()) - Math::DegToRad(Math::IRand(-5, 5) * Math::IRand(0, 1));
+
 			new Projectile(myX, myY - myZ, 5.5f, myDirection, false);
 			myDeflate = true;
 			myState = Aggro;
@@ -137,6 +139,10 @@ void ProjectileEnemy::StateGrabbed()
 		myZ = 0;
 		if (Target != NULL)
 		{
+			if (Target->GetState() == Player::Dead)
+			{
+				myState = Grabbable;
+			}
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
 			myDepth = Target->GetDepth() - 3;
@@ -147,7 +153,7 @@ void ProjectileEnemy::StateGrabbed()
 
 void ProjectileEnemy::Update()
 {
-	if(Alive() and myState != Idle)
+	if(Alive() and myState != Idle and Target != NULL)
 	{
 		int lookDir = (myX >= Target->GetX() ? -1 : 1);
 		if (myDeflate)

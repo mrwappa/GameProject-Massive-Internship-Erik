@@ -2,12 +2,14 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "PlayerAttack.h"
+#include "World.h"
 
 Player* Enemy::Target;
 sf::Color Enemy::GrabColor = sf::Color::Color(125,125,125,125);
 
 Enemy::Enemy()
 {
+	World::EnemyCount++;
 	myHP = 10;
 	myZSpeed = 3.0f;
 	myState = Idle;
@@ -17,7 +19,6 @@ Enemy::Enemy()
 
 	mySpawnSpeed = 5;
 }
-
 
 Enemy::~Enemy()
 {
@@ -29,7 +30,6 @@ void Enemy::Init(std::string aName, float aX, float aY)
 	CollisionEntity::Init(aName, aX, aY);
 	myPrevHP = myHP;
 }
-
 
 void Enemy::OnRemoval()
 {
@@ -71,7 +71,7 @@ void Enemy::StateIdle()
 
 		Move(myXSpeed + myXKnockBack,myYSpeed + myYKnockBack);
 
-		if (Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
+		if (Target != NULL and Math::PointDistance(myX, myY, Target->GetX(), Target->GetY()) < 240)
 		{
 			if (!LineEdgeCollision(Vector2f(myX, myY), Vector2f(Target->GetX(), Target->GetY()), "Solid", "GroundEdge"))
 			{
@@ -97,7 +97,9 @@ void Enemy::StateSpawned()
 			
 			if (groundEdge != NULL)
 			{
+				if(Target != NULL)
 				myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
+
 				myXKnockBack = Math::LenDirX(3, myDirection);
 				myYKnockBack = Math::LenDirY(3, myDirection);
 			}
@@ -105,7 +107,9 @@ void Enemy::StateSpawned()
 
 		if (groundEdge != NULL)
 		{
+			if (Target != NULL)
 			myDirection = Math::PointDirection(myX, myY, Target->GetX(), Target->GetY());
+
 			myXKnockBack = Math::LenDirX(3, myDirection);
 			myYKnockBack = Math::LenDirY(3, myDirection);
 		}
@@ -208,10 +212,15 @@ void Enemy::StateGrabbed()
 		myZ = 0;
 		if (Target != NULL)
 		{
+			if (Target->GetState() == Player::Dead)
+			{
+				myState = Grabbable;
+			}
 			myX = Math::Lerp(myX, Target->GetX(), 0.6f);
 			myY = Math::Lerp(myY, Target->GetY() - GetHeight() / 1.5f, 0.6f);
 			myDepth = Target->GetDepth() - 3;
 		}
+		
 	}
 }
 
@@ -264,7 +273,7 @@ void Enemy::StateThrown()
 		if (abs(myXSpeed) > 1.5f or abs(myYSpeed) > 1.5f)
 		{
 			Enemy* enemy = (Enemy*)ObjCollision(myX, myY, "Enemy");
-			if (enemy != NULL and enemy->Alive())
+			if (Target != NULL and enemy != NULL and enemy->Alive())
 			{
 				enemy->IncrHP(-(4 + Target->GetDamage()));
 				
@@ -355,7 +364,7 @@ void Enemy::Update()
 		}
 
 		//Hit by PlayerAttack
-		if (pAttack != NULL and myAttackPtr != pAttack)
+		if (Target != NULL and pAttack != NULL and myAttackPtr != pAttack)
 		{
 			float dir = Math::PointDirection(myX, myY - myZ, Target->GetX(), Target->GetY());
 			myXKnockBack = Math::LenDirX(-12.0f, dir);
@@ -375,8 +384,11 @@ void Enemy::Update()
 	{
 		myZ = Math::Lerp(myZ, myZTarget, 0.3f);
 	}
+	
 	if (myHP <= 0 and Alive())
 	{
+		World::Score += 6000;
+		World::EnemyCount--;
 		myYKnockBack = 0;
 		myXKnockBack = 0;
 		myXSpeed = 0;

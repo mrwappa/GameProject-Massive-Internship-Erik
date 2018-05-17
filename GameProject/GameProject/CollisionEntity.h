@@ -97,7 +97,7 @@ protected:
 	float myBoxWidth;
 	float myBoxHeight;
 
-	float myHP;
+	int myHP;
 	float myDamage;
 	
 	void AddCollInstance(CollisionEntity* aEntity);

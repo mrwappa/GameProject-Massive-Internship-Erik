@@ -32,7 +32,7 @@ public:
 	PlayerAttack* PAttack;
 	Enemy* GrabbableEnemy;
 
-	enum PlayerStates { Normal, Dash };
+	enum PlayerStates { Normal, Dash, Dead };
 	int GetState() const;
 
 private:
@@ -58,13 +58,13 @@ private:
 	float myYSub;
 
 	float myDirection;
-
 	
 	int myState;
 	bool myAccelerate;
 
 	void StateNormal();
 	void StateDash();
+	void StateDead();
 
 	Alarm myHurtAlarm;
 	Alarm myInvisAlarm;

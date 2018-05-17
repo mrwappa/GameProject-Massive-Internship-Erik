@@ -21,6 +21,9 @@ public:
 	World();
 	~World();
 
+	static int EnemyCount;
+	static unsigned long int Score;
+
 	void Update();
 	void BeginUpdate();
 	void EndUpdate();
@@ -30,9 +33,12 @@ public:
 	void ActivateAllInstances();
 	void DrawPauseScreen();
 
+	
+
 	void CreateWorld();
 	void DestroyWorld();
 	void DrawGUI();
+	void RestartWorld();
 
 	enum GameState {Active, Paused, MainMenu};
 	enum WorldState {InAction, Transitioning};
@@ -41,6 +47,8 @@ public:
 	void StateMainMenu();
 
 private:
+
+	
 
 	int myCurrentLevel;
 
