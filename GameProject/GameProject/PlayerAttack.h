@@ -3,18 +3,18 @@
 
 #include "CollisionEntity.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class PlayerAttack : public CollisionEntity
 {
 public:
-	PlayerAttack(float aX, float aY, Player* aTarget);
+	PlayerAttack(float aX, float aY);
 	~PlayerAttack();
 
 	void Update();
 	void Draw();
 
-private:
-	Player* myTarget;
+
 
 };
 #endif // !PLAYERATTACK_H

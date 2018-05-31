@@ -362,7 +362,7 @@ void Player::EndUpdate()
 				if (MouseCheckPressed(sf::Mouse::Left) and PAttack == NULL and myAttackTimer <= 0)
 				{
 					myAttackTimer = 0.4f;
-					PAttack = new PlayerAttack(myX, myY, this);
+					PAttack = new PlayerAttack(myX, myY);
 				}
 
 				if (PAttack != NULL)
@@ -427,7 +427,6 @@ void Player::DrawGUI()
 
 void Player::OnRemoval()
 {
-	Enemy::Target = NULL;
 	CollisionEntity::OnRemoval();
 }
 

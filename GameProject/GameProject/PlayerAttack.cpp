@@ -2,7 +2,7 @@
 #include "PlayerAttack.h"
 
 
-PlayerAttack::PlayerAttack(float aX, float aY, Player* aTarget)
+PlayerAttack::PlayerAttack(float aX, float aY)
 {
 	Init("PlayerAttack", aX, aY);
 	mySprite.SetTexture("Sprites/Player/spr_playerattack.png", 8);
@@ -15,8 +15,6 @@ PlayerAttack::PlayerAttack(float aX, float aY, Player* aTarget)
 	myBoxHeight = 18;
 
 	myDamage = 2.5f;
-
-	myTarget = aTarget;
 }
 
 PlayerAttack::~PlayerAttack()
@@ -27,9 +25,9 @@ void PlayerAttack::Update()
 {
 	myDepth = -myY;
 
-	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and myTarget != NULL)
+	if (mySprite.GetAnimationIndex() == mySprite.GetNrOfFrames() - 1 and Enemy::Target != NULL)
 	{
-		myTarget->PAttack = NULL;
+		Enemy::Target->PAttack = NULL;
 		DeleteInstance(this);
 	}
 }

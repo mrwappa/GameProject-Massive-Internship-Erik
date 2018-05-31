@@ -15,8 +15,6 @@ class Math
 public:
 	Math();
 	~Math();
-
-	
 	
 	static const int Sign(float aX);
 	static const float SQRT2(const float aX);

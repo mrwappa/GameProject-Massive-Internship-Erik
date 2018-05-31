@@ -261,6 +261,9 @@
     <ClInclude Include="DashEnemy.h">
       <Filter>Game\Enemies\DashEnemy</Filter>
     </ClInclude>
+    <ClInclude Include="ScoreChecking.h">
+      <Filter>Tools/Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

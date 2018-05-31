@@ -7,6 +7,7 @@ unsigned long int World::Score;
 World::World()
 {
 	Score = 0;
+	Score::CreateScoreFile();
 	EnemyCount = 0;
 	myPrevGameState = -1;//not necessary?
 	myGameState = Active;
@@ -249,6 +250,23 @@ void World::DrawGUI()
 			Score--;
 		}
 		DrawFontGUI(std::to_string(Score), 50, 50, 24, 1, 1, sf::Color::White);
+
+		//High Score
+		if (Enemy::Target == NULL)
+		{
+			if (previousEnemyTarget != NULL)
+			{
+				myHighScore = Score::GetFileScore();
+				if (myHighScore < Score)
+				{
+					Score::SetFileScore(Score);
+					myHighScore = Score;
+				}
+			}
+
+			DrawFontGUI("High Score: " + std::to_string(myHighScore), (Camera->GetInitialWidth() / 2) * 0.8f, (Camera->GetInitialHeight() / 2)* 0.9f, 32, 1, 1, sf::Color::White);
+		}
+		previousEnemyTarget = Enemy::Target;
 	}
 }
 

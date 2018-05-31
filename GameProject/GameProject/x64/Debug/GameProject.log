@@ -1,9 +1,10 @@
 ﻿  World.cpp
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(76): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(194): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(318): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(334): warning C4018: '<': signed/unsigned mismatch
-c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(351): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(77): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(195): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(260): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(336): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(352): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\world.cpp(369): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
 c:\users\erik wapner\documents\github\gameproject-massive-internship-erik\gameproject\gameproject\growingarray.h(315): warning C4172: returning address of local variable or temporary
   GameProject.vcxproj -> C:\Users\Erik Wapner\Documents\GitHub\GameProject-Massive-Internship-Erik\GameProject\x64\Debug\GameProject.exe

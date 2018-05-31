@@ -14,6 +14,7 @@
 #include "MapSections.h"
 #include "MageSpawner.h"
 #include "Tutorial.h"
+#include "ScoreChecking.h"
 
 class World : public Entity
 {
@@ -48,7 +49,7 @@ public:
 
 private:
 
-	
+	int myHighScore;
 
 	int myCurrentLevel;
 
@@ -63,6 +64,8 @@ private:
 	int myPrevGameState;
 
 	Tutorial* myTutorial;
+
+	Player* previousEnemyTarget;
 };
 
 #endif // !WORLD_H

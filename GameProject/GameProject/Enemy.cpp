@@ -396,6 +396,8 @@ void Enemy::Update()
 		myState = Grabbable;
 	}
 
+
+
 	if (myState == Thrown or myState == Grabbable)
 	{
 		if (ObjCollision(myX, myY, "LevelSection") == NULL)
@@ -411,6 +413,15 @@ void Enemy::Update()
 	if (myHurtAlarm.GetTick() != -1)
 	{
 		myColor = sf::Color(Math::IRand(0, 255), Math::IRand(0, 255), Math::IRand(0, 255), 255);
+	}
+	
+	if (myPrevState == Grabbed)
+	{
+		if (Target == NULL)
+		{
+			myState = Grabbable;
+			myZ = 22;
+		}
 	}
 }
 

@@ -331,19 +331,10 @@ bool CollisionEntity::InstanceCollision(float aX, float aY, CollisionEntity* aOb
 
 	if (((oAngle == 0 or oAngle == 180) and (myAngle == 0 or myAngle == 180)) or !aIncludeAngle)
 	{
-		if (myBoundingBox.Intersect(aObject->GetBounds()))
-		{
-			return true;
-		}
-		return false;
+		return myBoundingBox.Intersect(aObject->GetBounds());
 	}
 	
-	if (CheckBoxEdges(this, aObject))
-	{
-		return true;
-	}
-	return false;
-	
+	return CheckBoxEdges(this, aObject);
 }
 
 bool CollisionEntity::PreventCollision(std::string aName, std::string aIgnore)
@@ -411,6 +402,7 @@ CollisionEntity* CollisionEntity::LineEdgeCollision(Vector2f aStart, Vector2f aE
 	{
 		GrArrayPtr = CollisionList.at("LevelSection");
 
+		//The reason this statement is so long, is bevause of the fact that RektF Dimensions can't be negative
 		myBoundingBox = RektF(aStart.x - (abs(aEnd.x - aStart.x) * (aEnd.x - aStart.x < 0)),
 			aStart.y - myZ - (abs(aEnd.y - aStart.y) * (aEnd.y - aStart.y < 0)),
 			abs(aEnd.x - aStart.x), abs(aEnd.y - aStart.y));
